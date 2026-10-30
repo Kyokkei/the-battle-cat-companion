@@ -35,6 +35,12 @@ object CatScanResolver {
     /** Two boxes within this much height count as the same font size. */
     private const val HEIGHT_EPSILON = 0.002f
 
+    /** How far below the cat's name its level may print, in screen heights. */
+    private const val MAX_LEVEL_BELOW = 0.35f
+
+    /** How far sideways the level may sit from the name, in screen widths. */
+    private const val MAX_LEVEL_ACROSS = 0.22f
+
     /** How far above a `+N` the level number may sit, in screen heights. */
     private const val MAX_PLUS_GAP = 0.06f
 
@@ -58,7 +64,7 @@ object CatScanResolver {
     fun resolve(lines: List<OcrStageLine>, index: CatNameIndex): CatScanHit? {
         if (lines.isEmpty()) return null
         val name = bestName(lines, index) ?: return null
-        val (level, plus) = readLevel(lines)
+        val (level, plus) = readLevel(lines, name.line)
         return CatScanHit(
             unitId = name.match.entry.unitId,
             formIndex = name.match.entry.formIndex,
@@ -106,14 +112,17 @@ object CatScanResolver {
 
     private data class LevelRead(val level: Int?, val plus: Int?)
 
-    private fun readLevel(lines: List<OcrStageLine>): LevelRead {
-        val anchors = lines.filter { isLevelAnchor(it.text) }
+    private fun readLevel(lines: List<OcrStageLine>, nameLine: OcrStageLine): LevelRead {
         val levels = lines.mapNotNull { line -> parseLevel(line.text)?.let { it to line } }
         val pluses = lines.mapNotNull { line -> parsePlus(line.text)?.let { it to line } }
 
-        // The label is often too garbled to match — one real read was `eaxe 20` — but the plus level
-        // prints directly beneath the number, so it can anchor the level instead.
-        val level = pick(levels, anchors) ?: levelAbovePlus(levels, pluses)
+        // Anchoring on the word "Level" proved unreliable: it comes back as `eaxe 20`, `Leve1 20` or
+        // not at all. The card's own geometry is steadier — the level prints below the name and in
+        // the same column, while the neighbouring cats' levels sit further out.
+        val level = levelNearName(levels, nameLine)
+            ?: pick(levels, lines.filter { isLevelAnchor(it.text) })
+            ?: levelAbovePlus(levels, pluses)
+
         val plus = pluses.minByOrNull { (_, line) ->
             val reference = level?.second
             if (reference == null) 0f else verticalDistance(reference, line)
@@ -126,6 +135,31 @@ object CatScanResolver {
             }
         }
         return LevelRead(level?.first, plus)
+    }
+
+    /** The level of the card the name belongs to: below the name, same column, closest wins. */
+    private fun levelNearName(
+        levels: List<Pair<Int, OcrStageLine>>,
+        nameLine: OcrStageLine,
+    ): Pair<Int, OcrStageLine>? {
+        val nameCentreY = (nameLine.top + nameLine.bottom) / 2f
+        val nameCentreX = (nameLine.left + nameLine.right) / 2f
+        var best: Pair<Int, OcrStageLine>? = null
+        var bestScore = Float.MAX_VALUE
+        for ((value, line) in levels) {
+            val centreY = (line.top + line.bottom) / 2f
+            val centreX = (line.left + line.right) / 2f
+            val below = centreY - nameCentreY
+            val across = kotlin.math.abs(centreX - nameCentreX)
+            if (below <= 0f || below > MAX_LEVEL_BELOW) continue
+            if (across > MAX_LEVEL_ACROSS) continue
+            val score = across * 2f + below
+            if (score < bestScore) {
+                bestScore = score
+                best = value to line
+            }
+        }
+        return best
     }
 
     /** The number printed immediately above a `+N` plus level. */

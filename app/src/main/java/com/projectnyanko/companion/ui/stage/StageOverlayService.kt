@@ -522,7 +522,7 @@ class StageOverlayService : Service() {
             form.dps
         }
 
-        root.addView(label(form.name, 20f, INK, bold = true))
+        root.addView(label(form.name, 21f, INK, bold = true))
         val subtitle = buildString {
             append(formLabel(formIndex))
             append("  ·  Lv ")
@@ -530,20 +530,54 @@ class StageOverlayService : Service() {
                 append(readLevel)
                 if (readPlus > 0) append(" +").append(readPlus)
             } else {
-                append(shownLevel).append(" (level not read)")
+                append("?")
+            }
+            if (readLevel > 0 && readLevel != reference) {
+                append("   ·   numbers at Lv ").append(reference)
             }
         }
         root.addView(label(subtitle, 13f, INK_SOFT))
-        root.addView(statRow("Health", formatStat(hp)))
-        root.addView(statRow("Attack", formatStat(attack)))
-        root.addView(statRow("DPS", formatStat(dps)))
-        root.addView(statRow("Range", form.range.toString()))
-        root.addView(statRow("Speed", "${form.speedPerSecond}/s"))
+        root.addView(Spacer(this, dp(8)))
+
+        // Boxes, not lines: a two-column grid of bordered tiles reads at a glance mid-battle.
+        val tiles = listOf(
+            "Health" to formatStat(hp),
+            "Attack" to formatStat(attack),
+            "DPS" to formatStat(dps),
+            "Range" to form.range.toString(),
+            "Speed" to "${form.speedPerSecond}/s",
+            "Cost" to formatStat(form.cost),
+            "Knockbacks" to form.knockbacks.toString(),
+            "Recharge" to secondsText(form.rechargeSeconds),
+        )
+        tiles.chunked(2).forEach { pair ->
+            val row = LinearLayout(this).apply {
+                orientation = LinearLayout.HORIZONTAL
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                )
+                setPadding(0, dp(3), 0, dp(3))
+            }
+            pair.forEachIndexed { index, (tileLabel, tileValue) ->
+                row.addView(
+                    statTile(tileLabel, tileValue),
+                    LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
+                        marginEnd = if (index == 0) dp(6) else 0
+                    },
+                )
+            }
+            if (pair.size == 1) {
+                row.addView(View(this), LinearLayout.LayoutParams(0, 1, 1f))
+            }
+            root.addView(row)
+        }
 
         val provenance = if (readLevel > 0 && shownLevel != reference) {
-            "HP/ATK scaled from the Lv $reference table. Range, cost and speed do not change with level."
+            "Read Lv $readLevel${if (readPlus > 0) " +$readPlus" else ""}. These are the bundled Lv $reference numbers — " +
+                "the game's per-level growth table is not bundled, so anything else would be a guess."
         } else {
-            "Straight from the Lv $reference table."
+            "Bundled Lv $reference numbers."
         }
         root.addView(label(provenance, 11f, INK_SOFT))
         if (scannedName.isNotBlank() && !scannedName.equals(form.name, ignoreCase = true)) {
@@ -553,21 +587,30 @@ class StageOverlayService : Service() {
         showResultRoot(root)
     }
 
-    private fun statRow(name: String, value: String): View {
-        val row = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-            )
-            setPadding(0, dp(3), 0, dp(3))
+    /** One bordered stat box. */
+    private fun statTile(name: String, value: String): View {
+        val tile = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            background = GradientDrawable().apply {
+                shape = GradientDrawable.RECTANGLE
+                cornerRadius = dp(12).toFloat()
+                setColor(PAPER_DEEP)
+                setStroke(dp(2), INK)
+            }
+            setPadding(dp(9), dp(7), dp(9), dp(8))
         }
-        row.addView(label(name, 14f, INK_SOFT), LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
-        row.addView(label(value, 15f, INK, bold = true))
-        return row
+        tile.addView(label(name, 11f, INK_SOFT))
+        tile.addView(label(value, 17f, INK, bold = true))
+        return tile
     }
 
+    private fun secondsText(value: Double): String =
+        if (value <= 0.0) "—" else String.format(Locale.ROOT, "%.2fs", value)
+
     private fun formatStat(value: Int): String = String.format(Locale.ROOT, "%,d", value)
+
+    private fun Spacer(context: Context, height: Int): View =
+        View(context).apply { layoutParams = LinearLayout.LayoutParams(1, height) }
 
     private fun showResultRoot(root: View) {
         removeResult()

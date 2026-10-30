@@ -238,4 +238,47 @@ class CatScanResolverTest {
         assertNull(hit.level)
         assertNull(hit.effectiveLevel)
     }
+
+    @Test
+    fun canCanCatReadsItsLevelWithoutAnyLevelLabel() {
+        // Real card: name bar 0.42-0.55, "50" under it at 0.55-0.58, "+13" below that, and the
+        // neighbour Roe Cat's "45" further right. The label was unreadable.
+        val lines = listOf(
+            line("Can Can Cat", 0.99f, 0.130f, 0.200f, 0.420f, 0.550f),
+            line("50", 0.98f, 0.300f, 0.360f, 0.550f, 0.580f),
+            line("+13", 0.95f, 0.360f, 0.400f, 0.550f, 0.590f),
+            line("Roe Cat", 0.97f, 0.140f, 0.175f, 0.660f, 0.740f),
+            line("45", 0.96f, 0.300f, 0.350f, 0.700f, 0.730f),
+        )
+        val hit = requireNotNull(CatScanResolver.resolve(lines, index))
+        assertEquals("Can Can Cat", hit.displayName)
+        assertEquals(50, hit.level)
+        assertEquals(13, hit.plusLevel)
+        assertEquals(63, hit.effectiveLevel)
+    }
+
+    @Test
+    fun octopusCatReadsThirtyEightNotThree() {
+        val lines = listOf(
+            line("Octopus Cat", 0.99f, 0.130f, 0.200f, 0.420f, 0.550f),
+            line("38", 0.98f, 0.300f, 0.360f, 0.550f, 0.580f),
+            line("+1", 0.94f, 0.360f, 0.400f, 0.555f, 0.585f),
+            line("iCat", 0.97f, 0.140f, 0.175f, 0.660f, 0.720f),
+            line("30", 0.96f, 0.300f, 0.350f, 0.700f, 0.730f),
+        )
+        val hit = requireNotNull(CatScanResolver.resolve(lines, index))
+        assertEquals("Octopus Cat", hit.displayName)
+        assertEquals(38, hit.level)
+        assertEquals(1, hit.plusLevel)
+    }
+
+    @Test
+    fun aNeighboursLevelIsNotBorrowed() {
+        val lines = listOf(
+            line("Mohawk Cat", 0.99f, 0.130f, 0.200f, 0.420f, 0.550f),
+            line("20", 0.98f, 0.300f, 0.360f, 0.550f, 0.580f),
+            line("45", 0.98f, 0.300f, 0.360f, 0.700f, 0.730f),
+        )
+        assertEquals(20, requireNotNull(CatScanResolver.resolve(lines, index)).level)
+    }
 }
