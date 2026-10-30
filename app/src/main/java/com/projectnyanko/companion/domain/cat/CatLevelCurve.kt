@@ -48,10 +48,11 @@ object CatLevelCurve {
         val clamped = level.coerceIn(MIN_LEVEL, MAX_LEVEL)
         val s1 = baseStat(statAtReference)
         val value = if (normalCat) {
-            // Normal Cats are a legacy exception: full growth to level 90, half growth after. Their
-            // cap is 20 base + 90 plus, so the tier boundaries are 90 rather than 60/80.
-            val statAt90 = s1 * (2.0 + 90 * 0.5)
-            if (clamped <= 90) s1 * (2.0 + 0.5 * clamped) else statAt90 + (clamped - 90) * 0.25 * s1
+            // Normal Cats are a legacy exception: they halve at 60 like everyone else but never
+            // quarter, so 61..110 all grow at +0.25. Verified against the game at level 110:
+            // Mohawk 8900 and Eraser 26700, both exact. (Full growth to 90 gave 10400/31200.)
+            val statAt60 = s1 * (2.0 + 60 * 0.5)
+            if (clamped <= 60) s1 * (2.0 + 0.5 * clamped) else statAt60 + (clamped - 60) * 0.25 * s1
         } else {
             val statAt60 = s1 * (2.0 + 60 * 0.5)
             val statAt80 = statAt60 + 20 * 0.25 * s1

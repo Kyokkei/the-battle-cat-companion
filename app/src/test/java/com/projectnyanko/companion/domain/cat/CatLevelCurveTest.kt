@@ -50,10 +50,11 @@ class CatLevelCurveTest {
 
     @Test
     fun normalCatsKeepFullGrowthUntilNinety() {
-        // Normal Cats are the legacy exception: no halving at 60, only after 90.
-        // S30 = 3400 -> S1 = 200: L90 = 200 * 47 = 9400, L110 = 9400 + 20*0.25*200 = 10400.
-        assertEquals(9400, CatLevelCurve.statAt(3400, 90, normalCat = true))
-        assertEquals(10400, CatLevelCurve.statAt(3400, 110, normalCat = true))
+        // Normal Cats halve at 60 but never quarter. Verified against the game at level 110:
+        // Mohawk 8900 (S30 3400) and Eraser 26700 (S30 10200).
+        assertEquals(6400, CatLevelCurve.statAt(3400, 60, normalCat = true))
+        assertEquals(8900, CatLevelCurve.statAt(3400, 110, normalCat = true))
+        assertEquals(26700, CatLevelCurve.statAt(10200, 110, normalCat = true))
         // The gacha path must still halve at 60.
         assertEquals(8150, CatLevelCurve.statAt(3400, 110, normalCat = false))
     }

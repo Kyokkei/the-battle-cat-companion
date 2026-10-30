@@ -497,8 +497,8 @@ class StageOverlayService : Service() {
         val stats = app.unitStatsRepository.stats(region, unitId)
 
         val root = createCard()
-        root.addView(headerRow("Cat scan", showBack = false) {})
         if (stats == null || formIndex !in stats.forms.indices) {
+            root.addView(headerRow("Cat scan: $scannedName", showBack = false) {})
             root.addView(
                 label(
                     "$scannedName was read, but this build has no stat row for it. The bundled catalogue is a snapshot.",
@@ -525,21 +525,16 @@ class StageOverlayService : Service() {
             form.dps
         }
 
-        root.addView(label(form.name, 20f, INK, bold = true))
-        val subtitle = buildString {
-            append(formLabel(formIndex))
-            append("  ·  Lv ")
+        // One line, not three: name, form and level all in the header.
+        val levelText = buildString {
             if (readLevel > 0) {
                 append(readLevel)
                 if (readPlus > 0) append(" +").append(readPlus)
-                if (projectedLevel != readLevel + (if (readPlus > 0) readPlus else 0)) {
-                    append("  (capped ").append(projectedLevel).append(")")
-                }
             } else {
-                append("?  ·  showing Lv ").append(reference)
+                append("?")
             }
         }
-        root.addView(label(subtitle, 12f, INK_SOFT))
+        root.addView(headerRow("${form.name}  ·  Lv $levelText", showBack = false) {})
 
         val columns = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
