@@ -111,7 +111,8 @@ class CatScanResolverTest {
         assertEquals(50, CatScanResolver.parseLevel("5O"))
         assertEquals(10, CatScanResolver.parseLevel("l0"))
         assertNull(CatScanResolver.parseLevel("Max"))
-        assertNull(CatScanResolver.parseLevel("123"))
+        // Three digits are legal now that plus levels can push a cat past level 99.
+        assertNull(CatScanResolver.parseLevel("1234"))
     }
 
     @Test
@@ -121,5 +122,57 @@ class CatScanResolverTest {
         // rows still carry placeholder names), so the index is slightly smaller than the form count.
         assertTrue("index unexpectedly small: ${index.size} vs $expected", index.size >= expected - 30)
         assertTrue("index unexpectedly large: ${index.size} vs $expected", index.size <= expected)
+    }
+
+    @Test
+    fun theMergedLabelOnANormalCatStillGivesTheLevel() {
+        // Real read from the Mohawk Cat card: the label and the number arrive as one line and the
+        // recognizer turns the final "l" into a "1".
+        val lines = listOf(
+            line("Characters", 0.97f, 0.10f, 0.15f),
+            line("Mohawk Cat", 1.0f, 0.14f, 0.20f),
+            line("Leve1 20", 0.672f, 0.28f, 0.36f, 0.49f, 0.55f),
+        )
+        val hit = requireNotNull(CatScanResolver.resolve(lines, index))
+        assertEquals("Mohawk Cat", hit.displayName)
+        assertEquals(20, hit.level)
+        assertNull(hit.plusLevel)
+        assertEquals(20, hit.effectiveLevel)
+    }
+
+    @Test
+    fun plusLevelsAreReadAndAddedToTheProjectedLevel() {
+        val lines = listOf(
+            line("Mohawk Cat", 1.0f, 0.14f, 0.20f),
+            line("Leve1 20", 0.672f, 0.28f, 0.33f, 0.49f, 0.55f),
+            line("+90", 0.877f, 0.34f, 0.38f, 0.55f, 0.59f),
+        )
+        val hit = requireNotNull(CatScanResolver.resolve(lines, index))
+        assertEquals(20, hit.level)
+        assertEquals(90, hit.plusLevel)
+        // Plus levels grow stats like normal levels.
+        assertEquals(110, hit.effectiveLevel)
+    }
+
+    @Test
+    fun aPlusLevelFarFromTheCardIsIgnored() {
+        val lines = listOf(
+            line("Mohawk Cat", 1.0f, 0.14f, 0.20f),
+            line("Leve1 20", 0.672f, 0.28f, 0.33f, 0.49f, 0.55f),
+            line("+12", 0.9f, 0.90f, 0.95f, 0.10f, 0.20f),
+        )
+        assertNull(requireNotNull(CatScanResolver.resolve(lines, index)).plusLevel)
+    }
+
+    @Test
+    fun mergedLabelsAreParsed() {
+        assertEquals(20, CatScanResolver.parseLevel("Leve1 20"))
+        assertEquals(50, CatScanResolver.parseLevel("Max Level 50"))
+        assertEquals(45, CatScanResolver.parseLevel("Level 45"))
+        assertNull(CatScanResolver.parseLevel("Level"))
+        assertNull(CatScanResolver.parseLevel("+90"))
+        assertEquals(90, CatScanResolver.parsePlus("+90"))
+        assertEquals(90, CatScanResolver.parsePlus("+9O"))
+        assertNull(CatScanResolver.parsePlus("90"))
     }
 }

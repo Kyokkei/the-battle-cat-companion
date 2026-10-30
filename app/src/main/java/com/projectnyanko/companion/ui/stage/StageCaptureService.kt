@@ -94,6 +94,7 @@ class StageCaptureService : Service() {
     private var isUserStopping = false
     private var projectionActive = false
     private var locale = StageLocale.EN
+    private var scanMode = ScanMode.STAGE
     private var projectionCallback: MediaProjection.Callback? = null
 
     override fun onCreate() {
@@ -106,6 +107,7 @@ class StageCaptureService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         locale = intent?.getStringExtra(StageOverlayService.EXTRA_REGION)?.toLocale() ?: locale
+        scanMode = ScanMode.fromName(intent?.getStringExtra(StageOverlayService.EXTRA_SCAN_MODE))
         try {
             when (intent?.action) {
                 ACTION_ENABLE -> enableProjection(intent)
@@ -398,6 +400,31 @@ class StageCaptureService : Service() {
         reader.setOnImageAvailableListener(null, null)
         serviceScope.launch {
             try {
+                if (scanMode == ScanMode.CAT) {
+                    // Cat mode never consults the stage matcher: on a cat screen a stray number is
+                    // enough to "resolve" a stage and swallow the frame.
+                    val catHit = resolveCat(bitmap, locale)
+                    if (catHit != null) {
+                        startService(
+                            Intent(this@StageCaptureService, StageOverlayService::class.java)
+                                .setAction(StageOverlayService.ACTION_SHOW_CAT)
+                                .putExtra(StageOverlayService.EXTRA_REGION, locale.name)
+                                .putExtra(StageOverlayService.EXTRA_CAT_UNIT_ID, catHit.unitId)
+                                .putExtra(StageOverlayService.EXTRA_CAT_FORM_INDEX, catHit.formIndex)
+                                .putExtra(StageOverlayService.EXTRA_CAT_LEVEL, catHit.level ?: -1)
+                                .putExtra(StageOverlayService.EXTRA_CAT_PLUS, catHit.plusLevel ?: -1)
+                                .putExtra(StageOverlayService.EXTRA_CAT_NAME, catHit.displayName)
+                                .putExtra(StageOverlayService.EXTRA_CAT_CONFIDENCE, catHit.nameConfidence),
+                        )
+                    } else {
+                        StageOverlayService.showMessage(
+                            this@StageCaptureService,
+                            locale.name,
+                            "No cat name on this screen. Hold the paw for half a second to switch back to stage mode.",
+                        )
+                    }
+                    return@launch
+                }
                 val catalog = withContext(Dispatchers.IO) {
                     (application as BattleCatsApplication).stageCatalogRepository.getCatalog()
                 }
@@ -417,25 +444,6 @@ class StageCaptureService : Service() {
                     "OCR read (${bitmap.width}x${bitmap.height}, try ${ocrRetries + 1}): " +
                         lines.map { it.text }.take(12).joinToString(" | "),
                 )
-                if (matches.candidates.isEmpty() && ocrRetries == 0) {
-                    // No stage name: this may simply not be the stage screen. The same paw tap has
-                    // to work on the Upgrade / Organize Cats screens too, so try a cat before
-                    // assuming the frame was a replayed composition.
-                    val catHit = resolveCat(bitmap, locale)
-                    if (catHit != null) {
-                        startService(
-                            Intent(this@StageCaptureService, StageOverlayService::class.java)
-                                .setAction(StageOverlayService.ACTION_SHOW_CAT)
-                                .putExtra(StageOverlayService.EXTRA_REGION, locale.name)
-                                .putExtra(StageOverlayService.EXTRA_CAT_UNIT_ID, catHit.unitId)
-                                .putExtra(StageOverlayService.EXTRA_CAT_FORM_INDEX, catHit.formIndex)
-                                .putExtra(StageOverlayService.EXTRA_CAT_LEVEL, catHit.level ?: -1)
-                                .putExtra(StageOverlayService.EXTRA_CAT_NAME, catHit.displayName)
-                                .putExtra(StageOverlayService.EXTRA_CAT_CONFIDENCE, catHit.nameConfidence),
-                        )
-                        return@launch
-                    }
-                }
                 if (matches.candidates.isEmpty() && ocrRetries < MAX_OCR_RETRIES) {
                     // The engine reads a real stage-select screenshot perfectly, so an empty result
                     // means this frame is not the screen: the mirroring surface replayed a
@@ -718,10 +726,11 @@ class StageCaptureService : Service() {
             startCaptureService(context, intent)
         }
 
-        fun requestCapture(context: Context, locale: StageLocale) {
+        fun requestCapture(context: Context, locale: StageLocale, mode: ScanMode = ScanMode.STAGE) {
             val intent = Intent(context, StageCaptureService::class.java)
                 .setAction(ACTION_CAPTURE)
                 .putExtra(StageOverlayService.EXTRA_REGION, locale.name)
+                .putExtra(StageOverlayService.EXTRA_SCAN_MODE, mode.name)
             if (isRunning && isProjectionActive) startCaptureService(context, intent)
             else requestConsent(context, locale)
         }

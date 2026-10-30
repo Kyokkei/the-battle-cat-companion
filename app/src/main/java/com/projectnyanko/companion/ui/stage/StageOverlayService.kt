@@ -28,6 +28,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import android.widget.Toast
 import com.projectnyanko.companion.domain.cat.CatLevelCurve
 import com.projectnyanko.companion.domain.seed.GameRegion
 import com.projectnyanko.companion.ui.seed.formLabel
@@ -141,8 +142,9 @@ class StageOverlayService : Service() {
             val region = getSharedPreferences(PREFERENCES, MODE_PRIVATE)
                 .getString(PREFERENCE_REGION, selectedLocale.name)
                 ?.toLocale() ?: selectedLocale
-            StageCaptureService.requestCapture(this, region)
+            StageCaptureService.requestCapture(this, region, currentScanMode())
         }
+        applyScanModeToBubble()
         installDragAndTap(view, params)
         runCatching { windowManager.addView(view, params) }
             .onSuccess {
@@ -157,6 +159,15 @@ class StageOverlayService : Service() {
         var startX = 0
         var startY = 0
         var moved = false
+        var longPressFired = false
+        // Holding the bubble switches what the paw reads. It has to be cancellable from MOVE so a
+        // drag never toggles the mode by accident.
+        val longPress = Runnable {
+            if (!moved) {
+                longPressFired = true
+                toggleScanMode()
+            }
+        }
         view.setOnTouchListener { touched, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
@@ -165,12 +176,15 @@ class StageOverlayService : Service() {
                     startX = params.x
                     startY = params.y
                     moved = false
+                    longPressFired = false
+                    touched.postDelayed(longPress, LONG_PRESS_MS)
                     true
                 }
                 MotionEvent.ACTION_MOVE -> {
                     val dx = (event.rawX - downX).toInt()
                     val dy = (event.rawY - downY).toInt()
                     moved = moved || abs(dx) > dp(6) || abs(dy) > dp(6)
+                    if (moved) touched.removeCallbacks(longPress)
                     if (moved) {
                         if (stopTarget == null) showStopTarget()
                         params.x = (startX - dx).coerceAtLeast(0)
@@ -180,6 +194,12 @@ class StageOverlayService : Service() {
                     true
                 }
                 MotionEvent.ACTION_UP -> {
+                    touched.removeCallbacks(longPress)
+                    if (longPressFired) {
+                        longPressFired = false
+                        removeStopTarget()
+                        return@setOnTouchListener true
+                    }
                     if (moved && isDroppedOnStopTarget(event.rawX, event.rawY)) {
                         StageCaptureService.stop(this)
                         stopSelf()
@@ -191,6 +211,8 @@ class StageOverlayService : Service() {
                     true
                 }
                 MotionEvent.ACTION_CANCEL -> {
+                    touched.removeCallbacks(longPress)
+                    longPressFired = false
                     removeStopTarget()
                     true
                 }
@@ -460,6 +482,7 @@ class StageOverlayService : Service() {
         if (unitId <= 0) return
         val formIndex = intent.getIntExtra(EXTRA_CAT_FORM_INDEX, 0)
         val readLevel = intent.getIntExtra(EXTRA_CAT_LEVEL, -1)
+        val readPlus = intent.getIntExtra(EXTRA_CAT_PLUS, -1)
         val scannedName = intent.getStringExtra(EXTRA_CAT_NAME).orEmpty()
         val confidence = intent.getFloatExtra(EXTRA_CAT_CONFIDENCE, 0f)
 
@@ -483,7 +506,8 @@ class StageOverlayService : Service() {
 
         val form = stats.forms[formIndex]
         val reference = stats.level
-        val shownLevel = if (readLevel > 0) readLevel else reference
+        // Plus levels grow stats like normal levels, so 20 +90 projects as level 110.
+        val shownLevel = if (readLevel > 0) readLevel + (if (readPlus > 0) readPlus else 0) else reference
         val hp = CatLevelCurve.project(form.health, reference, shownLevel)
         val attack = CatLevelCurve.project(form.attack, reference, shownLevel)
         val dps = if (form.attackCycleSeconds > 0.0) {
@@ -495,8 +519,13 @@ class StageOverlayService : Service() {
         root.addView(label(form.name, 20f, INK, bold = true))
         val subtitle = buildString {
             append(formLabel(formIndex))
-            append("  ·  Lv ").append(shownLevel)
-            if (readLevel <= 0) append(" (level not read)")
+            append("  ·  Lv ")
+            if (readLevel > 0) {
+                append(readLevel)
+                if (readPlus > 0) append(" +").append(readPlus)
+            } else {
+                append(shownLevel).append(" (level not read)")
+            }
         }
         root.addView(label(subtitle, 13f, INK_SOFT))
         root.addView(statRow("Health", formatStat(hp)))
@@ -728,10 +757,49 @@ class StageOverlayService : Service() {
         setStroke(dp(3), INK)
     }
 
-    private fun bubbleBackground() = GradientDrawable().apply {
+    private fun bubbleBackground() = bubbleBackground(ACCENT)
+
+    private fun bubbleBackground(fill: Int) = GradientDrawable().apply {
         shape = GradientDrawable.OVAL
-        setColor(ACCENT)
+        setColor(fill)
         setStroke(dp(3), INK)
+    }
+
+    // ------------------------------------------------------------------ scan mode
+
+    private fun currentScanMode(): ScanMode =
+        ScanMode.fromName(
+            getSharedPreferences(PREFERENCES, MODE_PRIVATE).getString(PREFERENCE_SCAN_MODE, null),
+        )
+
+    private fun toggleScanMode() {
+        val next = currentScanMode().toggled()
+        getSharedPreferences(PREFERENCES, MODE_PRIVATE).edit()
+            .putString(PREFERENCE_SCAN_MODE, next.name)
+            .apply()
+        applyScanModeToBubble()
+        val message = when (next) {
+            ScanMode.STAGE -> "Stage mode: the paw reads stage names"
+            ScanMode.CAT -> "Cat mode: the paw reads cat name + level"
+        }
+        runCatching { Toast.makeText(this, message, Toast.LENGTH_SHORT).show() }
+        Log.i(TAG, "scan mode -> ${next.name}")
+    }
+
+    /** The paw is amber for stages and teal for cats, so the mode is visible without a label. */
+    private fun applyScanModeToBubble() {
+        val view = bubble ?: return
+        val mode = currentScanMode()
+        view.background = bubbleBackground(
+            when (mode) {
+                ScanMode.STAGE -> ACCENT
+                ScanMode.CAT -> CAT_MODE_FILL
+            },
+        )
+        view.contentDescription = when (mode) {
+            ScanMode.STAGE -> "Battle Cats stage helper. Tap to scan a stage, hold to switch to cat stats."
+            ScanMode.CAT -> "Battle Cats cat helper. Tap to scan a cat, hold to switch to stage info."
+        }
     }
 
     private fun roundedBackground(color: Int, radius: Int) = GradientDrawable().apply {
@@ -818,17 +886,22 @@ class StageOverlayService : Service() {
         const val ACTION_HIDE_BUBBLE = "com.projectnyanko.companion.stage.HIDE_BUBBLE"
         const val PREFERENCES = "stage_helper"
         const val PREFERENCE_REGION = "region"
+        const val PREFERENCE_SCAN_MODE = "scan_mode"
+        private const val LONG_PRESS_MS = 500L
+        private const val CAT_MODE_FILL = 0xFF7FD8CE.toInt()
         const val ACTION_SHOW_RESULT = "com.projectnyanko.companion.stage.SHOW_RESULT"
         const val ACTION_SHOW_CAT = "com.projectnyanko.companion.stage.SHOW_CAT"
         const val EXTRA_CAT_UNIT_ID = "cat_unit_id"
         const val EXTRA_CAT_FORM_INDEX = "cat_form_index"
         const val EXTRA_CAT_LEVEL = "cat_level"
+        const val EXTRA_CAT_PLUS = "cat_plus"
         const val EXTRA_CAT_NAME = "cat_name"
         const val EXTRA_CAT_CONFIDENCE = "cat_confidence"
         const val ACTION_CLOSE_RESULT = "com.projectnyanko.companion.stage.CLOSE_RESULT"
         const val ACTION_STOP = "com.projectnyanko.companion.stage.STOP_HELPER"
         const val ACTION_SHOW_MESSAGE = "com.projectnyanko.companion.stage.SHOW_MESSAGE"
         const val EXTRA_REGION = "stage_region"
+        const val EXTRA_SCAN_MODE = "scan_mode"
         const val EXTRA_STAGE_IDS = "stage_ids"
         const val EXTRA_LIKELY_STAGE_ID = "likely_stage_id"
         const val EXTRA_SELECTED_ENERGY = "selected_energy"

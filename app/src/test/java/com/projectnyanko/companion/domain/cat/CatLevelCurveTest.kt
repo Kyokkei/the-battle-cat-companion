@@ -63,7 +63,7 @@ class CatLevelCurveTest {
     @Test
     fun levelsAreClampedToTheLegalRange() {
         assertEquals(CatLevelCurve.project(1155, 1, 1), CatLevelCurve.project(1155, 1, 0))
-        assertEquals(CatLevelCurve.project(1155, 1, 60), CatLevelCurve.project(1155, 1, 999))
+        assertEquals(CatLevelCurve.project(1155, 1, 200), CatLevelCurve.project(1155, 1, 999))
     }
 
     @Test

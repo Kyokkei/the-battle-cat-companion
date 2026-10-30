@@ -23,8 +23,12 @@ object CatLevelCurve {
     /** Lowest level the game shows. */
     const val MIN_LEVEL = 1
 
-    /** Highest level reachable with catseyes before plus-levels. */
-    const val MAX_LEVEL = 60
+    /**
+     * Sanity bound, not a game rule. A normal cat caps at 20 base levels but can carry +90 plus
+     * levels, and plus levels grow stats exactly like normal ones, so the projection has to accept
+     * levels well past 60.
+     */
+    const val MAX_LEVEL = 200
 
     /** Recovers the level-1 base from a value printed at [referenceLevel], in half-units. */
     fun baseHalfUnits(valueAtReference: Int, referenceLevel: Int): Long {

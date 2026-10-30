@@ -7,11 +7,18 @@ data class CatScanHit(
     val unitId: Int,
     val formIndex: Int,
     val displayName: String,
+    /** The level printed on the card, before plus-levels. Null when nothing legible was found. */
     val level: Int?,
+    /** `+90` on a hyper-levelled cat; null when the card shows no plus level. */
+    val plusLevel: Int?,
     val nameConfidence: Float,
     val matchedText: String,
 ) {
-    val corrected: Boolean get() = matchedText.trim().lowercase() != displayName.lowercase()
+    /**
+     * Level used for the stat projection. Plus-levels add the same growth as a normal level, so a
+     * `20 +90` card is projected as level 110.
+     */
+    val effectiveLevel: Int? get() = level?.let { it + (plusLevel ?: 0) }
 }
 
 /**
@@ -28,15 +35,23 @@ object CatScanResolver {
     /** How far the level number may sit from the word Level, in screen heights. */
     private const val MAX_LEVEL_DISTANCE = 0.15f
 
+    /**
+     * The label and its number are often merged into one detected line: the Mohawk Cat card reads
+     * `Leve1 20`, with the recognizer turning the `l` into a `1`.
+     */
+    private val LEVEL_IN_LINE = Regex("""leve[l1]\s*(\d{1,3})""", RegexOption.IGNORE_CASE)
+    private val PLUS_LINE = Regex("""^\+\s*([0-9OoIl]{1,2})$""")
+
     fun resolve(lines: List<OcrStageLine>, index: CatNameIndex): CatScanHit? {
         if (lines.isEmpty()) return null
         val name = bestName(lines, index) ?: return null
-        val level = bestLevel(lines, name.line)
+        val (level, plus) = readLevel(lines)
         return CatScanHit(
             unitId = name.match.entry.unitId,
             formIndex = name.match.entry.formIndex,
             displayName = name.match.entry.displayName,
             level = level,
+            plusLevel = plus,
             nameConfidence = name.line.confidence,
             matchedText = name.line.text,
         )
@@ -62,25 +77,47 @@ object CatScanResolver {
         return best
     }
 
-    private fun bestLevel(lines: List<OcrStageLine>, nameLine: OcrStageLine): Int? {
-        val candidates = lines.mapNotNull { line ->
-            val value = parseLevel(line.text) ?: return@mapNotNull null
-            value to line
-        }.filter { (value, _) -> value in CatLevelCurve.MIN_LEVEL..CatLevelCurve.MAX_LEVEL }
-        if (candidates.isEmpty()) return null
+    private data class LevelRead(val level: Int?, val plus: Int?)
 
+    private fun readLevel(lines: List<OcrStageLine>): LevelRead {
         val anchors = lines.filter { isLevelAnchor(it.text) }
+        val levels = lines.mapNotNull { line -> parseLevel(line.text)?.let { it to line } }
+        val pluses = lines.mapNotNull { line -> parsePlus(line.text)?.let { it to line } }
+
+        val level = pick(levels, anchors)
+        // A plus level belongs to the same card, so it only counts when it sits near the level.
+        val plus = pluses.minByOrNull { (_, line) ->
+            val centre = (line.top + line.bottom) / 2f
+            val reference = level?.second
+            if (reference == null) 0f else kotlin.math.abs((reference.top + reference.bottom) / 2f - centre)
+        }?.let { (value, line) ->
+            val reference = level?.second
+            if (reference == null) {
+                value
+            } else {
+                val distance = kotlin.math.abs((reference.top + reference.bottom) / 2f - (line.top + line.bottom) / 2f)
+                if (distance <= MAX_LEVEL_DISTANCE) value else null
+            }
+        }
+        return LevelRead(level?.first, plus)
+    }
+
+    private fun pick(
+        candidates: List<Pair<Int, OcrStageLine>>,
+        anchors: List<OcrStageLine>,
+    ): Pair<Int, OcrStageLine>? {
+        val inRange = candidates.filter { (value, _) -> value in CatLevelCurve.MIN_LEVEL..CatLevelCurve.MAX_LEVEL }
+        if (inRange.isEmpty()) return null
         if (anchors.isEmpty()) {
             // Without the word "Level" on screen a lone plausible number is still the best guess, but
             // two of them means we cannot tell which is the level.
-            return candidates.singleOrNull()?.first
+            return inRange.singleOrNull()
         }
-        val scored = candidates.map { (value, line) ->
-            val distance = anchors.minOf { verticalDistance(it, line) }
-            Triple(value, line, distance)
-        }.filter { it.third <= MAX_LEVEL_DISTANCE }
-        if (scored.isEmpty()) return null
-        return scored.minByOrNull { it.third }?.first
+        return inRange
+            .map { (value, line) -> Triple(value, line, anchors.minOf { verticalDistance(it, line) }) }
+            .filter { it.third <= MAX_LEVEL_DISTANCE }
+            .minByOrNull { it.third }
+            ?.let { it.first to it.second }
     }
 
     private fun verticalDistance(a: OcrStageLine, b: OcrStageLine): Float {
@@ -89,20 +126,38 @@ object CatScanResolver {
         return kotlin.math.abs(centreA - centreB)
     }
 
-    private fun isLevelAnchor(text: String): Boolean =
-        text.lowercase().replace(" ", "").contains("level")
+    private fun isLevelAnchor(text: String): Boolean {
+        val lowered = text.lowercase().replace(" ", "")
+        return lowered.contains("level") || lowered.contains("leve1")
+    }
 
     /**
-     * Reads a level from one OCR line. The game prints the number alone next to a stacked
-     * "Max"/"Level" label, and the recognizer occasionally confuses O with 0 or l with 1 in the
-     * outlined font, so those two substitutions are undone before parsing.
+     * Reads a level from one OCR line. Three shapes reach here: a bare number (`50`), a number merged
+     * with its label (`Leve1 20`), and a bare number with glyph confusions (`5O`).
      */
     internal fun parseLevel(text: String): Int? {
         val trimmed = text.trim()
-        if (trimmed.isEmpty() || trimmed.length > 2) return null
+        if (trimmed.isEmpty()) return null
+        LEVEL_IN_LINE.find(trimmed)?.let { match ->
+            return match.groupValues[1].toIntOrNull()
+        }
+        return parseDigits(trimmed)
+    }
+
+    /** `+90` on a hyper-levelled cat. */
+    internal fun parsePlus(text: String): Int? {
+        val match = PLUS_LINE.find(text.trim()) ?: return null
+        val digits = buildString {
+            for (ch in match.groupValues[1]) append(GLYPH_CONFUSIONS[ch] ?: ch)
+        }
+        return digits.toIntOrNull()
+    }
+
+    private fun parseDigits(trimmed: String): Int? {
+        if (trimmed.length > 3) return null
         // Every character has to be a digit or a known glyph confusion. Without this, the label
         // itself parses: "Level" ends in 'l', which maps to '1', and the level became 1.
-        if (trimmed.any { ch -> !ch.isDigit() && ch !in GLYPH_CONFUSIONS } ) return null
+        if (trimmed.any { ch -> !ch.isDigit() && ch !in GLYPH_CONFUSIONS }) return null
         val cleaned = buildString {
             for (ch in trimmed) append(GLYPH_CONFUSIONS[ch] ?: ch)
         }
