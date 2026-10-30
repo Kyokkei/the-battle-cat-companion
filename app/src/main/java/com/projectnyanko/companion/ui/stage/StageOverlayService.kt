@@ -479,7 +479,8 @@ class StageOverlayService : Service() {
     private var catName = ""
     private var catConfidence = 0f
     private var catTypedText = ""
-    private var catKeypadOpen = false
+    private var catEditing = false
+    private var catTypedView: TextView? = null
 
     private fun showMessageCard(message: String, title: String) {
         val root = createCard()
@@ -506,7 +507,8 @@ class StageOverlayService : Service() {
         catConfidence = intent.getFloatExtra(EXTRA_CAT_CONFIDENCE, 0f)
         // A fresh scan is the truth again; drop anything the player typed for the previous cat.
         catTypedText = ""
-        catKeypadOpen = false
+        catEditing = false
+        catTypedView = null
         renderCat()
     }
 
@@ -521,9 +523,9 @@ class StageOverlayService : Service() {
         val unitId = catUnitId
         if (unitId < 0) return
         val formIndex = catFormIndex
-        val typed = catTypedText.toIntOrNull()?.takeIf { it > 0 }
-        val readLevel = typed ?: catReadLevel
-        val readPlus = if (typed != null) 0 else catReadPlus
+        val (typedLevel, typedPlus) = parseTyped(catTypedText)
+        val readLevel = typedLevel ?: catReadLevel
+        val readPlus = if (typedLevel != null) (typedPlus ?: 0) else catReadPlus
         val scannedName = catName
         val confidence = catConfidence
 
@@ -565,13 +567,17 @@ class StageOverlayService : Service() {
             if (readLevel > 0) {
                 append(readLevel)
                 if (readPlus > 0) append(" +").append(readPlus)
-                if (typed != null) append(" typed")
+                if (typedLevel != null) append(" typed")
             } else {
                 append("?")
             }
         }
-        root.addView(headerRow("${form.name}  ·  Lv $levelText", showBack = false) {})
-        root.addView(if (catKeypadOpen) keypadRow() else levelHintRow())
+        root.addView(headerRow(catHeader(form.name, levelText), showBack = false) {})
+        if (catEditing) {
+            root.addView(editorBody(unitId, formIndex))
+            showResultRoot(root)
+            return
+        }
 
         val columns = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
@@ -697,59 +703,167 @@ class StageOverlayService : Service() {
         }.getOrNull()
     }
 
-    /** The one-line escape hatch under the header: OCR is right until it isn't. */
-    private fun levelHintRow(): View = TextView(this).apply {
-        text = "◀ not your level? tap to type"
-        setTextSize(android.util.TypedValue.COMPLEX_UNIT_DIP, 10f)
-        setTextColor(ACCENT_DEEP)
+    /**
+     * `Name · Lv 50 +16  (not ur level? click me)` — one line, as asked, with the escape hatch as a
+     * tappable tail rather than a row of its own.
+     */
+    private fun catHeader(name: String, levelText: String): CharSequence =
+        android.text.SpannableStringBuilder().apply {
+            append("$name  ·  Lv $levelText")
+            if (catEditing) return@apply
+            append("   ")
+            val start = length
+            append("(not ur level? click me)")
+            setSpan(
+                android.text.style.ForegroundColorSpan(ACCENT_DEEP),
+                start, length, android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+            )
+            setSpan(
+                android.text.style.RelativeSizeSpan(0.5f),
+                start, length, android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+            )
+            setSpan(
+                object : android.text.style.ClickableSpan() {
+                    override fun onClick(widget: View) {
+                        // Keep whatever was typed before: fixing one digit should not mean retyping
+                        // the whole thing.
+                        catEditing = true
+                        renderCat()
+                    }
+
+                    override fun updateDrawState(ds: android.text.TextPaint) {
+                        ds.isUnderlineText = false
+                    }
+                },
+                start, length, android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+            )
+        }
+
+    /**
+     * The typing screen: portrait, what you typed, ENTER on the left; a 4x3 pad on the right.
+     *
+     * A `+` key exists because "50+16" is how the game prints it and nobody should have to add it up.
+     * No soft keyboard is involved on purpose: an IME in an overlay window is unreliable across OEMs,
+     * and a game running fullscreen covers the whole card anyway.
+     */
+    private fun editorBody(unitId: Int, formIndex: Int): View {
+        val height = statRowHeight * 5 + dp(10)
+        val body = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height)
+            setPadding(0, dp(2), 0, dp(2))
+        }
+
+        val left = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        val portrait = ImageView(this).apply {
+            scaleType = ImageView.ScaleType.FIT_CENTER
+            setPadding(dp(6), dp(6), dp(6), dp(6))
+            background = tileBackground()
+            loadSprite(unitId, formIndex)?.let { setImageBitmap(it) }
+        }
+        left.addView(portrait, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f))
+        left.addView(typedBox(), LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dp(36)).apply {
+            topMargin = dp(4)
+        })
+        left.addView(enterButton(), LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dp(40)).apply {
+            topMargin = dp(4)
+        })
+        body.addView(left, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0.34f).apply {
+            marginEnd = dp(6)
+        })
+
+        val pad = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        listOf(
+            listOf("1", "2", "3"),
+            listOf("4", "5", "6"),
+            listOf("7", "8", "9"),
+            listOf("+", "0", "del"),
+        ).forEach { keys ->
+            val row = LinearLayout(this).apply {
+                orientation = LinearLayout.HORIZONTAL
+                setPadding(0, dp(2), 0, dp(2))
+            }
+            keys.forEach { key ->
+                row.addView(keypadKey(key), LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f).apply {
+                    marginEnd = if (key == "3" || key == "6" || key == "9" || key == "del") 0 else dp(4)
+                })
+            }
+            pad.addView(row, LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f))
+        }
+        body.addView(pad, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0.66f))
+        return body
+    }
+
+    /** What the player has typed so far: `50 + 16`, or a dash before anything. */
+    private fun typedBox(): TextView = TextView(this).apply {
+        text = typedDisplay()
+        setTextSize(android.util.TypedValue.COMPLEX_UNIT_DIP, 17f)
+        setTextColor(INK)
+        gravity = Gravity.CENTER
         includeFontPadding = false
-        setPadding(0, 0, 0, dp(4))
+        background = tileBackground()
+        catTypedView = this
+    }
+
+    private fun typedDisplay(): String {
+        if (catTypedText.isEmpty()) return "—"
+        val parts = catTypedText.split('+')
+        return if (parts.size == 2 && parts[1].isNotEmpty()) "${parts[0]} + ${parts[1]}" else catTypedText
+    }
+
+    private fun enterButton(): View = TextView(this).apply {
+        text = "ENTER"
+        setTextSize(android.util.TypedValue.COMPLEX_UNIT_DIP, 16f)
+        setTextColor(INK)
+        gravity = Gravity.CENTER
+        includeFontPadding = false
+        setTypeface(typeface, android.graphics.Typeface.BOLD)
+        background = GradientDrawable().apply {
+            shape = GradientDrawable.RECTANGLE
+            cornerRadius = dp(10).toFloat()
+            setColor(CAT_MODE_FILL)
+            setStroke(dp(2), INK)
+        }
         isClickable = true
         isFocusable = true
         setOnClickListener {
-            catKeypadOpen = true
-            catTypedText = ""
+            catEditing = false
+            catTypedView = null
             renderCat()
         }
     }
 
-    /** Twelve keys, no IME: a soft keyboard in an overlay window is a coin flip on Android. */
-    private fun keypadRow(): View {
-        val row = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            setPadding(0, dp(2), 0, dp(4))
-        }
-        listOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "⌫", "0", "✓").forEach { key ->
-            row.addView(
-                keypadKey(key),
-                LinearLayout.LayoutParams(0, dp(30), 1f).apply { marginEnd = dp(2) },
-            )
-        }
-        return row
-    }
-
     private fun keypadKey(key: String): View = TextView(this).apply {
         text = key
-        setTextSize(android.util.TypedValue.COMPLEX_UNIT_DIP, 14f)
+        setTextSize(android.util.TypedValue.COMPLEX_UNIT_DIP, if (key == "del") 13f else 16f)
         setTextColor(INK)
         gravity = Gravity.CENTER
         includeFontPadding = false
         background = GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
-            cornerRadius = dp(6).toFloat()
-            setColor(if (key == "✓") CAT_MODE_FILL else PAPER_LIGHT)
+            cornerRadius = dp(8).toFloat()
+            setColor(PAPER_LIGHT)
             setStroke(dp(2), INK)
         }
         isClickable = true
         isFocusable = true
         setOnClickListener {
             when (key) {
-                "⌫" -> catTypedText = catTypedText.dropLast(1)
-                "✓" -> catKeypadOpen = false
-                else -> if (catTypedText.length < 3) catTypedText += key
+                "del" -> catTypedText = catTypedText.dropLast(1)
+                "+" -> if (catTypedText.isNotEmpty() && !catTypedText.contains('+')) catTypedText += "+"
+                else -> if (catTypedText.length < 7) catTypedText += key
             }
-            renderCat()
+            catTypedView?.text = typedDisplay()
         }
+    }
+
+    /** `50+16` is level 50 plus 16; `110` is just level 110. */
+    private fun parseTyped(text: String): Pair<Int?, Int?> {
+        if (text.isEmpty()) return null to null
+        val parts = text.split('+')
+        val level = parts.getOrNull(0)?.trim()?.toIntOrNull()?.takeIf { it > 0 }
+        val plus = parts.getOrNull(1)?.trim()?.toIntOrNull()?.takeIf { it >= 0 }
+        return level to plus
     }
 
     /** Full-width box for the ability text, which does not fit a half-column. */
@@ -785,7 +899,7 @@ class StageOverlayService : Service() {
      */
     private val statRowHeight: Int by lazy {
         val heightDp = resources.displayMetrics.heightPixels / resources.displayMetrics.density
-        val available = heightDp - 16f - HEADER_DP - HINT_DP - CARD_PADDING_DP
+        val available = heightDp - 16f - HEADER_DP - CARD_PADDING_DP
         dp((available / 5f).coerceIn(30f, 44f).toInt())
     }
 
@@ -835,7 +949,7 @@ class StageOverlayService : Service() {
      * Full-width "Back" / "Close" rows cost two 54 dp bands on every card. A browser-style back arrow
      * and an X in the corner do the same job and let the card itself stay short.
      */
-    private fun headerRow(title: String, showBack: Boolean, onBack: () -> Unit): View {
+    private fun headerRow(title: CharSequence, showBack: Boolean, onBack: () -> Unit): View {
         val row = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
@@ -848,6 +962,12 @@ class StageOverlayService : Service() {
             setTypeface(typeface, android.graphics.Typeface.BOLD)
             maxLines = 2
             ellipsize = android.text.TextUtils.TruncateAt.END
+            if (title is android.text.Spanned) {
+                // The "(not ur level? click me)" tail is a ClickableSpan, which only fires with a
+                // movement method attached.
+                movementMethod = android.text.method.LinkMovementMethod.getInstance()
+                highlightColor = 0x00000000
+            }
         }
         row.addView(heading, LinearLayout.LayoutParams(0, WRAP_CONTENT, 1f))
         if (showBack) row.addView(circleButton(R.drawable.ic_back, "Back to candidates", onBack))
@@ -1163,9 +1283,8 @@ class StageOverlayService : Service() {
         private const val CARD_WIDTH_FRACTION = 0.72f
 
         // Vertical budget the stat rows have to share, in dp. Everything else in the card is fixed:
-        // header row, the level hint (or the keypad) and the card's own padding.
+        // header row (which also carries the "not ur level" link) and the card's own padding.
         private const val HEADER_DP = 48f
-        private const val HINT_DP = 26f
         private const val CARD_PADDING_DP = 26f
         const val ACTION_SHOW_BUBBLE = "com.projectnyanko.companion.stage.SHOW_BUBBLE"
         const val ACTION_HIDE_BUBBLE = "com.projectnyanko.companion.stage.HIDE_BUBBLE"
