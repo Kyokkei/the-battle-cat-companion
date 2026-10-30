@@ -529,12 +529,38 @@ class StageCaptureService : Service() {
                 )
                 CatScanResolver.resolve(all, index).also { hit ->
                     Log.i(TAG, "cat scan hit: ${hit?.displayName ?: "none"} level=${hit?.level} plus=${hit?.plusLevel}")
+                    dumpCatScan(all, hit)
                 }
             } catch (error: Exception) {
                 Log.w(TAG, "cat scan failed: ${error.message}")
                 null
             }
         }
+
+    /**
+     * Writes the last cat scan to the cache directory.
+     *
+     * The logcat ring buffer is only 256 KB and rotates within minutes on this device, so a failed
+     * scan was unreadable by the time anyone looked. This file survives.
+     */
+    private fun dumpCatScan(lines: List<com.projectnyanko.companion.domain.stage.OcrStageLine>, hit: CatScanHit?) {
+        runCatching {
+            val body = buildString {
+                appendLine("hit=" + (hit?.displayName ?: "none") + " level=" + hit?.level + " plus=" + hit?.plusLevel)
+                appendLine("lines=" + lines.size)
+                lines.forEach { line ->
+                    appendLine(
+                        "  [%.3f-%.3f x %.3f-%.3f] %s (%.2f)".format(
+                            java.util.Locale.ROOT,
+                            line.top, line.bottom, line.left, line.right,
+                            line.text, line.confidence,
+                        ),
+                    )
+                }
+            }
+            java.io.File(cacheDir, "last_cat_scan.txt").writeText(body)
+        }
+    }
 
     /**
      * Reads the energy the game prints under the selected card.

@@ -513,9 +513,12 @@ class StageOverlayService : Service() {
         val form = stats.forms[formIndex]
         val reference = stats.level
         // A plus level is just another level: the card's 50 +16 is level 66, so they are summed.
-        val projectedLevel = if (readLevel > 0) readLevel + (if (readPlus > 0) readPlus else 0) else reference
-        val hp = CatLevelCurve.project(form.health, reference, projectedLevel)
-        val attack = CatLevelCurve.project(form.attack, reference, projectedLevel)
+        val readTotal = if (readLevel > 0) readLevel + (if (readPlus > 0) readPlus else 0) else reference
+        // Clamp to the rarity's hard cap so a misread number cannot produce a fantasy level.
+        val projectedLevel = readTotal.coerceIn(CatLevelCurve.MIN_LEVEL, CatLevelCurve.capFor(stats.rarity))
+        val normalCat = CatLevelCurve.isNormalCat(stats.rarity)
+        val hp = CatLevelCurve.statAt(form.health, projectedLevel, normalCat)
+        val attack = CatLevelCurve.statAt(form.attack, projectedLevel, normalCat)
         val dps = if (form.attackCycleSeconds > 0.0) {
             (attack / form.attackCycleSeconds).toInt()
         } else {

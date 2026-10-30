@@ -1,51 +1,79 @@
 package com.projectnyanko.companion.domain.cat
 
+import com.projectnyanko.companion.domain.seed.CatRarity
+
 /**
  * Battle Cats stat growth.
  *
- * The game gives every unit +20% of its base HP and attack per level, so the value at level `L` is
- * `base * (1 + 0.2 * (L - 1))`. The bundled `stats.json` only stores one reference level (30), so the
- * base has to be recovered from it and then re-projected onto whatever level the player's screen
- * shows.
+ * The bundled table stores one reference level (30). From it the level-1 base is
+ * `S1 = S30 / 17.0`, and growth is piecewise rather than a single line:
  *
- * Base values are not always whole numbers: HP is frequently a half-integer (a unit with base 2.5 HP
- * exists), which is why a plain `value / 6.8` loses about 5% of units. Working in half-units keeps
- * the whole thing exact:
+ *     L <= 60          S1 * (2.0 + 0.5 * L)              +0.5   * S1 per level
+ *     60 < L <= 80     Stat(60) + (L - 60) * 0.25 * S1   +0.25  * S1 per level
+ *     80 < L <= 130    Stat(80) + (L - 80) * 0.125 * S1  +0.125 * S1 per level
  *
- *     half  = round(valueAtReference * 10 / (referenceLevel + 4))
- *     value = half * (level + 4) / 10            (integer division)
- *
- * With reference level 30 this is `half * (L + 4) / 10` and reproduces the bundled table for 99.03%
- * of all forms; the remainder are rows the source table itself has wrong (a known 1.2x discrepancy on
- * some third forms).
+ * Below level 60 this is algebraically identical to `base * (1 + 0.2 * (L - 1))`, which is why
+ * Pizza Cat at 50 matched the reference exactly; the tiers only matter once plus levels push a cat
+ * past 60.
  */
 object CatLevelCurve {
-    /** Lowest level the game shows. */
     const val MIN_LEVEL = 1
 
+    /** Highest total level any rarity can reach (Uber 60+70, Super Rare 50+80). */
+    const val MAX_LEVEL = 130
+
+    /** The level the bundled `stats.json` values are stated at. */
+    const val REFERENCE_LEVEL = 30
+
     /**
-     * Sanity bound, not a game rule. A normal cat caps at 20 base levels but can carry +90 plus
-     * levels, and plus levels grow stats exactly like normal ones, so the projection has to accept
-     * levels well past 60.
+     * Hard cap for a total level (base + plus), per rarity.
+     *
+     * Used to reject impossible OCR reads: a Legend Rare cannot be level 128, so a stray `128` on
+     * screen is a misread rather than a level.
      */
-    const val MAX_LEVEL = 200
-
-    /** Recovers the level-1 base from a value printed at [referenceLevel], in half-units. */
-    fun baseHalfUnits(valueAtReference: Int, referenceLevel: Int): Long {
-        if (valueAtReference <= 0) return 0L
-        val denominator = (referenceLevel + 4).toDouble()
-        if (denominator <= 0.0) return 0L
-        return Math.round(valueAtReference * 10.0 / denominator)
+    fun capFor(rarity: CatRarity?): Int = when (rarity) {
+        CatRarity.UBER_RARE -> 130            // base 60 + plus 70
+        CatRarity.SUPER_RARE -> 130           // base 50 + plus 80
+        CatRarity.RARE -> 130                 // base 50 + plus 80
+        CatRarity.LEGEND_RARE -> 70           // base 50 + plus 20
+        null -> 110                           // Normal: base 20 + plus 90
     }
 
-    /** Projects a half-unit base onto [level]. Levels outside 1..60 are clamped. */
-    fun valueAt(baseHalfUnits: Long, level: Int): Int {
-        if (baseHalfUnits <= 0L) return 0
+    /** Level-1 base for a stat whose level-30 value is [statAtReference]. */
+    fun baseStat(statAtReference: Int): Double = statAtReference / 17.0
+
+    /** The stat at [level], given the level-30 value. */
+    fun statAt(statAtReference: Int, level: Int, normalCat: Boolean = false): Int {
+        if (statAtReference <= 0) return 0
         val clamped = level.coerceIn(MIN_LEVEL, MAX_LEVEL)
-        return (baseHalfUnits * (clamped + 4L) / 10L).toInt()
+        val s1 = baseStat(statAtReference)
+        val value = if (normalCat) {
+            // Normal Cats are a legacy exception: full growth to level 90, half growth after. Their
+            // cap is 20 base + 90 plus, so the tier boundaries are 90 rather than 60/80.
+            val statAt90 = s1 * (2.0 + 90 * 0.5)
+            if (clamped <= 90) s1 * (2.0 + 0.5 * clamped) else statAt90 + (clamped - 90) * 0.25 * s1
+        } else {
+            val statAt60 = s1 * (2.0 + 60 * 0.5)
+            val statAt80 = statAt60 + 20 * 0.25 * s1
+            when {
+                clamped <= 60 -> s1 * (2.0 + 0.5 * clamped)
+                clamped <= 80 -> statAt60 + (clamped - 60) * 0.25 * s1
+                else -> statAt80 + (clamped - 80) * 0.125 * s1
+            }
+        }
+        return kotlin.math.round(value).toInt()
     }
 
-    /** Convenience: the value at [level] for a stat whose reference value is [valueAtReference]. */
-    fun project(valueAtReference: Int, referenceLevel: Int, level: Int): Int =
-        valueAt(baseHalfUnits(valueAtReference, referenceLevel), level)
+    /** Convenience for callers that still pass a reference level; only level 30 is stored. */
+    fun project(valueAtReference: Int, referenceLevel: Int, level: Int): Int {
+        val normalised = if (referenceLevel == REFERENCE_LEVEL) {
+            valueAtReference
+        } else {
+            kotlin.math.round(valueAtReference * 17.0 / (2.0 + 0.5 * referenceLevel)).toInt()
+        }
+        return statAt(normalised, level)
+    }
+
+    /** True when the unit has no gacha rarity, i.e. the Normal Cats. */
+    fun isNormalCat(rarity: CatRarity?): Boolean = rarity == null
 }

@@ -32,11 +32,39 @@ class CatLevelCurveTest {
     }
 
     @Test
-    fun halfUnitBasesArePreserved() {
-        // Base HP is sometimes x.5, which a plain value/6.8 loses.
-        val half = CatLevelCurve.baseHalfUnits(17, 30)
-        assertEquals(5L, half) // 2.5 HP, stored as 5 half-units
-        assertEquals(17, CatLevelCurve.valueAt(half, 30))
+    fun growthHalvesAboveSixtyAndQuartersAboveEighty() {
+        // S30 = 3400 -> S1 = 200.
+        // L60 = 200 * 32 = 6400; L80 = 6400 + 20*0.25*200 = 7400;
+        // L110 = 7400 + 30*0.125*200 = 8150.
+        assertEquals(6400, CatLevelCurve.statAt(3400, 60))
+        assertEquals(7400, CatLevelCurve.statAt(3400, 80))
+        assertEquals(8150, CatLevelCurve.statAt(3400, 110))
+    }
+
+    @Test
+    fun pizzaCatAtSixtySixUsesTheSecondTier() {
+        // S30 = 33150 -> S1 = 1950. L60 = 62400, then +6 * 0.25 * 1950 = 2925.
+        assertEquals(62400, CatLevelCurve.statAt(33150, 60))
+        assertEquals(65325, CatLevelCurve.statAt(33150, 66))
+    }
+
+    @Test
+    fun normalCatsKeepFullGrowthUntilNinety() {
+        // Normal Cats are the legacy exception: no halving at 60, only after 90.
+        // S30 = 3400 -> S1 = 200: L90 = 200 * 47 = 9400, L110 = 9400 + 20*0.25*200 = 10400.
+        assertEquals(9400, CatLevelCurve.statAt(3400, 90, normalCat = true))
+        assertEquals(10400, CatLevelCurve.statAt(3400, 110, normalCat = true))
+        // The gacha path must still halve at 60.
+        assertEquals(8150, CatLevelCurve.statAt(3400, 110, normalCat = false))
+    }
+
+    @Test
+    fun rarityCapsMatchTheGamesHardLimits() {
+        assertEquals(130, CatLevelCurve.capFor(com.projectnyanko.companion.domain.seed.CatRarity.UBER_RARE))
+        assertEquals(130, CatLevelCurve.capFor(com.projectnyanko.companion.domain.seed.CatRarity.SUPER_RARE))
+        assertEquals(130, CatLevelCurve.capFor(com.projectnyanko.companion.domain.seed.CatRarity.RARE))
+        assertEquals(70, CatLevelCurve.capFor(com.projectnyanko.companion.domain.seed.CatRarity.LEGEND_RARE))
+        assertEquals(110, CatLevelCurve.capFor(null))
     }
 
     @Test
