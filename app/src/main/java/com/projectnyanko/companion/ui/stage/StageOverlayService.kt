@@ -559,17 +559,20 @@ class StageOverlayService : Service() {
             loadSprite(unitId, formIndex)?.let { setImageBitmap(it) }
         }
         leftColumn.addView(portrait, LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, dp(76),
+            LinearLayout.LayoutParams.MATCH_PARENT, dp(104),
         ))
         // The ability box is the cat's special ability (Strong, Massive Damage, Slow, ...). Single vs
         // area is an attack property, so it goes in the small Target box instead.
+        val effects = form.effects.map(String::trim).filter { it.isNotEmpty() }
+        val immune = form.immune.map(String::trim).filter { it.isNotEmpty() }
         val abilityRows = buildList {
-            add("Special ability" to form.effects.joinToString(", ").ifBlank { "None" })
-            if (form.immune.isNotEmpty()) add("Immune" to form.immune.joinToString(", "))
+            add("Special ability" to effects.joinToString(", ").ifBlank { "None" })
+            // Only show the immune row when the unit actually resists something.
+            if (immune.isNotEmpty()) add("Immune" to immune.joinToString(", "))
         }
         val abilityBox = wideTile(abilityRows)
         leftColumn.addView(abilityBox, LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, dp(92),
+            LinearLayout.LayoutParams.MATCH_PARENT, dp(96),
         ).apply { topMargin = dp(4) })
         columns.addView(leftColumn, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.34f).apply {
             marginEnd = dp(5)
@@ -579,23 +582,17 @@ class StageOverlayService : Service() {
         val rightColumn = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         rightColumn.addView(tileRow("Health" to formatStat(hp), "Damage" to formatStat(attack)))
         rightColumn.addView(tileRow("Range" to form.range.toString(), "Knockback" to form.knockbacks.toString()))
-        rightColumn.addView(tileRow("Speed" to "${form.speedPerSecond}/s", "DPS" to formatStat(dps)))
-        rightColumn.addView(tileRow("TBA" to secondsText(form.attackCycleSeconds), "Spawn" to secondsText(form.rechargeSeconds)))
+        // The game prints the raw speed (36). Multiplying by 15 turned it into 540, which is not the
+        // number the player sees in-game.
+        rightColumn.addView(tileRow("Speed" to form.speed.toString(), "DPS" to formatStat(dps)))
+        rightColumn.addView(tileRow("TBA" to secondsText(form.attackCycleSeconds), "Cooldown" to secondsText(form.rechargeSeconds)))
         rightColumn.addView(tileRow("Target" to (if (form.areaAttack) "Area" else "Single"), "Cost" to formatStat(form.cost)))
         columns.addView(rightColumn, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.66f))
 
         root.addView(columns)
 
-        val provenance = when {
-            readLevel <= 0 -> "Level unreadable — showing the bundled Lv $reference row."
-            projectedLevel != reference ->
-                "Lv $projectedLevel, scaled from the bundled Lv $reference table."
-            else -> "Bundled Lv $reference row."
-        }
-        root.addView(label(provenance, 11f, INK_SOFT))
-        if (scannedName.isNotBlank() && !scannedName.equals(form.name, ignoreCase = true)) {
-            root.addView(label("Read as: \"$scannedName\"", 11f, INK_SOFT))
-        }
+        // No provenance line: the level is already in the subtitle and nobody reads the caveat.
+
         Log.i(TAG, "cat scan: $unitId form $formIndex level $projectedLevel plus $readPlus conf $confidence")
         showResultRoot(root)
     }
