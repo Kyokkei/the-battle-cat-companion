@@ -357,6 +357,19 @@ class CatScanResolverTest {
     }
 
     @Test
+    fun theSelectedCatWinsEvenWhenTheMarginIsOnlyTenPercent() {
+        // Verbatim from a letterboxed capture, where every box is squashed: the selected name is
+        // 0.011 tall and its neighbour 0.010. The old absolute 0.002 epsilon called that a tie and
+        // let confidence hand the card to Cyberpunk Cat while the player was scanning Octopus.
+        val lines = listOf(
+            line("Octopus Cat", 0.96f, 0.428f, 0.439f, 0.438f, 0.560f),
+            line("Cyberpunk Cat", 1.00f, 0.450f, 0.460f, 0.237f, 0.339f),
+            line("iCat", 1.00f, 0.451f, 0.458f, 0.695f, 0.724f),
+        )
+        assertEquals("Octopus Cat", requireNotNull(CatScanResolver.resolve(lines, index)).displayName)
+    }
+
+    @Test
     fun aBlockWithNothingButAStrayDigitReadsNothing() {
         val lines = listOf(line("3", 0.90f, 0.10f, 0.20f, 0.30f, 0.45f))
         assertNull(CatScanResolver.readLevelBlock(lines))

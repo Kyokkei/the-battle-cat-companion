@@ -510,6 +510,11 @@ class StageCaptureService : Service() {
      */
     private suspend fun resolveCat(bitmap: Bitmap, locale: StageLocale): CatScanHit? =
         withContext(Dispatchers.IO) {
+            // The game is not always the whole display: in a floating or split window it is a
+            // letterboxed band in the middle, and every box on screen comes out vertically squashed.
+            // All the level geometry is relative to the name box, so a squashed frame breaks it —
+            // crop to the game's own pixels first.
+            val frame = gameFrame(bitmap)
             try {
                 val app = application as BattleCatsApplication
                 // Cat mode returns before the stage path runs, so this is the only place that would
@@ -520,7 +525,7 @@ class StageCaptureService : Service() {
                 val index = app.catScanCatalog.index(region)
                 val startedAt = System.currentTimeMillis()
                 val all = withTimeout(CAT_SCAN_TIMEOUT_MS) {
-                    engine.recognizeAllLines(bitmap, locale)
+                    engine.recognizeAllLines(frame, locale)
                 }
                 Log.i(
                     TAG,
@@ -529,8 +534,8 @@ class StageCaptureService : Service() {
                 )
                 CatScanResolver.resolve(all, index)?.let { hit ->
                     val trace = ScanTrace()
-                    val refined = refineLevel(bitmap, hit, trace)
-                    dumpCatScan(all, refined, trace, bitmap)
+                    val refined = refineLevel(frame, hit, trace)
+                    dumpCatScan(all, refined, trace, frame, bitmap, frame !== bitmap)
                     refined
                 }.also { hit ->
                     Log.i(TAG, "cat scan hit: ${hit?.displayName ?: "none"} level=${hit?.level} plus=${hit?.plusLevel}")
@@ -538,8 +543,60 @@ class StageCaptureService : Service() {
             } catch (error: Exception) {
                 Log.w(TAG, "cat scan failed: ${error.message}")
                 null
+            } finally {
+                if (frame !== bitmap) frame.recycle()
             }
         }
+
+    /**
+     * Crops the capture to the pixels the game actually drew.
+     *
+     * A phone in portrait with a landscape game, a floating window, or a stale projection buffer all
+     * produce a frame where the game sits in a band surrounded by black. Normalised coordinates are
+     * taken against the bitmap, so that band squashes every box and every ratio derived from a name
+     * box stops meaning anything.
+     */
+    private fun gameFrame(bitmap: Bitmap): Bitmap {
+        val bounds = contentBounds(bitmap) ?: return bitmap
+        if (bounds.width() >= bitmap.width * 0.97f && bounds.height() >= bitmap.height * 0.97f) return bitmap
+        return runCatching {
+            Bitmap.createBitmap(bitmap, bounds.left, bounds.top, bounds.width(), bounds.height())
+        }.getOrDefault(bitmap)
+    }
+
+    /** Bounding box of every pixel that is not near-black, sampled every [BOUNDS_STEP] px. */
+    private fun contentBounds(bitmap: Bitmap): android.graphics.Rect? {
+        var left = Int.MAX_VALUE
+        var top = Int.MAX_VALUE
+        var right = -1
+        var bottom = -1
+        var y = 0
+        while (y < bitmap.height) {
+            var x = 0
+            while (x < bitmap.width) {
+                val pixel = bitmap.getPixel(x, y)
+                val r = (pixel shr 16) and 0xFF
+                val g = (pixel shr 8) and 0xFF
+                val b = pixel and 0xFF
+                if (r + g + b > 60) {
+                    if (x < left) left = x
+                    if (x > right) right = x
+                    if (y < top) top = y
+                    if (y > bottom) bottom = y
+                }
+                x += BOUNDS_STEP
+            }
+            y += BOUNDS_STEP
+        }
+        if (right <= left || bottom <= top) return null
+        // Sampling lands on a grid, so the real edge is up to one step further out.
+        return android.graphics.Rect(
+            (left - BOUNDS_STEP).coerceAtLeast(0),
+            (top - BOUNDS_STEP).coerceAtLeast(0),
+            (right + BOUNDS_STEP).coerceAtMost(bitmap.width),
+            (bottom + BOUNDS_STEP).coerceAtMost(bitmap.height),
+        )
+    }
 
     /**
      * Re-reads the level block from a crop instead of trusting the full-screen digits.
@@ -600,6 +657,8 @@ class StageCaptureService : Service() {
         hit: CatScanHit?,
         trace: ScanTrace,
         frame: Bitmap,
+        fullFrame: Bitmap,
+        cropped: Boolean,
     ) {
         runCatching {
             val dir = java.io.File(cacheDir, "catscan").apply { mkdirs() }
@@ -610,6 +669,8 @@ class StageCaptureService : Service() {
             val body = buildString {
                 appendLine("name=" + (hit?.displayName ?: "none") + " level=" + hit?.level + " plus=" + hit?.plusLevel)
                 appendLine("refine=\"" + (trace.refineText ?: "-") + "\"")
+                appendLine("frame=" + frame.width + "x" + frame.height + " cropped=" + cropped +
+                    " full=" + fullFrame.width + "x" + fullFrame.height)
                 appendLine("lines=" + lines.size)
                 lines.forEach { line ->
                     appendLine(
@@ -813,6 +874,9 @@ class StageCaptureService : Service() {
 
         /** How many past scans to keep in the cache for diagnosis. */
         private const val CAT_SCAN_DUMPS = 8
+
+        /** Sampling stride when hunting for the game's own pixels inside a letterboxed capture. */
+        private const val BOUNDS_STEP = 8
         const val ACTION_ENABLE = "com.projectnyanko.companion.stage.ENABLE_CAPTURE"
         const val ACTION_CAPTURE = "com.projectnyanko.companion.stage.CAPTURE_FRAME"
         const val ACTION_STOP = "com.projectnyanko.companion.stage.STOP_CAPTURE"

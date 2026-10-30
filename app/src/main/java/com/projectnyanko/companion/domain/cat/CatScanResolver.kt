@@ -37,8 +37,8 @@ object CatScanResolver {
     /** Below this the recognizer is guessing; a wrong cat is worse than no answer. */
     private const val MIN_NAME_CONFIDENCE = 0.45f
 
-    /** Two boxes within this much height count as the same font size. */
-    private const val HEIGHT_EPSILON = 0.002f
+    /** Two boxes within this ratio of each other count as the same font size. */
+    private const val HEIGHT_TOLERANCE = 1.06f
 
     /** How far below the name its level may print, in name heights. */
     private const val MAX_LEVEL_BELOW = 8f
@@ -119,8 +119,12 @@ object CatScanResolver {
         if (current == null) return true
         val candidateHeight = candidate.line.bottom - candidate.line.top
         val currentHeight = current.line.bottom - current.line.top
-        if (candidateHeight > currentHeight + HEIGHT_EPSILON) return true
-        if (currentHeight > candidateHeight + HEIGHT_EPSILON) return false
+        // Relative, not absolute: a name box is ~0.055 tall on a full-screen capture but ~0.010 in a
+        // letterboxed window, and a fixed epsilon then declared the selected cat and its neighbour
+        // "the same size" — which handed the card to Cyberpunk when the player scanned Octopus.
+        val ratio = candidateHeight / currentHeight.coerceAtLeast(1e-5f)
+        if (ratio > HEIGHT_TOLERANCE) return true
+        if (ratio < 1f / HEIGHT_TOLERANCE) return false
         if (candidate.match.exact != current.match.exact) return candidate.match.exact
         if (candidate.line.confidence != current.line.confidence) {
             return candidate.line.confidence > current.line.confidence
