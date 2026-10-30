@@ -43,7 +43,7 @@ object CatScanResolver {
     private const val MAX_LEVEL_BELOW = 0.35f
 
     /** How far sideways a `+N` may sit from its level, in screen widths. */
-    private const val MAX_PLUS_ACROSS = 0.05f
+    private const val MAX_PLUS_ACROSS = 0.08f
 
     /** How far sideways the level may sit from the name, in screen widths. */
     private const val MAX_LEVEL_ACROSS = 0.22f
@@ -147,7 +147,8 @@ object CatScanResolver {
             val across = kotlin.math.abs(
                 (line.left + line.right) / 2f - (reference.left + reference.right) / 2f,
             )
-            below > 0f && below <= MAX_LEVEL_DISTANCE && across <= MAX_PLUS_ACROSS
+            // `>= 0` because a merged line carries both, so the plus sits on the level's own row.
+            below >= 0f && below <= MAX_LEVEL_DISTANCE && across <= MAX_PLUS_ACROSS
         }.minByOrNull { (_, line) ->
             val reference = level?.second ?: return@minByOrNull 0f
             verticalDistance(reference, line)
