@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.projectnyanko.companion.data.catalog.UnitFormStats
 import com.projectnyanko.companion.data.catalog.UnitStats
+import com.projectnyanko.companion.domain.cat.InGameCooldown
 import com.projectnyanko.companion.ui.theme.AccentDeep
 import com.projectnyanko.companion.ui.theme.Ink
 import com.projectnyanko.companion.ui.theme.InkSoft
@@ -126,7 +127,7 @@ private fun FormCard(unitId: Int, formIndex: Int, form: UnitFormStats) {
         StatPair("Health", format(form.health), "Knockbacks", form.knockbacks.toString())
         StatPair("Attack", format(form.attack), "Range", form.range.toString())
         StatPair("DPS", format(form.dps), "Speed", "${form.speedPerSecond}/s")
-        StatPair("Cost", format(form.cost), "Recharge", seconds(form.rechargeSeconds))
+        StatPair("Cost", format(form.cost), "Recharge", InGameCooldown.format(form.rechargeSeconds))
         StatPair(
             "Attack cycle",
             seconds(form.attackCycleSeconds),

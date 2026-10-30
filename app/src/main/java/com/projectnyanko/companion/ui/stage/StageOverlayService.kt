@@ -33,6 +33,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import com.projectnyanko.companion.domain.cat.CatLevelCurve
+import com.projectnyanko.companion.domain.cat.InGameCooldown
 import com.projectnyanko.companion.domain.seed.GameRegion
 import com.projectnyanko.companion.ui.seed.formLabel
 import androidx.core.view.isNotEmpty
@@ -580,7 +581,13 @@ class StageOverlayService : Service() {
         // The game prints the raw speed (36). Multiplying by 15 turned it into 540, which is not the
         // number the player sees in-game.
         rightColumn.addView(tileRow("Speed" to form.speed.toString(), "DPS" to formatStat(dps)))
-        rightColumn.addView(tileRow("TBA" to secondsText(form.attackCycleSeconds), "Cooldown" to secondsText(form.rechargeSeconds)))
+        rightColumn.addView(
+            tileRow(
+                "TBA" to secondsText(form.attackCycleSeconds),
+                // Not secondsText: the table stores raw zero-upgrade frames, the player sees endgame.
+                "Cooldown" to InGameCooldown.format(form.rechargeSeconds),
+            ),
+        )
         rightColumn.addView(tileRow("Target" to (if (form.areaAttack) "Area" else "Single"), "Cost" to formatStat(form.cost)))
         columns.addView(rightColumn, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.66f))
 
