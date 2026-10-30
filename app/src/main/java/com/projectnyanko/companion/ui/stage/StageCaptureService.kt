@@ -806,7 +806,7 @@ class StageCaptureService : Service() {
          * Upgrade card and the Organize Cats panel, where the block sits at a different absolute
          * place but the same distance from the name.
          */
-        private const val CROP_HALF_WIDTH = 3.0f
+        private const val CROP_HALF_WIDTH = 2.4f
         private const val CROP_TOP = 0.3f
         private const val CROP_BOTTOM = 9.0f
         private const val CROP_SCALE = 4

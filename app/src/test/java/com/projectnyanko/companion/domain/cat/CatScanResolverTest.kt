@@ -361,4 +361,27 @@ class CatScanResolverTest {
         val lines = listOf(line("3", 0.90f, 0.10f, 0.20f, 0.30f, 0.45f))
         assertNull(CatScanResolver.readLevelBlock(lines))
     }
+
+    @Test
+    fun theCropPrefersTheCardInTheMiddleOverTheNeighbourAtTheEdge() {
+        // Verbatim from the Cyberpunk Cat crop: `34` + `+7` are the selected card, while `45` + `+6`
+        // at the left edge are Roe Cat next door. Taking the tallest plus returned the neighbour.
+        val lines = listOf(
+            line("Leaxe: 34", 0.85f, 0.05f, 0.20f, 0.47f, 0.61f),
+            line("+7", 0.90f, 0.25f, 0.35f, 0.70f, 0.76f),
+            line("45", 0.90f, 0.05f, 0.20f, 0.00f, 0.02f),
+            line("+6", 0.90f, 0.25f, 0.35f, 0.02f, 0.06f),
+        )
+        assertEquals(34 to 7, CatScanResolver.readLevelBlock(lines))
+    }
+
+    @Test
+    fun theCropIgnoresANumberAtTheEdgeWhenTheCardHasItsOwn() {
+        // Octopus Cat crop: `Leavei 38` is the card, `84` at the far left is the neighbour's.
+        val lines = listOf(
+            line("Leavei 38", 0.80f, 0.05f, 0.25f, 0.44f, 0.64f),
+            line("84", 0.85f, 0.05f, 0.25f, 0.00f, 0.02f),
+        )
+        assertEquals(38 to null, CatScanResolver.readLevelBlock(lines))
+    }
 }

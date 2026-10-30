@@ -52,6 +52,9 @@ object CatScanResolver {
     /** How far a number may sit from the `+N` or the `Max Level` word it belongs to. */
     private const val MAX_BLOCK_GAP = 1.8f
 
+    /** How far from the crop's centre column a candidate may sit, in crop widths. */
+    private const val CROP_COLUMN = 0.30f
+
     /**
      * No cat tile prints a level below 20: the number under `Max Level` is the *cap*, and caps start
      * at 20. Anything smaller is a fragment of a two-digit number — `30` arriving as `3` is what
@@ -310,10 +313,12 @@ object CatScanResolver {
      * Reads a level block that was cropped on its own, with no cat name inside the crop.
      *
      * Used by the second pass, which re-reads the block at 4x after the full-screen pass missed it.
-     * Same rules as [readLevel] minus the name: anchor on the plus, else on the label, else take the
-     * only plausible number in the crop.
+     * [expectedX] is where the card's own column sits inside the crop — the crop is taken around the
+     * name, so that is the middle. Every candidate is ranked by distance from it: the crop is narrow
+     * but the neighbouring card's `Max Level 45 +6` still bleeds into the left edge, and picking the
+     * tallest plus (the old rule) handed back the neighbour every time.
      */
-    fun readLevelBlock(lines: List<OcrStageLine>): Pair<Int?, Int?>? {
+    fun readLevelBlock(lines: List<OcrStageLine>, expectedX: Float = 0.5f): Pair<Int?, Int?>? {
         if (lines.isEmpty()) return null
         val numbers = ArrayList<Pair<Int, OcrStageLine>>(6)
         val pluses = ArrayList<Pair<Int, OcrStageLine>>(2)
@@ -323,28 +328,38 @@ object CatScanResolver {
             if (plus != null) pluses += plus to line
         }
 
-        // Biggest plus first: the crop holds one card, so the tallest is the one we cropped for.
-        for ((plusValue, plusLine) in pluses.sortedByDescending { it.second.bottom - it.second.top }) {
-            numberAbove(numbers, plusLine)?.let { (level, _) ->
-                val usable = level.takeIf { it >= MIN_TILE_LEVEL }
-                if (usable != null) return usable to plusValue
-            }
+        val plusHere = pluses
+            .filter { (_, line) -> across(line, expectedX) <= CROP_COLUMN }
+            .minByOrNull { (_, line) -> across(line, expectedX) }
+
+        // The plus sits at the bottom-right of the number, so the column tolerance here has to be
+        // wider than on a full screen: `34` at 0.54 and its `+7` at 0.73 are the same card.
+        if (plusHere != null) {
+            val above = numbers.filter { (value, line) ->
+                val boxHeight = (line.bottom - line.top).coerceAtLeast(1e-4f)
+                val gap = plusHere.second.top - line.bottom
+                value >= MIN_TILE_LEVEL && gap >= -0.6f * boxHeight && gap <= 2.5f * boxHeight &&
+                    across(line, centreX(plusHere.second)) <= CROP_COLUMN
+            }.minByOrNull { (_, line) -> across(line, centreX(plusHere.second)) }
+            if (above != null) return above.first to plusHere.first
         }
 
-        val label = lines.filter { isLevelAnchor(it.text) }.minByOrNull { it.top }
+        val label = lines.filter { isLevelAnchor(it.text) && across(it, expectedX) <= CROP_COLUMN }
+            .minByOrNull { it.top }
         if (label != null) {
             val under = numbers.filter { (value, line) ->
                 val boxHeight = (line.bottom - line.top).coerceAtLeast(1e-4f)
                 val gap = line.top - label.bottom
                 value >= MIN_TILE_LEVEL && gap >= -0.6f * boxHeight &&
-                    gap <= MAX_BLOCK_GAP * boxHeight && across(line, centreX(label)) <= MAX_BLOCK_GAP * boxHeight
+                    gap <= MAX_BLOCK_GAP * boxHeight && across(line, centreX(label)) <= CROP_COLUMN
             }.minByOrNull { (_, line) -> line.top }
-            if (under != null) return under.first to pluses.firstOrNull()?.first
+            if (under != null) return under.first to plusHere?.first
         }
 
-        val plausible = numbers.filter { it.first >= MIN_TILE_LEVEL }
-        if (plausible.size == 1) return plausible.first().first to pluses.firstOrNull()?.first
-        return null
+        val plausible = numbers
+            .filter { (value, line) -> value >= MIN_TILE_LEVEL && across(line, expectedX) <= CROP_COLUMN }
+        val nearest = plausible.minByOrNull { (_, line) -> across(line, expectedX) }
+        return nearest?.let { it.first to plusHere?.first }
     }
 
     private fun centreX(line: OcrStageLine): Float = (line.left + line.right) / 2f

@@ -470,6 +470,17 @@ class StageOverlayService : Service() {
 
     private var lastCandidateIntent: Intent = Intent()
 
+    // The cat card is redrawn in place when the player types a level, so its inputs live here
+    // rather than in the intent that started the scan.
+    private var catUnitId = -1
+    private var catFormIndex = 0
+    private var catReadLevel = -1
+    private var catReadPlus = -1
+    private var catName = ""
+    private var catConfidence = 0f
+    private var catTypedText = ""
+    private var catKeypadOpen = false
+
     private fun showMessageCard(message: String, title: String) {
         val root = createCard()
         root.addView(headerRow(title, showBack = false) {})
@@ -487,11 +498,34 @@ class StageOverlayService : Service() {
     private fun showCat(intent: Intent) {
         val unitId = intent.getIntExtra(EXTRA_CAT_UNIT_ID, -1)
         if (unitId < 0) return
-        val formIndex = intent.getIntExtra(EXTRA_CAT_FORM_INDEX, 0)
-        val readLevel = intent.getIntExtra(EXTRA_CAT_LEVEL, -1)
-        val readPlus = intent.getIntExtra(EXTRA_CAT_PLUS, -1)
-        val scannedName = intent.getStringExtra(EXTRA_CAT_NAME).orEmpty()
-        val confidence = intent.getFloatExtra(EXTRA_CAT_CONFIDENCE, 0f)
+        catUnitId = unitId
+        catFormIndex = intent.getIntExtra(EXTRA_CAT_FORM_INDEX, 0)
+        catReadLevel = intent.getIntExtra(EXTRA_CAT_LEVEL, -1)
+        catReadPlus = intent.getIntExtra(EXTRA_CAT_PLUS, -1)
+        catName = intent.getStringExtra(EXTRA_CAT_NAME).orEmpty()
+        catConfidence = intent.getFloatExtra(EXTRA_CAT_CONFIDENCE, 0f)
+        // A fresh scan is the truth again; drop anything the player typed for the previous cat.
+        catTypedText = ""
+        catKeypadOpen = false
+        renderCat()
+    }
+
+    /**
+     * Draws the cat card from [catUnitId] and friends, so it can be redrawn in place.
+     *
+     * The level comes from OCR, which is right most of the time and wrong exactly when the game's
+     * outlined digits are small — so the card carries its own override: tap the hint, punch the
+     * number in on the keypad, and every stat is re-projected without another scan.
+     */
+    private fun renderCat() {
+        val unitId = catUnitId
+        if (unitId < 0) return
+        val formIndex = catFormIndex
+        val typed = catTypedText.toIntOrNull()?.takeIf { it > 0 }
+        val readLevel = typed ?: catReadLevel
+        val readPlus = if (typed != null) 0 else catReadPlus
+        val scannedName = catName
+        val confidence = catConfidence
 
         val app = application as BattleCatsApplication
         val region = if (selectedLocale == StageLocale.JP) GameRegion.JP else GameRegion.EN
@@ -531,11 +565,13 @@ class StageOverlayService : Service() {
             if (readLevel > 0) {
                 append(readLevel)
                 if (readPlus > 0) append(" +").append(readPlus)
+                if (typed != null) append(" typed")
             } else {
                 append("?")
             }
         }
         root.addView(headerRow("${form.name}  ·  Lv $levelText", showBack = false) {})
+        root.addView(if (catKeypadOpen) keypadRow() else levelHintRow())
 
         val columns = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
@@ -555,7 +591,7 @@ class StageOverlayService : Service() {
             loadSprite(unitId, formIndex)?.let { setImageBitmap(it) }
         }
         leftColumn.addView(portrait, LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, dp(92),
+            LinearLayout.LayoutParams.MATCH_PARENT, portraitHeight,
         ))
         // The ability box is the cat's special ability (Strong, Massive Damage, Slow, ...). Single vs
         // area is an attack property, so it goes in the small Target box instead.
@@ -624,7 +660,8 @@ class StageOverlayService : Service() {
     private fun compactLabel(textValue: String, size: Float, color: Int, bold: Boolean = false): TextView =
         TextView(this).apply {
             text = textValue
-            textSize = size
+            // DIP for the same reason as [label]: the tile has a fixed height on every device.
+            setTextSize(android.util.TypedValue.COMPLEX_UNIT_DIP, size)
             setTextColor(color)
             maxLines = 1
             includeFontPadding = false
@@ -639,9 +676,9 @@ class StageOverlayService : Service() {
         }
         row.addView(
             statTile(first.first, first.second),
-            LinearLayout.LayoutParams(0, dp(34), 1f).apply { marginEnd = dp(4) },
+            LinearLayout.LayoutParams(0, statRowHeight, 1f).apply { marginEnd = dp(4) },
         )
-        row.addView(statTile(second.first, second.second), LinearLayout.LayoutParams(0, dp(34), 1f))
+        row.addView(statTile(second.first, second.second), LinearLayout.LayoutParams(0, statRowHeight, 1f))
         return row
     }
 
@@ -660,6 +697,61 @@ class StageOverlayService : Service() {
         }.getOrNull()
     }
 
+    /** The one-line escape hatch under the header: OCR is right until it isn't. */
+    private fun levelHintRow(): View = TextView(this).apply {
+        text = "◀ not your level? tap to type"
+        setTextSize(android.util.TypedValue.COMPLEX_UNIT_DIP, 10f)
+        setTextColor(ACCENT_DEEP)
+        includeFontPadding = false
+        setPadding(0, 0, 0, dp(4))
+        isClickable = true
+        isFocusable = true
+        setOnClickListener {
+            catKeypadOpen = true
+            catTypedText = ""
+            renderCat()
+        }
+    }
+
+    /** Twelve keys, no IME: a soft keyboard in an overlay window is a coin flip on Android. */
+    private fun keypadRow(): View {
+        val row = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            setPadding(0, dp(2), 0, dp(4))
+        }
+        listOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "⌫", "0", "✓").forEach { key ->
+            row.addView(
+                keypadKey(key),
+                LinearLayout.LayoutParams(0, dp(30), 1f).apply { marginEnd = dp(2) },
+            )
+        }
+        return row
+    }
+
+    private fun keypadKey(key: String): View = TextView(this).apply {
+        text = key
+        setTextSize(android.util.TypedValue.COMPLEX_UNIT_DIP, 14f)
+        setTextColor(INK)
+        gravity = Gravity.CENTER
+        includeFontPadding = false
+        background = GradientDrawable().apply {
+            shape = GradientDrawable.RECTANGLE
+            cornerRadius = dp(6).toFloat()
+            setColor(if (key == "✓") CAT_MODE_FILL else PAPER_LIGHT)
+            setStroke(dp(2), INK)
+        }
+        isClickable = true
+        isFocusable = true
+        setOnClickListener {
+            when (key) {
+                "⌫" -> catTypedText = catTypedText.dropLast(1)
+                "✓" -> catKeypadOpen = false
+                else -> if (catTypedText.length < 3) catTypedText += key
+            }
+            renderCat()
+        }
+    }
+
     /** Full-width box for the ability text, which does not fit a half-column. */
     private fun wideTile(rows: List<Pair<String, String>>): View {
         val tile = LinearLayout(this).apply {
@@ -674,9 +766,33 @@ class StageOverlayService : Service() {
         }
         rows.forEach { (key, value) ->
             tile.addView(label(key, 10f, INK_SOFT))
-            tile.addView(label(value, 13f, INK))
+            tile.addView(label(value, 13f, INK).apply {
+                // Bounded: an ability string can run four lines, and the box must not decide the
+                // card's height on a short screen.
+                maxLines = 3
+                ellipsize = android.text.TextUtils.TruncateAt.END
+            })
         }
         return tile
+    }
+
+    /**
+     * Height of one stat row, sized so five rows plus the header fit the display in landscape.
+     *
+     * A landscape phone is anywhere from 320 dp (old 16:9 at 240 dpi) to 800 dp (tablet) tall, so a
+     * fixed row height either clips the last row or wastes half the card. This divides whatever is
+     * actually available.
+     */
+    private val statRowHeight: Int by lazy {
+        val heightDp = resources.displayMetrics.heightPixels / resources.displayMetrics.density
+        val available = heightDp - 16f - HEADER_DP - HINT_DP - CARD_PADDING_DP
+        dp((available / 5f).coerceIn(30f, 44f).toInt())
+    }
+
+    /** Portrait grows with the rows so the left column never decides the card's height. */
+    private val portraitHeight: Int by lazy {
+        val rowDp = statRowHeight / resources.displayMetrics.density
+        dp((rowDp * 2.3f).coerceIn(70f, 112f).toInt())
     }
 
     private fun secondsText(value: Double): String =
@@ -727,7 +843,7 @@ class StageOverlayService : Service() {
         }
         val heading = TextView(this).apply {
             text = title
-            textSize = 20f
+            setTextSize(android.util.TypedValue.COMPLEX_UNIT_DIP, 20f)
             setTextColor(INK)
             setTypeface(typeface, android.graphics.Typeface.BOLD)
             maxLines = 2
@@ -769,7 +885,9 @@ class StageOverlayService : Service() {
 
     private fun label(textValue: String, size: Float, color: Int, bold: Boolean = false): TextView = TextView(this).apply {
         text = textValue
-        textSize = size
+        // DIP, not SP: these sit in boxes with a fixed height, so a player who runs a 1.3x system
+        // font must not have every value sliced in half. The box is the design, not the glyph size.
+        setTextSize(android.util.TypedValue.COMPLEX_UNIT_DIP, size)
         setTextColor(color)
         if (bold) setTypeface(typeface, android.graphics.Typeface.BOLD)
         setPadding(0, dp(5), 0, dp(5))
@@ -1043,6 +1161,12 @@ class StageOverlayService : Service() {
          * lineup grows the box downwards rather than sideways.
          */
         private const val CARD_WIDTH_FRACTION = 0.72f
+
+        // Vertical budget the stat rows have to share, in dp. Everything else in the card is fixed:
+        // header row, the level hint (or the keypad) and the card's own padding.
+        private const val HEADER_DP = 48f
+        private const val HINT_DP = 26f
+        private const val CARD_PADDING_DP = 26f
         const val ACTION_SHOW_BUBBLE = "com.projectnyanko.companion.stage.SHOW_BUBBLE"
         const val ACTION_HIDE_BUBBLE = "com.projectnyanko.companion.stage.HIDE_BUBBLE"
         const val PREFERENCES = "stage_helper"
