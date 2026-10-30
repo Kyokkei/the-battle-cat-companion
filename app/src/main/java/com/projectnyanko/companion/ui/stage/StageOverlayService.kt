@@ -28,6 +28,9 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import com.projectnyanko.companion.domain.cat.CatLevelCurve
+import com.projectnyanko.companion.domain.seed.GameRegion
+import com.projectnyanko.companion.ui.seed.formLabel
 import androidx.core.view.isNotEmpty
 import com.projectnyanko.companion.BattleCatsApplication
 import com.projectnyanko.companion.R
@@ -66,6 +69,7 @@ class StageOverlayService : Service() {
                 resultView?.visibility = View.INVISIBLE
             }
             ACTION_SHOW_RESULT -> showCandidates(intent)
+            ACTION_SHOW_CAT -> showCat(intent)
             ACTION_CLOSE_RESULT -> {
                 removeResult()
                 bubble?.visibility = View.VISIBLE
@@ -444,6 +448,92 @@ class StageOverlayService : Service() {
         showResultRoot(root)
     }
 
+    /**
+     * Shows the cat that the scan recognised, at the level printed on the player's screen.
+     *
+     * The bundled table is a single reference level (30), so HP and attack are re-projected with
+     * [CatLevelCurve] and the card says so — a scaled number presented as if it were read straight
+     * from the game would be a lie.
+     */
+    private fun showCat(intent: Intent) {
+        val unitId = intent.getIntExtra(EXTRA_CAT_UNIT_ID, -1)
+        if (unitId <= 0) return
+        val formIndex = intent.getIntExtra(EXTRA_CAT_FORM_INDEX, 0)
+        val readLevel = intent.getIntExtra(EXTRA_CAT_LEVEL, -1)
+        val scannedName = intent.getStringExtra(EXTRA_CAT_NAME).orEmpty()
+        val confidence = intent.getFloatExtra(EXTRA_CAT_CONFIDENCE, 0f)
+
+        val app = application as BattleCatsApplication
+        val region = if (selectedLocale == StageLocale.JP) GameRegion.JP else GameRegion.EN
+        val stats = app.unitStatsRepository.stats(region, unitId)
+
+        val root = createCard()
+        root.addView(headerRow("Cat scan", showBack = false) {})
+        if (stats == null || formIndex !in stats.forms.indices) {
+            root.addView(
+                label(
+                    "$scannedName was read, but this build has no stat row for it. The bundled catalogue is a snapshot.",
+                    15f,
+                    ACCENT_DEEP,
+                ),
+            )
+            showResultRoot(root)
+            return
+        }
+
+        val form = stats.forms[formIndex]
+        val reference = stats.level
+        val shownLevel = if (readLevel > 0) readLevel else reference
+        val hp = CatLevelCurve.project(form.health, reference, shownLevel)
+        val attack = CatLevelCurve.project(form.attack, reference, shownLevel)
+        val dps = if (form.attackCycleSeconds > 0.0) {
+            (attack / form.attackCycleSeconds).toInt()
+        } else {
+            form.dps
+        }
+
+        root.addView(label(form.name, 20f, INK, bold = true))
+        val subtitle = buildString {
+            append(formLabel(formIndex))
+            append("  ·  Lv ").append(shownLevel)
+            if (readLevel <= 0) append(" (level not read)")
+        }
+        root.addView(label(subtitle, 13f, INK_SOFT))
+        root.addView(statRow("Health", formatStat(hp)))
+        root.addView(statRow("Attack", formatStat(attack)))
+        root.addView(statRow("DPS", formatStat(dps)))
+        root.addView(statRow("Range", form.range.toString()))
+        root.addView(statRow("Speed", "${form.speedPerSecond}/s"))
+
+        val provenance = if (readLevel > 0 && shownLevel != reference) {
+            "HP/ATK scaled from the Lv $reference table. Range, cost and speed do not change with level."
+        } else {
+            "Straight from the Lv $reference table."
+        }
+        root.addView(label(provenance, 11f, INK_SOFT))
+        if (scannedName.isNotBlank() && !scannedName.equals(form.name, ignoreCase = true)) {
+            root.addView(label("Read as: \"$scannedName\"", 11f, INK_SOFT))
+        }
+        Log.i(TAG, "cat scan: $unitId form $formIndex level $shownLevel conf $confidence")
+        showResultRoot(root)
+    }
+
+    private fun statRow(name: String, value: String): View {
+        val row = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+            )
+            setPadding(0, dp(3), 0, dp(3))
+        }
+        row.addView(label(name, 14f, INK_SOFT), LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+        row.addView(label(value, 15f, INK, bold = true))
+        return row
+    }
+
+    private fun formatStat(value: Int): String = String.format(Locale.ROOT, "%,d", value)
+
     private fun showResultRoot(root: View) {
         removeResult()
         val scrollableRoot = ScrollView(this).apply {
@@ -729,6 +819,12 @@ class StageOverlayService : Service() {
         const val PREFERENCES = "stage_helper"
         const val PREFERENCE_REGION = "region"
         const val ACTION_SHOW_RESULT = "com.projectnyanko.companion.stage.SHOW_RESULT"
+        const val ACTION_SHOW_CAT = "com.projectnyanko.companion.stage.SHOW_CAT"
+        const val EXTRA_CAT_UNIT_ID = "cat_unit_id"
+        const val EXTRA_CAT_FORM_INDEX = "cat_form_index"
+        const val EXTRA_CAT_LEVEL = "cat_level"
+        const val EXTRA_CAT_NAME = "cat_name"
+        const val EXTRA_CAT_CONFIDENCE = "cat_confidence"
         const val ACTION_CLOSE_RESULT = "com.projectnyanko.companion.stage.CLOSE_RESULT"
         const val ACTION_STOP = "com.projectnyanko.companion.stage.STOP_HELPER"
         const val ACTION_SHOW_MESSAGE = "com.projectnyanko.companion.stage.SHOW_MESSAGE"

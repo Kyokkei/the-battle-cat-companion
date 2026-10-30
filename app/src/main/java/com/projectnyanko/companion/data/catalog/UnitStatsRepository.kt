@@ -13,6 +13,10 @@ class UnitStatsRepository(context: Context) {
     @Synchronized
     fun stats(region: GameRegion, unitId: Int): UnitStats? = load(region)[unitId]
 
+    /** The whole table, for callers that need to search it (the cat scanner builds a name index). */
+    @Synchronized
+    fun all(region: GameRegion): Map<Int, UnitStats> = load(region)
+
     @Synchronized
     fun level(region: GameRegion): Int = levelByRegion[region] ?: 30
 

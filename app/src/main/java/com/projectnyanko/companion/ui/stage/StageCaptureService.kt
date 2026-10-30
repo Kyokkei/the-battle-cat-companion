@@ -25,6 +25,9 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Display
 import android.view.WindowManager
+import com.projectnyanko.companion.domain.cat.CatScanHit
+import com.projectnyanko.companion.domain.cat.CatScanResolver
+import com.projectnyanko.companion.domain.seed.GameRegion
 import com.projectnyanko.companion.BattleCatsApplication
 import com.projectnyanko.companion.domain.stage.StageLocale
 import com.projectnyanko.companion.domain.stage.OcrStageLine
@@ -414,6 +417,25 @@ class StageCaptureService : Service() {
                     "OCR read (${bitmap.width}x${bitmap.height}, try ${ocrRetries + 1}): " +
                         lines.map { it.text }.take(12).joinToString(" | "),
                 )
+                if (matches.candidates.isEmpty() && ocrRetries == 0) {
+                    // No stage name: this may simply not be the stage screen. The same paw tap has
+                    // to work on the Upgrade / Organize Cats screens too, so try a cat before
+                    // assuming the frame was a replayed composition.
+                    val catHit = resolveCat(bitmap, locale)
+                    if (catHit != null) {
+                        startService(
+                            Intent(this@StageCaptureService, StageOverlayService::class.java)
+                                .setAction(StageOverlayService.ACTION_SHOW_CAT)
+                                .putExtra(StageOverlayService.EXTRA_REGION, locale.name)
+                                .putExtra(StageOverlayService.EXTRA_CAT_UNIT_ID, catHit.unitId)
+                                .putExtra(StageOverlayService.EXTRA_CAT_FORM_INDEX, catHit.formIndex)
+                                .putExtra(StageOverlayService.EXTRA_CAT_LEVEL, catHit.level ?: -1)
+                                .putExtra(StageOverlayService.EXTRA_CAT_NAME, catHit.displayName)
+                                .putExtra(StageOverlayService.EXTRA_CAT_CONFIDENCE, catHit.nameConfidence),
+                        )
+                        return@launch
+                    }
+                }
                 if (matches.candidates.isEmpty() && ocrRetries < MAX_OCR_RETRIES) {
                     // The engine reads a real stage-select screenshot perfectly, so an empty result
                     // means this frame is not the screen: the mirroring surface replayed a
@@ -463,6 +485,28 @@ class StageCaptureService : Service() {
             }
         }
     }
+
+    /**
+     * Reads a cat screen: the name bar and the level printed beside it.
+     *
+     * Returns null when the frame is neither a stage nor a cat screen, so the caller's retry path
+     * still handles a replayed composition.
+     */
+    private suspend fun resolveCat(bitmap: Bitmap, locale: StageLocale): CatScanHit? =
+        withContext(Dispatchers.IO) {
+            try {
+                val engine = ocrEngine ?: return@withContext null
+                val app = application as BattleCatsApplication
+                val region = if (locale == StageLocale.JP) GameRegion.JP else GameRegion.EN
+                val index = app.catScanCatalog.index(region)
+                val all = engine.recognizeAllLines(bitmap, locale)
+                Log.i(TAG, "cat scan read ${all.size} lines: " + all.take(12).joinToString(" | ") { it.text })
+                CatScanResolver.resolve(all, index)
+            } catch (error: Exception) {
+                Log.w(TAG, "cat scan failed: ${error.message}")
+                null
+            }
+        }
 
     /**
      * Reads the energy the game prints under the selected card.

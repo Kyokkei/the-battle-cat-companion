@@ -31,21 +31,50 @@ class StageOcrEngine(private val modelStore: StageOcrModelStore) : AutoCloseable
     fun recognize(screen: Bitmap, locale: StageLocale): List<OcrStageLine> {
         check(!closed) { "OCR engine is closed." }
         require(!screen.isRecycled && screen.width > 0 && screen.height > 0) { "Captured screen is empty." }
-        if (activeLocale != null && activeLocale != locale) {
-            if (locale == StageLocale.JP) {
-                englishRecognizer?.close()
-                englishRecognizer = null
-            } else {
-                japaneseRecognizer?.close()
-                japaneseRecognizer = null
-            }
-        }
+        switchLocale(locale)
         activeLocale = locale
         val detected = TextLineBuilder.merge(detector().detect(screen))
         val kept = detected.filter { box -> isCarouselLine(box, screen.width, screen.height) }
         Log.i(TAG, "detector found ${detected.size} lines, ${kept.size} kept as labels")
         val lines = if (locale == StageLocale.JP) centeredFirst(kept, screen.width) else kept
-        return lines.mapNotNull { box ->
+        return recognizeBoxes(screen, locale, lines)
+    }
+
+    /**
+     * Every text line on screen, without the stage-carousel filter.
+     *
+     * The cat scanner needs the name bar and the `Level` label, which sit outside the band the stage
+     * reader keeps, so it asks for the unfiltered set and does its own selection.
+     */
+    @Synchronized
+    fun recognizeAllLines(screen: Bitmap, locale: StageLocale): List<OcrStageLine> {
+        check(!closed) { "OCR engine is closed." }
+        require(!screen.isRecycled && screen.width > 0 && screen.height > 0) { "Captured screen is empty." }
+        switchLocale(locale)
+        activeLocale = locale
+        val detected = TextLineBuilder.merge(detector().detect(screen))
+        Log.i(TAG, "cat scan: detector found ${detected.size} lines")
+        val ordered = if (locale == StageLocale.JP) centeredFirst(detected, screen.width) else detected
+        return recognizeBoxes(screen, locale, ordered)
+    }
+
+    private fun switchLocale(locale: StageLocale) {
+        if (activeLocale == null || activeLocale == locale) return
+        if (locale == StageLocale.JP) {
+            englishRecognizer?.close()
+            englishRecognizer = null
+        } else {
+            japaneseRecognizer?.close()
+            japaneseRecognizer = null
+        }
+    }
+
+    private fun recognizeBoxes(
+        screen: Bitmap,
+        locale: StageLocale,
+        boxes: List<TextBox>,
+    ): List<OcrStageLine> =
+        boxes.mapNotNull { box ->
             val crop = Bitmap.createBitmap(screen, box.left, box.top, box.width, box.height)
             try {
                 val result = if (locale == StageLocale.JP) japaneseRecognizer().recognize(crop)
@@ -63,7 +92,6 @@ class StageOcrEngine(private val modelStore: StageOcrModelStore) : AutoCloseable
                 crop.recycle()
             }
         }
-    }
 
     @Synchronized
     override fun close() {
