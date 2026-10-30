@@ -28,9 +28,10 @@ data class CatScanHit(
 /**
  * Turns raw OCR lines from a Battle Cats cat screen into a unit, form and level.
  *
- * Nothing here depends on screen geometry beyond "the level sits near the word Level", which is why
- * the same code reads both the Upgrade detail card and the Organize Cats panel without a per-screen
- * layout table.
+ * Every distance here is measured in **name heights** rather than screen fractions. The cat's name
+ * is the one box whose size tracks the UI scale, so a 20:9 phone, a tablet and a landscape crop all
+ * produce the same numbers — that is what lets the same code read the Upgrade card and the Organize
+ * Cats panel without a per-screen layout table.
  */
 object CatScanResolver {
     /** Below this the recognizer is guessing; a wrong cat is worse than no answer. */
@@ -39,47 +40,50 @@ object CatScanResolver {
     /** Two boxes within this much height count as the same font size. */
     private const val HEIGHT_EPSILON = 0.002f
 
-    /** How far below the cat's name its level may print, in screen heights. */
-    private const val MAX_LEVEL_BELOW = 0.35f
+    /** How far below the name its level may print, in name heights. */
+    private const val MAX_LEVEL_BELOW = 8f
 
-    /** How far sideways a `+N` may sit from its level, in screen widths. */
-    private const val MAX_PLUS_ACROSS = 0.08f
+    /** How far sideways the level may sit from the name, in name heights. */
+    private const val MAX_LEVEL_ACROSS = 2.5f
 
-    /** How far sideways the level may sit from the name, in screen widths. */
-    private const val MAX_LEVEL_ACROSS = 0.22f
+    /** How far sideways a `+N` may sit from the name, in name heights. */
+    private const val MAX_PLUS_ACROSS = 2.5f
 
-    /** How far above a `+N` the level number may sit, in screen heights. */
-    private const val MAX_PLUS_GAP = 0.06f
+    /** How far a number may sit from the `+N` or the `Max Level` word it belongs to. */
+    private const val MAX_BLOCK_GAP = 1.8f
 
-    /** How far the level number may sit from the word Level, in screen heights. */
-    private const val MAX_LEVEL_DISTANCE = 0.15f
+    /**
+     * No cat tile prints a level below 20: the number under `Max Level` is the *cap*, and caps start
+     * at 20. Anything smaller is a fragment of a two-digit number — `30` arriving as `3` is what
+     * turned a maxed Dread Pirate Catley into a level-3 cat with a third of its health.
+     */
+    private const val MIN_TILE_LEVEL = 20
 
     /**
      * The label and its number are often merged into one detected line: the Mohawk Cat card reads
      * `Leve1 20`, with the recognizer turning the `l` into a `1`.
      */
     private val LEVEL_IN_LINE = Regex("""leve[l1]\s*(\d{1,3})""", RegexOption.IGNORE_CASE)
-    private val PLUS_LINE = Regex("""^\+\s*([0-9OoIl]{1,2})$""")
 
     /**
-     * A short word followed by the number, for labels the recognizer mangled past the point of
-     * matching — `eaxe 20` instead of `Level 20`. The prefix cannot contain digits, so a counter like
-     * `XP 38869800` does not qualify.
+     * A plus level. The game draws `+` as a full-width glyph, which the recognizer returns as the
+     * CJK `十` or a full-width `＋` often enough that ignoring those dropped every `+90` on screen.
      */
-    private val TRAILING_NUMBER = Regex("""^[^\d]{1,12}(\d{1,3})$""")
+    private val PLUS_LINE = Regex("""^[+＋十]\s*([0-9OoIl]{1,2})$""")
+
+    /** The same glyphs, for finding a plus inside a merged line. */
+    private val PLUS_CHARS = charArrayOf('+', '＋', '十')
 
     fun resolve(lines: List<OcrStageLine>, index: CatNameIndex): CatScanHit? {
         if (lines.isEmpty()) return null
         val name = bestName(lines, index) ?: return null
         val read = readLevel(lines, name.line)
-        val level = read.level
-        val plus = read.plus
         return CatScanHit(
             unitId = name.match.entry.unitId,
             formIndex = name.match.entry.formIndex,
             displayName = name.match.entry.displayName,
-            level = level,
-            plusLevel = plus,
+            level = read.level,
+            plusLevel = read.plus,
             nameConfidence = name.line.confidence,
             matchedText = name.line.text,
             levelBounds = read.levelLine,
@@ -124,84 +128,119 @@ object CatScanResolver {
     private data class LevelRead(val level: Int?, val plus: Int?, val levelLine: OcrStageLine? = null)
 
     private fun readLevel(lines: List<OcrStageLine>, nameLine: OcrStageLine): LevelRead {
-        // A single detected line can hold both, e.g. `Max Level 38 +1`, so split before parsing.
-        // Only levels the game could actually print; a stray `0` is a fragment, not a level.
-        val levels = lines.mapNotNull { line -> splitLevelAndPlus(line.text).first?.let { it to line } }
-            .filter { (value, _) -> value in CatLevelCurve.MIN_LEVEL..CatLevelCurve.MAX_LEVEL }
-        val pluses = lines.mapNotNull { line -> splitLevelAndPlus(line.text).second?.let { it to line } }
+        val nameHeight = (nameLine.bottom - nameLine.top).coerceAtLeast(1e-4f)
+        val nameCentreX = (nameLine.left + nameLine.right) / 2f
+        val nameCentreY = (nameLine.top + nameLine.bottom) / 2f
 
-        // Anchoring on the word "Level" proved unreliable: it comes back as `eaxe 20`, `Leve1 20` or
-        // not at all. The card's own geometry is steadier — the level prints below the name and in
-        // the same column, while the neighbouring cats' levels sit further out.
-        val level = levelNearName(levels, nameLine)
-            ?: pick(levels, lines.filter { isLevelAnchor(it.text) })
-            ?: levelAbovePlus(levels, pluses)
-            ?: nearestNumberBelow(levels, nameLine)
+        val numbers = ArrayList<Pair<Int, OcrStageLine>>(8)
+        val pluses = ArrayList<Pair<Int, OcrStageLine>>(4)
+        for (line in lines) {
+            if (line === nameLine) continue
+            val (value, plus) = splitLevelAndPlus(line.text)
+            if (value != null) numbers += value to line
+            if (plus != null) pluses += plus to line
+        }
 
-        // The plus must belong to the same card: directly below the level and in its column.
-        // Neighbours print their own "+13" at the same height, and matching on height alone
-        // handed back the cat next door's plus level.
-        val plus = pluses.filter { (_, line) ->
-            val reference = level?.second ?: return@filter false
-            val below = (line.top + line.bottom) / 2f - (reference.top + reference.bottom) / 2f
-            val across = kotlin.math.abs(
-                (line.left + line.right) / 2f - (reference.left + reference.right) / 2f,
-            )
-            // `>= 0` because a merged line carries both, so the plus sits on the level's own row.
-            below >= 0f && below <= MAX_LEVEL_DISTANCE && across <= MAX_PLUS_ACROSS
+        // The plus is the rarest token on a cat screen — one per card — so it is the steadiest
+        // anchor: the level is the number printed directly above it, in its own column. That holds
+        // on the Upgrade card and on the Organize panel, and it needs no absolute coordinates.
+        val plusHere = pluses
+            .filter { (_, line) -> across(line, nameCentreX) <= MAX_PLUS_ACROSS * nameHeight }
+            .minByOrNull { (_, line) -> across(line, nameCentreX) }
+
+        val abovePlus = plusHere?.let { (_, plusLine) -> numberAbove(numbers, plusLine) }
+        val found = abovePlus
+            ?: numberUnderLabel(numbers, lines, nameHeight, nameCentreX)
+            ?: numberBelowName(numbers, nameHeight, nameCentreX, nameCentreY)
+
+        val levelLine = found?.second
+        val level = found?.first?.takeIf { it >= MIN_TILE_LEVEL }
+
+        // The plus must belong to the same card: below the level and in its column, or — when the
+        // level was merged into one line with it — on that same row.
+        val plus = plusHere?.first ?: pluses.filter { (_, line) ->
+            val reference = levelLine ?: return@filter false
+            val boxHeight = (reference.bottom - reference.top).coerceAtLeast(1e-4f)
+            val below = centreY(line) - centreY(reference)
+            below >= -0.2f * boxHeight && below <= MAX_BLOCK_GAP * boxHeight &&
+                across(line, centreX(reference)) <= MAX_BLOCK_GAP * boxHeight
         }.minByOrNull { (_, line) ->
-            val reference = level?.second ?: return@minByOrNull 0f
-            verticalDistance(reference, line)
+            kotlin.math.abs(centreY(line) - centreY(levelLine ?: line))
         }?.first
-        return LevelRead(level?.first, plus, level?.second)
+
+        return LevelRead(level, plus, if (level != null) levelLine else null)
     }
 
     /**
-     * Splits `Max Level 38 +1` into level 38 and plus 1. The detector merges the label, the number and
-     * the plus into one line often enough that parsing the whole string lost the level entirely.
+     * The number printed immediately above a `+N`. Their boxes nearly touch, so the gap is measured
+     * against the number's own height rather than the screen.
      */
-    internal fun splitLevelAndPlus(text: String): Pair<Int?, Int?> {
-        val plusAt = text.indexOf('+')
-        if (plusAt < 0) return parseLevel(text) to null
-        val before = text.substring(0, plusAt)
-        val after = text.substring(plusAt + 1).trim().take(2)
-        val plus = parsePlus("+$after")
-        val level = parseLevel(before) ?: parseLevel(text.substring(0, plusAt).trim())
-        return level to plus
-    }
-
-    /** Last resort: the biggest plausible number under the name, whatever column it is in. */
-    private fun nearestNumberBelow(
-        levels: List<Pair<Int, OcrStageLine>>,
-        nameLine: OcrStageLine,
+    private fun numberAbove(
+        numbers: List<Pair<Int, OcrStageLine>>,
+        plusLine: OcrStageLine,
     ): Pair<Int, OcrStageLine>? {
-        val nameCentreY = (nameLine.top + nameLine.bottom) / 2f
-        return levels
-            .filter { (_, line) ->
-                val centre = (line.top + line.bottom) / 2f
-                val below = centre - nameCentreY
-                below > 0f && below <= MAX_LEVEL_BELOW
+        var best: Pair<Int, OcrStageLine>? = null
+        var bestGap = Float.MAX_VALUE
+        for ((value, line) in numbers) {
+            val boxHeight = (line.bottom - line.top).coerceAtLeast(1e-4f)
+            val gap = plusLine.top - line.bottom
+            if (gap < -0.4f * boxHeight) continue
+            if (gap > MAX_BLOCK_GAP * boxHeight) continue
+            if (across(line, centreX(plusLine)) > MAX_BLOCK_GAP * boxHeight) continue
+            if (gap < bestGap) {
+                bestGap = gap
+                best = value to line
             }
-            .minByOrNull { (_, line) -> (line.top + line.bottom) / 2f - nameCentreY }
+        }
+        return best
     }
 
-    /** The level of the card the name belongs to: below the name, same column, closest wins. */
-    private fun levelNearName(
-        levels: List<Pair<Int, OcrStageLine>>,
-        nameLine: OcrStageLine,
+    /** The number printed directly under a `Max` / `Level` word, in that word's column. */
+    private fun numberUnderLabel(
+        numbers: List<Pair<Int, OcrStageLine>>,
+        lines: List<OcrStageLine>,
+        nameHeight: Float,
+        nameCentreX: Float,
     ): Pair<Int, OcrStageLine>? {
-        val nameCentreY = (nameLine.top + nameLine.bottom) / 2f
-        val nameCentreX = (nameLine.left + nameLine.right) / 2f
+        val labels = lines.filter {
+            isLevelAnchor(it.text) && across(it, nameCentreX) <= MAX_LEVEL_ACROSS * nameHeight
+        }
+        if (labels.isEmpty()) return null
         var best: Pair<Int, OcrStageLine>? = null
         var bestScore = Float.MAX_VALUE
-        for ((value, line) in levels) {
-            val centreY = (line.top + line.bottom) / 2f
-            val centreX = (line.left + line.right) / 2f
-            val below = centreY - nameCentreY
-            val across = kotlin.math.abs(centreX - nameCentreX)
+        for (label in labels) {
+            for ((value, line) in numbers) {
+                val boxHeight = (line.bottom - line.top).coerceAtLeast(1e-4f)
+                val gap = line.top - label.bottom
+                if (gap < -0.6f * boxHeight) continue
+                if (gap > MAX_BLOCK_GAP * boxHeight) continue
+                val acrossLabel = across(line, centreX(label))
+                if (acrossLabel > MAX_BLOCK_GAP * boxHeight) continue
+                val score = gap + acrossLabel
+                if (score < bestScore) {
+                    bestScore = score
+                    best = value to line
+                }
+            }
+        }
+        return best
+    }
+
+    /** The level of the card the name belongs to: below the name, in the name's column. */
+    private fun numberBelowName(
+        numbers: List<Pair<Int, OcrStageLine>>,
+        nameHeight: Float,
+        nameCentreX: Float,
+        nameCentreY: Float,
+    ): Pair<Int, OcrStageLine>? {
+        var best: Pair<Int, OcrStageLine>? = null
+        var bestScore = Float.MAX_VALUE
+        for ((value, line) in numbers) {
+            val below = (centreY(line) - nameCentreY) / nameHeight
+            val acrossName = across(line, nameCentreX) / nameHeight
             if (below <= 0f || below > MAX_LEVEL_BELOW) continue
-            if (across > MAX_LEVEL_ACROSS) continue
-            val score = across * 2f + below
+            if (acrossName > MAX_LEVEL_ACROSS) continue
+            val score = acrossName * 2f + below
             if (score < bestScore) {
                 bestScore = score
                 best = value to line
@@ -210,56 +249,20 @@ object CatScanResolver {
         return best
     }
 
-    /** The number printed immediately above a `+N` plus level. */
-    private fun levelAbovePlus(
-        levels: List<Pair<Int, OcrStageLine>>,
-        pluses: List<Pair<Int, OcrStageLine>>,
-    ): Pair<Int, OcrStageLine>? {
-        if (pluses.isEmpty() || levels.isEmpty()) return null
-        var best: Pair<Int, OcrStageLine>? = null
-        var bestGap = Float.MAX_VALUE
-        for ((_, plusLine) in pluses) {
-            val plusCentre = (plusLine.top + plusLine.bottom) / 2f
-            for ((value, line) in levels) {
-                val gap = plusCentre - (line.top + line.bottom) / 2f
-                // Only numbers above the plus, and close enough to belong to the same card.
-                if (gap <= 0f || gap > MAX_PLUS_GAP) continue
-                if (gap < bestGap) {
-                    bestGap = gap
-                    best = value to line
-                }
-            }
-        }
-        return best
-    }
-
-    private fun pick(
-        candidates: List<Pair<Int, OcrStageLine>>,
-        anchors: List<OcrStageLine>,
-    ): Pair<Int, OcrStageLine>? {
-        val inRange = candidates.filter { (value, _) -> value in CatLevelCurve.MIN_LEVEL..CatLevelCurve.MAX_LEVEL }
-        if (inRange.isEmpty()) return null
-        if (anchors.isEmpty()) {
-            // Without the word "Level" on screen a lone plausible number is still the best guess, but
-            // two of them means we cannot tell which is the level.
-            return inRange.singleOrNull()
-        }
-        return inRange
-            .map { (value, line) -> Triple(value, line, anchors.minOf { verticalDistance(it, line) }) }
-            .filter { it.third <= MAX_LEVEL_DISTANCE }
-            .minByOrNull { it.third }
-            ?.let { it.first to it.second }
-    }
-
-    private fun verticalDistance(a: OcrStageLine, b: OcrStageLine): Float {
-        val centreA = (a.top + a.bottom) / 2f
-        val centreB = (b.top + b.bottom) / 2f
-        return kotlin.math.abs(centreA - centreB)
+    /**
+     * Splits `Max Level 38 +1` into level 38 and plus 1. The detector merges the label, the number and
+     * the plus into one line often enough that parsing the whole string lost the level entirely.
+     */
+    internal fun splitLevelAndPlus(text: String): Pair<Int?, Int?> {
+        val plusAt = text.indexOfAny(PLUS_CHARS)
+        if (plusAt < 0) return parseLevel(text) to null
+        val plusToken = text.substring(plusAt).trim().substringBefore(' ')
+        return parseLevel(text.substring(0, plusAt)) to parsePlus(plusToken)
     }
 
     private fun isLevelAnchor(text: String): Boolean {
         val lowered = text.lowercase().replace(" ", "")
-        return lowered.contains("level") || lowered.contains("leve1")
+        return lowered.contains("level") || lowered.contains("leve1") || lowered.contains("max")
     }
 
     /**
@@ -275,7 +278,7 @@ object CatScanResolver {
         // A bare number first, so glyph confusions (`l0` -> 10) are honoured before anything else.
         parseDigits(trimmed)?.let { return it }
         // `+90` is a plus level, never the level itself.
-        if (trimmed.startsWith("+")) return null
+        if (trimmed.startsWith("+") || trimmed.startsWith("十") || trimmed.startsWith("＋")) return null
         // Otherwise the number is the last whitespace-separated token. The label is mangled in ways
         // no pattern survives — `Lexe1 45`, `eaxe 20`, `Leave 50` — but the digits stay intact.
         val last = trimmed.substringAfterLast(' ').trim()
@@ -302,6 +305,54 @@ object CatScanResolver {
         }
         return cleaned.toIntOrNull()
     }
+
+    /**
+     * Reads a level block that was cropped on its own, with no cat name inside the crop.
+     *
+     * Used by the second pass, which re-reads the block at 4x after the full-screen pass missed it.
+     * Same rules as [readLevel] minus the name: anchor on the plus, else on the label, else take the
+     * only plausible number in the crop.
+     */
+    fun readLevelBlock(lines: List<OcrStageLine>): Pair<Int?, Int?>? {
+        if (lines.isEmpty()) return null
+        val numbers = ArrayList<Pair<Int, OcrStageLine>>(6)
+        val pluses = ArrayList<Pair<Int, OcrStageLine>>(2)
+        for (line in lines) {
+            val (value, plus) = splitLevelAndPlus(line.text)
+            if (value != null) numbers += value to line
+            if (plus != null) pluses += plus to line
+        }
+
+        // Biggest plus first: the crop holds one card, so the tallest is the one we cropped for.
+        for ((plusValue, plusLine) in pluses.sortedByDescending { it.second.bottom - it.second.top }) {
+            numberAbove(numbers, plusLine)?.let { (level, _) ->
+                val usable = level.takeIf { it >= MIN_TILE_LEVEL }
+                if (usable != null) return usable to plusValue
+            }
+        }
+
+        val label = lines.filter { isLevelAnchor(it.text) }.minByOrNull { it.top }
+        if (label != null) {
+            val under = numbers.filter { (value, line) ->
+                val boxHeight = (line.bottom - line.top).coerceAtLeast(1e-4f)
+                val gap = line.top - label.bottom
+                value >= MIN_TILE_LEVEL && gap >= -0.6f * boxHeight &&
+                    gap <= MAX_BLOCK_GAP * boxHeight && across(line, centreX(label)) <= MAX_BLOCK_GAP * boxHeight
+            }.minByOrNull { (_, line) -> line.top }
+            if (under != null) return under.first to pluses.firstOrNull()?.first
+        }
+
+        val plausible = numbers.filter { it.first >= MIN_TILE_LEVEL }
+        if (plausible.size == 1) return plausible.first().first to pluses.firstOrNull()?.first
+        return null
+    }
+
+    private fun centreX(line: OcrStageLine): Float = (line.left + line.right) / 2f
+
+    private fun centreY(line: OcrStageLine): Float = (line.top + line.bottom) / 2f
+
+    private fun across(line: OcrStageLine, referenceX: Float): Float =
+        kotlin.math.abs(centreX(line) - referenceX)
 
     /** Outlined game font: O/0 and l/1 are the two the recognizer actually mixes up. */
     private val GLYPH_CONFUSIONS = mapOf('O' to '0', 'o' to '0', 'l' to '1', 'I' to '1')

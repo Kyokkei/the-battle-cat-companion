@@ -555,7 +555,7 @@ class StageOverlayService : Service() {
             loadSprite(unitId, formIndex)?.let { setImageBitmap(it) }
         }
         leftColumn.addView(portrait, LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, dp(104),
+            LinearLayout.LayoutParams.MATCH_PARENT, dp(92),
         ))
         // The ability box is the cat's special ability (Strong, Massive Damage, Slow, ...). Single vs
         // area is an attack property, so it goes in the small Target box instead.
@@ -567,8 +567,10 @@ class StageOverlayService : Service() {
             if (immune.isNotEmpty()) add("Immune" to immune.joinToString(", "))
         }
         val abilityBox = wideTile(abilityRows)
+        // Wrap rather than a fixed 96 dp: "Freeze 40% for 4.0s, Survives a lethal strike 100%" needs
+        // four lines, and a fixed box cut the last one in half.
         leftColumn.addView(abilityBox, LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, dp(96),
+            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT,
         ).apply { topMargin = dp(4) })
         columns.addView(leftColumn, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.34f).apply {
             marginEnd = dp(5)
@@ -637,9 +639,9 @@ class StageOverlayService : Service() {
         }
         row.addView(
             statTile(first.first, first.second),
-            LinearLayout.LayoutParams(0, dp(38), 1f).apply { marginEnd = dp(4) },
+            LinearLayout.LayoutParams(0, dp(34), 1f).apply { marginEnd = dp(4) },
         )
-        row.addView(statTile(second.first, second.second), LinearLayout.LayoutParams(0, dp(38), 1f))
+        row.addView(statTile(second.first, second.second), LinearLayout.LayoutParams(0, dp(34), 1f))
         return row
     }
 
@@ -700,7 +702,10 @@ class StageOverlayService : Service() {
             gravity = Gravity.CENTER
             width = (resources.displayMetrics.widthPixels * CARD_WIDTH_FRACTION).toInt()
                 .coerceAtLeast(dp(300))
-            height = (resources.displayMetrics.heightPixels * 0.86f).toInt()
+            // Wrap, not 86% of the display: the card is 320 dp tall and a landscape phone only has
+            // 360 dp, so a fixed fraction cut the last row in half ("Single" was sliced off the
+            // bottom). The window now grows to the content and the system clamps it to the display.
+            height = WindowManager.LayoutParams.WRAP_CONTENT
         }
         runCatching { windowManager.addView(scrollableRoot, params) }.onSuccess {
             resultView = scrollableRoot

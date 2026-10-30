@@ -25,7 +25,6 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Display
 import android.view.WindowManager
-import com.projectnyanko.companion.domain.cat.CatLevelCurve
 import com.projectnyanko.companion.domain.cat.CatScanHit
 import com.projectnyanko.companion.domain.cat.CatScanResolver
 import com.projectnyanko.companion.domain.seed.GameRegion
@@ -528,9 +527,13 @@ class StageCaptureService : Service() {
                     "cat scan read ${all.size} lines in ${System.currentTimeMillis() - startedAt} ms: " +
                         all.take(16).joinToString(" | ") { "${it.text}(${"%.2f".format(it.bottom - it.top)})" },
                 )
-                CatScanResolver.resolve(all, index)?.let { hit -> refineLevel(bitmap, hit) }.also { hit ->
+                CatScanResolver.resolve(all, index)?.let { hit ->
+                    val trace = ScanTrace()
+                    val refined = refineLevel(bitmap, hit, trace)
+                    dumpCatScan(all, refined, trace, bitmap)
+                    refined
+                }.also { hit ->
                     Log.i(TAG, "cat scan hit: ${hit?.displayName ?: "none"} level=${hit?.level} plus=${hit?.plusLevel}")
-                    dumpCatScan(all, hit)
                 }
             } catch (error: Exception) {
                 Log.w(TAG, "cat scan failed: ${error.message}")
@@ -541,35 +544,34 @@ class StageCaptureService : Service() {
     /**
      * Re-reads the level block from a crop instead of trusting the full-screen digits.
      *
-     * The detector splits the level into fragments often enough that `45` arrived as `5`, `30 +1`
-     * lost its plus, and `40 +10` produced nothing. The block always sits directly under the name,
-     * so cropping that strip and upscaling it 3x gives one clean line to parse.
+     * The block is always in the name's own column, a handful of name-heights below it: under the
+     * portrait on the Upgrade card, under the panel name on Organize Cats. Cropping by **name
+     * heights** instead of screen fractions is what makes this work on both screens and on any
+     * device — the name is the only box whose size tracks the UI scale.
      */
-    private fun refineLevel(bitmap: Bitmap, hit: CatScanHit): CatScanHit {
+    private fun refineLevel(bitmap: Bitmap, hit: CatScanHit, trace: ScanTrace): CatScanHit {
         val name = hit.nameBounds ?: return hit
         val engine = ocrEngine ?: return hit
-        val left = ((name.left - 0.03f) * bitmap.width).toInt().coerceIn(0, bitmap.width - 1)
-        val right = ((name.right + 0.14f) * bitmap.width).toInt().coerceIn(left + 1, bitmap.width)
-        val top = ((name.bottom + 0.03f) * bitmap.height).toInt().coerceIn(0, bitmap.height - 1)
-        val bottom = ((name.bottom + 0.24f) * bitmap.height).toInt().coerceIn(top + 1, bitmap.height)
-        if (right - left < 16 || bottom - top < 16) return hit
+        val nameHeight = (name.bottom - name.top).coerceAtLeast(0.004f)
+        val centreX = (name.left + name.right) / 2f
+        val left = ((centreX - CROP_HALF_WIDTH * nameHeight) * bitmap.width).toInt().coerceIn(0, bitmap.width - 1)
+        val right = ((centreX + CROP_HALF_WIDTH * nameHeight) * bitmap.width).toInt().coerceIn(left + 1, bitmap.width)
+        val top = ((name.bottom + CROP_TOP * nameHeight) * bitmap.height).toInt().coerceIn(0, bitmap.height - 1)
+        val bottom = ((name.bottom + CROP_BOTTOM * nameHeight) * bitmap.height).toInt().coerceIn(top + 1, bitmap.height)
+        if (right - left < 16 || bottom - top < 12) return hit
         val crop = runCatching { Bitmap.createBitmap(bitmap, left, top, right - left, bottom - top) }
             .getOrNull() ?: return hit
+        trace.crop = crop
         return try {
-            val big = Bitmap.createScaledBitmap(crop, crop.width * 3, crop.height * 3, true)
+            val big = Bitmap.createScaledBitmap(crop, crop.width * CROP_SCALE, crop.height * CROP_SCALE, true)
             try {
                 val lines = engine.recognizeAllLines(big, locale)
-                val joined = lines.joinToString(" ") { it.text }
-                val (level, plus) = CatScanResolver.splitLevelAndPlus(joined)
-                // Only the first `+N` in the crop belongs to this card; the rest are neighbours.
-                val firstPlus = joined.substringAfter('+', "").trim().substringBefore(' ').take(2)
-                val plusHere = if (firstPlus.isNotEmpty()) CatScanResolver.parsePlus("+$firstPlus") else plus
-                Log.i(TAG, "level block read: \"$joined\" -> level=$level plus=$plus")
-                // A stray `0` is not a level; only accept something the game could actually show.
-                val usableLevel = level?.takeIf { it in CatLevelCurve.MIN_LEVEL..CatLevelCurve.MAX_LEVEL }
+                trace.refineText = lines.joinToString(" | ") { "${it.text}@${"%.2f".format(it.left)}" }
+                val (level, plus) = CatScanResolver.readLevelBlock(lines) ?: (null to null)
+                Log.i(TAG, "level block read: \"${trace.refineText}\" -> level=$level plus=$plus")
                 hit.copy(
-                    level = usableLevel ?: hit.level,
-                    plusLevel = plusHere ?: plus ?: hit.plusLevel,
+                    level = level ?: hit.level,
+                    plusLevel = plus ?: hit.plusLevel,
                 )
             } finally {
                 if (big !== crop) big.recycle()
@@ -577,21 +579,37 @@ class StageCaptureService : Service() {
         } catch (error: Exception) {
             Log.w(TAG, "level refine failed: ${error.message}")
             hit
-        } finally {
-            crop.recycle()
         }
     }
 
+    /** What the second pass saw, so a failed scan can be read back off the device. */
+    private class ScanTrace {
+        var refineText: String? = null
+        var crop: Bitmap? = null
+    }
+
     /**
-     * Writes the last cat scan to the cache directory.
+     * Writes the last few cat scans to the cache directory.
      *
      * The logcat ring buffer is only 256 KB and rotates within minutes on this device, so a failed
-     * scan was unreadable by the time anyone looked. This file survives.
+     * scan was unreadable by the time anyone looked. Each scan keeps its text, the frame the OCR saw
+     * and the level crop it re-read, so a wrong level can be diagnosed without a second attempt.
      */
-    private fun dumpCatScan(lines: List<com.projectnyanko.companion.domain.stage.OcrStageLine>, hit: CatScanHit?) {
+    private fun dumpCatScan(
+        lines: List<com.projectnyanko.companion.domain.stage.OcrStageLine>,
+        hit: CatScanHit?,
+        trace: ScanTrace,
+        frame: Bitmap,
+    ) {
         runCatching {
+            val dir = java.io.File(cacheDir, "catscan").apply { mkdirs() }
+            // Keep the last few scans; a ring is enough and the cache stays small.
+            val existing = dir.listFiles()?.sortedBy { it.name }.orEmpty()
+            if (existing.size > CAT_SCAN_DUMPS * 3) existing.take(existing.size - CAT_SCAN_DUMPS * 3).forEach { it.delete() }
+            val stamp = "scan-" + System.currentTimeMillis()
             val body = buildString {
-                appendLine("hit=" + (hit?.displayName ?: "none") + " level=" + hit?.level + " plus=" + hit?.plusLevel)
+                appendLine("name=" + (hit?.displayName ?: "none") + " level=" + hit?.level + " plus=" + hit?.plusLevel)
+                appendLine("refine=\"" + (trace.refineText ?: "-") + "\"")
                 appendLine("lines=" + lines.size)
                 lines.forEach { line ->
                     appendLine(
@@ -603,8 +621,24 @@ class StageCaptureService : Service() {
                     )
                 }
             }
-            java.io.File(cacheDir, "last_cat_scan.txt").writeText(body)
+            java.io.File(dir, "$stamp.txt").writeText(body)
+            runCatching {
+                // JPEG for the frame: it is only ever looked at, and a full-screen PNG costs ~250 ms
+                // of the tap-to-card latency on a 2400x1080 capture.
+                java.io.FileOutputStream(java.io.File(dir, "$stamp-frame.jpg")).use {
+                    frame.compress(Bitmap.CompressFormat.JPEG, 85, it)
+                }
+            }
+            runCatching {
+                trace.crop?.let { crop ->
+                    java.io.FileOutputStream(java.io.File(dir, "$stamp-crop.png")).use {
+                        crop.compress(Bitmap.CompressFormat.PNG, 100, it)
+                    }
+                }
+            }
         }
+        trace.crop?.recycle()
+        trace.crop = null
     }
 
     /**
@@ -763,6 +797,22 @@ class StageCaptureService : Service() {
     companion object {
         /** A cat screen is a single frame; anything slower than this means the engine is stuck. */
         private const val CAT_SCAN_TIMEOUT_MS = 15_000L
+
+        /**
+         * The level block crop, in multiples of the name's height.
+         *
+         * The name box is the only thing on screen whose size follows the UI scale, so cropping by
+         * it lands on the block on a 16:9 phone, a 20:9 phone and a tablet alike — and on both the
+         * Upgrade card and the Organize Cats panel, where the block sits at a different absolute
+         * place but the same distance from the name.
+         */
+        private const val CROP_HALF_WIDTH = 3.0f
+        private const val CROP_TOP = 0.3f
+        private const val CROP_BOTTOM = 9.0f
+        private const val CROP_SCALE = 4
+
+        /** How many past scans to keep in the cache for diagnosis. */
+        private const val CAT_SCAN_DUMPS = 8
         const val ACTION_ENABLE = "com.projectnyanko.companion.stage.ENABLE_CAPTURE"
         const val ACTION_CAPTURE = "com.projectnyanko.companion.stage.CAPTURE_FRAME"
         const val ACTION_STOP = "com.projectnyanko.companion.stage.STOP_CAPTURE"

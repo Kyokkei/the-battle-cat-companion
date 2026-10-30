@@ -301,4 +301,64 @@ class CatScanResolverTest {
         assertEquals(38, hit.level)
         assertEquals(1, hit.plusLevel)
     }
+
+    @Test
+    fun theNeighboursLevelIsNeverBorrowedThroughALabel() {
+        // Verbatim geometry from a real Fiend Cat scan: the selected tile's own number was not
+        // detected at all, and the only number on screen sat under the tile to the left. The old
+        // label-anchored fallback ignored columns and handed back that neighbour's 30.
+        val lines = listOf(
+            line("Fiend Cat", 1.0f, 0.141f, 0.195f, 0.453f, 0.547f),
+            line("Max", 0.97f, 0.304f, 0.332f, 0.520f, 0.540f),
+            line("Level,", 0.93f, 0.329f, 0.369f, 0.514f, 0.556f),
+            line("30", 0.99f, 0.383f, 0.411f, 0.162f, 0.183f),
+            line("十", 0.96f, 0.380f, 0.411f, 0.575f, 0.590f),
+        )
+        val hit = requireNotNull(CatScanResolver.resolve(lines, index))
+        assertEquals("Fiend Cat", hit.displayName)
+        assertNull(hit.level)
+    }
+
+    @Test
+    fun aTruncatedTwoDigitCapIsNotTakenAsALevel() {
+        // `30` arriving as `3` is what turned a maxed Dread Pirate Catley into a level-3 cat showing
+        // a third of its health. No tile prints a cap below 20, so a lone digit is a fragment.
+        val lines = listOf(
+            line("Dread Pirate Catley", 1.0f, 0.130f, 0.200f, 0.420f, 0.550f),
+            line("Max Level 3", 0.70f, 0.290f, 0.360f, 0.490f, 0.580f),
+        )
+        assertNull(requireNotNull(CatScanResolver.resolve(lines, index)).level)
+    }
+
+    @Test
+    fun theFullWidthPlusGlyphStillReadsThePlusLevel() {
+        // The game draws a full-width plus; the recognizer returns the CJK `十` for it.
+        val lines = listOf(
+            line("Mohawk Cat", 1.0f, 0.14f, 0.20f, 0.40f, 0.57f),
+            line("Leve1 20", 0.672f, 0.28f, 0.33f, 0.49f, 0.55f),
+            line("十90", 0.80f, 0.34f, 0.38f, 0.55f, 0.59f),
+        )
+        val hit = requireNotNull(CatScanResolver.resolve(lines, index))
+        assertEquals(20, hit.level)
+        assertEquals(90, hit.plusLevel)
+        assertEquals(110, hit.effectiveLevel)
+    }
+
+    @Test
+    fun theCropPassReadsABlockWithNoNameInIt() {
+        // What the second pass feeds in: the level block alone, upscaled, no cat name in the crop.
+        val lines = listOf(
+            line("Max", 0.90f, 0.10f, 0.20f, 0.30f, 0.45f),
+            line("Level", 0.90f, 0.20f, 0.30f, 0.30f, 0.48f),
+            line("30", 0.98f, 0.35f, 0.50f, 0.40f, 0.52f),
+            line("十90", 0.80f, 0.55f, 0.70f, 0.40f, 0.55f),
+        )
+        assertEquals(30 to 90, CatScanResolver.readLevelBlock(lines))
+    }
+
+    @Test
+    fun aBlockWithNothingButAStrayDigitReadsNothing() {
+        val lines = listOf(line("3", 0.90f, 0.10f, 0.20f, 0.30f, 0.45f))
+        assertNull(CatScanResolver.readLevelBlock(lines))
+    }
 }
