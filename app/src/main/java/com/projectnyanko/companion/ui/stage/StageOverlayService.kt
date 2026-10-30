@@ -512,10 +512,8 @@ class StageOverlayService : Service() {
 
         val form = stats.forms[formIndex]
         val reference = stats.level
-        // Project the base level only. Plus levels grow at a different rate and the game's growth
-        // table is not bundled: Mohawk 20+90 is 8900 HP, not the 11400 a full +90 would give. Pizza
-        // Cat 50+16 reads exactly right at base level 50 (52650), so base levels are trustworthy.
-        val projectedLevel = if (readLevel > 0) readLevel else reference
+        // A plus level is just another level: the card's 50 +16 is level 66, so they are summed.
+        val projectedLevel = if (readLevel > 0) readLevel + (if (readPlus > 0) readPlus else 0) else reference
         val hp = CatLevelCurve.project(form.health, reference, projectedLevel)
         val attack = CatLevelCurve.project(form.attack, reference, projectedLevel)
         val dps = if (form.attackCycleSeconds > 0.0) {
@@ -581,9 +579,8 @@ class StageOverlayService : Service() {
 
         val provenance = when {
             readLevel <= 0 -> "Level unreadable — showing the bundled Lv $reference row."
-            readLevel != reference && readPlus > 0 ->
-                "HP/ATK at base Lv $readLevel, scaled from the Lv $reference table. The +$readPlus plus levels are not included."
-            readLevel != reference -> "Scaled from the bundled Lv $reference table."
+            projectedLevel != reference ->
+                "Lv $projectedLevel, scaled from the bundled Lv $reference table."
             else -> "Bundled Lv $reference row."
         }
         root.addView(label(provenance, 11f, INK_SOFT))
