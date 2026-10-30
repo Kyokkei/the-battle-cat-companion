@@ -9,7 +9,7 @@ import org.junit.Test
  * Pins the cooldown conversion against the bundled table and the numbers MyGamatoto shows.
  *
  * The table stores raw zero-upgrade frames; the game (and every stat site) displays the endgame
- * value, which is the raw count minus 264 frames, floored at 60 frames.
+ * value, which is the raw count minus 266 frames, floored at 60 frames.
  */
 class InGameCooldownTest {
     private val stats by lazy { TestCatalog.unitStats() }
@@ -25,19 +25,22 @@ class InGameCooldownTest {
 
     @Test
     fun cheapCatsHitTheHardTwoSecondFloor() {
-        // Mohawk (152f) and Eraser (242f) are both below the 264-frame reduction, so PONOS' 60-frame
-        // floor is what they display — this is the value the user checks in-game.
+        // Mohawk (152f) and Eraser (242f) are both below the reduction, so PONOS' 60-frame floor is
+        // what they display — this is the value the user checks in-game.
         assertEquals("2.00s", InGameCooldown.format(5.07))
         assertEquals("2.00s", InGameCooldown.format(8.07))
         assertEquals(60L, InGameCooldown.inGameFrames(5.07))
     }
 
     @Test
-    fun longCooldownsLoseTheFlatEightPointEightSeconds() {
-        // 842 - 264 = 578 frames, 2402 - 264 = 2138 frames.
-        assertEquals("19.27s", InGameCooldown.format(28.07))
-        assertEquals("71.27s", InGameCooldown.format(80.07))
-        assertEquals(578L, InGameCooldown.inGameFrames(28.07))
+    fun matchesMyGamatotoSpawnValues() {
+        // Read off mygamatoto.com: Pizza 19.20s, Saber Alter CC 71.20s, Mega Cat 383.47s.
+        assertEquals("19.20s", InGameCooldown.format(28.07))
+        assertEquals(576L, InGameCooldown.inGameFrames(28.07))
+        assertEquals("71.20s", InGameCooldown.format(80.07))
+        assertEquals(2136L, InGameCooldown.inGameFrames(80.07))
+        assertEquals("383.47s", InGameCooldown.format(392.33))
+        assertEquals(11504L, InGameCooldown.inGameFrames(392.33))
     }
 
     @Test
