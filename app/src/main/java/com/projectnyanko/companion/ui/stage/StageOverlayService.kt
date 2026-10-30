@@ -512,10 +512,12 @@ class StageOverlayService : Service() {
 
         val form = stats.forms[formIndex]
         val reference = stats.level
-        // Plus levels grow stats like normal levels, so 20 +90 projects as level 110.
-        val shownLevel = if (readLevel > 0) readLevel + (if (readPlus > 0) readPlus else 0) else reference
-        val hp = CatLevelCurve.project(form.health, reference, shownLevel)
-        val attack = CatLevelCurve.project(form.attack, reference, shownLevel)
+        // Project the base level only. Plus levels grow at a different rate and the game's growth
+        // table is not bundled: Mohawk 20+90 is 8900 HP, not the 11400 a full +90 would give. Pizza
+        // Cat 50+16 reads exactly right at base level 50 (52650), so base levels are trustworthy.
+        val projectedLevel = if (readLevel > 0) readLevel else reference
+        val hp = CatLevelCurve.project(form.health, reference, projectedLevel)
+        val attack = CatLevelCurve.project(form.attack, reference, projectedLevel)
         val dps = if (form.attackCycleSeconds > 0.0) {
             (attack / form.attackCycleSeconds).toInt()
         } else {
@@ -530,16 +532,11 @@ class StageOverlayService : Service() {
                 append(readLevel)
                 if (readPlus > 0) append(" +").append(readPlus)
             } else {
-                append("?")
-            }
-            if (readLevel > 0 && readLevel != reference) {
-                append("   ·   numbers at Lv ").append(reference)
+                append("?  ·  showing Lv ").append(reference)
             }
         }
-        root.addView(label(subtitle, 13f, INK_SOFT))
-        root.addView(Spacer(this, dp(8)))
+        root.addView(label(subtitle, 12f, INK_SOFT))
 
-        // Boxes, not lines: a two-column grid of bordered tiles reads at a glance mid-battle.
         val tiles = listOf(
             "Health" to formatStat(hp),
             "Attack" to formatStat(attack),
@@ -557,33 +554,43 @@ class StageOverlayService : Service() {
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                 )
-                setPadding(0, dp(3), 0, dp(3))
+                setPadding(0, dp(2), 0, dp(2))
             }
             pair.forEachIndexed { index, (tileLabel, tileValue) ->
                 row.addView(
                     statTile(tileLabel, tileValue),
                     LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
-                        marginEnd = if (index == 0) dp(6) else 0
+                        marginEnd = if (index == 0) dp(4) else 0
                     },
                 )
-            }
-            if (pair.size == 1) {
-                row.addView(View(this), LinearLayout.LayoutParams(0, 1, 1f))
             }
             root.addView(row)
         }
 
-        val provenance = if (readLevel > 0 && shownLevel != reference) {
-            "Read Lv $readLevel${if (readPlus > 0) " +$readPlus" else ""}. These are the bundled Lv $reference numbers — " +
-                "the game's per-level growth table is not bundled, so anything else would be a guess."
-        } else {
-            "Bundled Lv $reference numbers."
+        val abilityLines = buildList {
+            add("Target" to (if (form.areaAttack) "Area" else "Single"))
+            if (form.effects.isNotEmpty()) add("Abilities" to form.effects.joinToString(", "))
+            if (form.immune.isNotEmpty()) add("Immune" to form.immune.joinToString(", "))
+        }
+        if (abilityLines.isNotEmpty()) {
+            root.addView(wideTile(abilityLines), LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+            ).apply { topMargin = dp(2) })
+        }
+
+        val provenance = when {
+            readLevel <= 0 -> "Level unreadable — showing the bundled Lv $reference row."
+            readLevel != reference && readPlus > 0 ->
+                "HP/ATK at base Lv $readLevel, scaled from the Lv $reference table. The +$readPlus plus levels are not included."
+            readLevel != reference -> "Scaled from the bundled Lv $reference table."
+            else -> "Bundled Lv $reference row."
         }
         root.addView(label(provenance, 11f, INK_SOFT))
         if (scannedName.isNotBlank() && !scannedName.equals(form.name, ignoreCase = true)) {
             root.addView(label("Read as: \"$scannedName\"", 11f, INK_SOFT))
         }
-        Log.i(TAG, "cat scan: $unitId form $formIndex level $shownLevel conf $confidence")
+        Log.i(TAG, "cat scan: $unitId form $formIndex level $projectedLevel plus $readPlus conf $confidence")
         showResultRoot(root)
     }
 
@@ -597,10 +604,29 @@ class StageOverlayService : Service() {
                 setColor(PAPER_DEEP)
                 setStroke(dp(2), INK)
             }
-            setPadding(dp(9), dp(7), dp(9), dp(8))
+            setPadding(dp(8), dp(5), dp(8), dp(6))
         }
-        tile.addView(label(name, 11f, INK_SOFT))
-        tile.addView(label(value, 17f, INK, bold = true))
+        tile.addView(label(name, 10f, INK_SOFT))
+        tile.addView(label(value, 16f, INK, bold = true))
+        return tile
+    }
+
+    /** Full-width box for the ability text, which does not fit a half-column. */
+    private fun wideTile(rows: List<Pair<String, String>>): View {
+        val tile = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            background = GradientDrawable().apply {
+                shape = GradientDrawable.RECTANGLE
+                cornerRadius = dp(12).toFloat()
+                setColor(PAPER_DEEP)
+                setStroke(dp(2), INK)
+            }
+            setPadding(dp(8), dp(5), dp(8), dp(6))
+        }
+        rows.forEach { (key, value) ->
+            tile.addView(label(key, 10f, INK_SOFT))
+            tile.addView(label(value, 13f, INK))
+        }
         return tile
     }
 

@@ -113,8 +113,9 @@ object CatScanResolver {
     private data class LevelRead(val level: Int?, val plus: Int?)
 
     private fun readLevel(lines: List<OcrStageLine>, nameLine: OcrStageLine): LevelRead {
-        val levels = lines.mapNotNull { line -> parseLevel(line.text)?.let { it to line } }
-        val pluses = lines.mapNotNull { line -> parsePlus(line.text)?.let { it to line } }
+        // A single detected line can hold both, e.g. `Max Level 38 +1`, so split before parsing.
+        val levels = lines.mapNotNull { line -> splitLevelAndPlus(line.text).first?.let { it to line } }
+        val pluses = lines.mapNotNull { line -> splitLevelAndPlus(line.text).second?.let { it to line } }
 
         // Anchoring on the word "Level" proved unreliable: it comes back as `eaxe 20`, `Leve1 20` or
         // not at all. The card's own geometry is steadier — the level prints below the name and in
@@ -122,6 +123,7 @@ object CatScanResolver {
         val level = levelNearName(levels, nameLine)
             ?: pick(levels, lines.filter { isLevelAnchor(it.text) })
             ?: levelAbovePlus(levels, pluses)
+            ?: nearestNumberBelow(levels, nameLine)
 
         val plus = pluses.minByOrNull { (_, line) ->
             val reference = level?.second
@@ -135,6 +137,35 @@ object CatScanResolver {
             }
         }
         return LevelRead(level?.first, plus)
+    }
+
+    /**
+     * Splits `Max Level 38 +1` into level 38 and plus 1. The detector merges the label, the number and
+     * the plus into one line often enough that parsing the whole string lost the level entirely.
+     */
+    internal fun splitLevelAndPlus(text: String): Pair<Int?, Int?> {
+        val plusAt = text.indexOf('+')
+        if (plusAt < 0) return parseLevel(text) to null
+        val before = text.substring(0, plusAt)
+        val after = text.substring(plusAt + 1).trim().take(2)
+        val plus = parsePlus("+$after")
+        val level = parseLevel(before) ?: parseLevel(text.substring(0, plusAt).trim())
+        return level to plus
+    }
+
+    /** Last resort: the biggest plausible number under the name, whatever column it is in. */
+    private fun nearestNumberBelow(
+        levels: List<Pair<Int, OcrStageLine>>,
+        nameLine: OcrStageLine,
+    ): Pair<Int, OcrStageLine>? {
+        val nameCentreY = (nameLine.top + nameLine.bottom) / 2f
+        return levels
+            .filter { (_, line) ->
+                val centre = (line.top + line.bottom) / 2f
+                val below = centre - nameCentreY
+                below > 0f && below <= MAX_LEVEL_BELOW
+            }
+            .minByOrNull { (_, line) -> (line.top + line.bottom) / 2f - nameCentreY }
     }
 
     /** The level of the card the name belongs to: below the name, same column, closest wins. */

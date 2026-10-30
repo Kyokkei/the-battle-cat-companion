@@ -281,4 +281,24 @@ class CatScanResolverTest {
         )
         assertEquals(20, requireNotNull(CatScanResolver.resolve(lines, index)).level)
     }
+
+    @Test
+    fun aLineHoldingLabelNumberAndPlusIsSplit() {
+        // Octopus came back as "Lv ?" because the detector merged all three into one line.
+        assertEquals(38 to 1, CatScanResolver.splitLevelAndPlus("Max Level 38 +1"))
+        assertEquals(50 to 16, CatScanResolver.splitLevelAndPlus("Level 50 +16"))
+        assertEquals(20 to 90, CatScanResolver.splitLevelAndPlus("Leve1 20 +90"))
+        assertEquals(30 to null, CatScanResolver.splitLevelAndPlus("Max Level 30"))
+    }
+
+    @Test
+    fun octopusReadsItsLevelWhenEverythingIsOneLine() {
+        val lines = listOf(
+            line("Octopus Cat", 0.99f, 0.130f, 0.200f, 0.420f, 0.550f),
+            line("Max Level 38 +1", 0.80f, 0.290f, 0.380f, 0.490f, 0.590f),
+        )
+        val hit = requireNotNull(CatScanResolver.resolve(lines, index))
+        assertEquals(38, hit.level)
+        assertEquals(1, hit.plusLevel)
+    }
 }
