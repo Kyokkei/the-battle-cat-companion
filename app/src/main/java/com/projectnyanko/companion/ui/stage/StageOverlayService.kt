@@ -82,7 +82,10 @@ class StageOverlayService : Service() {
                 StageCaptureService.stop(this)
                 stopSelf()
             }
-            ACTION_SHOW_MESSAGE -> showMessageCard(intent.getStringExtra(EXTRA_MESSAGE).orEmpty())
+            ACTION_SHOW_MESSAGE -> showMessageCard(
+                intent.getStringExtra(EXTRA_MESSAGE).orEmpty(),
+                intent.getStringExtra(EXTRA_MESSAGE_TITLE) ?: "Stage helper",
+            )
         }
         return START_NOT_STICKY
     }
@@ -466,9 +469,9 @@ class StageOverlayService : Service() {
 
     private var lastCandidateIntent: Intent = Intent()
 
-    private fun showMessageCard(message: String) {
+    private fun showMessageCard(message: String, title: String) {
         val root = createCard()
-        root.addView(headerRow("Stage helper", showBack = false) {})
+        root.addView(headerRow(title, showBack = false) {})
         root.addView(label(message, 15f, INK_SOFT))
         showResultRoot(root)
     }
@@ -945,6 +948,7 @@ class StageOverlayService : Service() {
         const val EXTRA_OCR_TEXTS = "ocr_texts"
         const val EXTRA_RECOGNIZED_TEXT = "recognized_text"
         const val EXTRA_MESSAGE = "message"
+        const val EXTRA_MESSAGE_TITLE = "message_title"
 
         fun startBubble(context: Context, locale: StageLocale) {
             val intent = Intent(context, StageOverlayService::class.java)
@@ -962,11 +966,12 @@ class StageOverlayService : Service() {
             )
         }
 
-        fun showMessage(context: Context, locale: String, message: String) {
+        fun showMessage(context: Context, locale: String, message: String, title: String = "Stage helper") {
             val intent = Intent(context, StageOverlayService::class.java)
                 .setAction(ACTION_SHOW_MESSAGE)
                 .putExtra(EXTRA_REGION, locale)
                 .putExtra(EXTRA_MESSAGE, message)
+                .putExtra(EXTRA_MESSAGE_TITLE, title)
             context.startService(intent)
         }
     }

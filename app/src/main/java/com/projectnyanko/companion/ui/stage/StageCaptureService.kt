@@ -238,8 +238,12 @@ class StageCaptureService : Service() {
             )
             return
         }
-        if (captureInProgress || captureRequested) {
-            Log.i(TAG, "capture already running; ignoring tap")
+        // A tap always wins over a queued retry. The stage reader retries an unmatched frame a few
+        // times, and every one of those windows used to swallow the tap, so pressing the paw in cat
+        // mode did nothing at all.
+        captureHandler?.removeCallbacksAndMessages(null)
+        if (captureInProgress) {
+            Log.i(TAG, "capture in progress; tap arrives after this frame is read")
             return
         }
         Log.i(TAG, "capture requested")
@@ -335,6 +339,9 @@ class StageCaptureService : Service() {
         captureAttempt = 0
         imageReader?.setOnImageAvailableListener(null, null)
         runCatching { virtualDisplay?.setSurface(null) }
+        // The bubble is hidden while a capture is in flight. Restoring it here means a failed scan
+        // can never leave the player with no bubble and no card — which reads as "it vanished".
+        StageOverlayService.startBubble(this, locale)
         StageOverlayService.showMessage(this, locale.name, message)
     }
 
@@ -420,7 +427,8 @@ class StageCaptureService : Service() {
                         StageOverlayService.showMessage(
                             this@StageCaptureService,
                             locale.name,
-                            "No cat name on this screen. Hold the paw for half a second to switch back to stage mode.",
+                            "No cat name on this screen. Tap again if the frame was still, or hold the paw to switch back to stage mode.",
+                            title = "Cat scan",
                         )
                     }
                     return@launch
@@ -503,8 +511,11 @@ class StageCaptureService : Service() {
     private suspend fun resolveCat(bitmap: Bitmap, locale: StageLocale): CatScanHit? =
         withContext(Dispatchers.IO) {
             try {
-                val engine = ocrEngine ?: return@withContext null
                 val app = application as BattleCatsApplication
+                // Cat mode returns before the stage path runs, so this is the only place that would
+                // ever build the engine for a cat-only session. Without it the scan silently failed
+                // with "no cat name" while the stage reader had just read the same screen fine.
+                val engine = ocrEngine ?: StageOcrEngine(app.stageOcrModelStore).also { ocrEngine = it }
                 val region = if (locale == StageLocale.JP) GameRegion.JP else GameRegion.EN
                 val index = app.catScanCatalog.index(region)
                 val startedAt = System.currentTimeMillis()
