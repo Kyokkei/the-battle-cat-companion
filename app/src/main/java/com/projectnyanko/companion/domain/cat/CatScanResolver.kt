@@ -15,6 +15,8 @@ data class CatScanHit(
     val matchedText: String,
     /** Box the level was read from, so the caller can look just below it for a plus level. */
     val levelBounds: OcrStageLine? = null,
+    /** Box the name was read from; the level block always sits under it. */
+    val nameBounds: OcrStageLine? = null,
 ) {
     /**
      * Level used for the stat projection. Plus-levels add the same growth as a normal level, so a
@@ -78,6 +80,7 @@ object CatScanResolver {
             nameConfidence = name.line.confidence,
             matchedText = name.line.text,
             levelBounds = read.levelLine,
+            nameBounds = name.line,
         )
     }
 
@@ -119,7 +122,9 @@ object CatScanResolver {
 
     private fun readLevel(lines: List<OcrStageLine>, nameLine: OcrStageLine): LevelRead {
         // A single detected line can hold both, e.g. `Max Level 38 +1`, so split before parsing.
+        // Only levels the game could actually print; a stray `0` is a fragment, not a level.
         val levels = lines.mapNotNull { line -> splitLevelAndPlus(line.text).first?.let { it to line } }
+            .filter { (value, _) -> value in CatLevelCurve.MIN_LEVEL..CatLevelCurve.MAX_LEVEL }
         val pluses = lines.mapNotNull { line -> splitLevelAndPlus(line.text).second?.let { it to line } }
 
         // Anchoring on the word "Level" proved unreliable: it comes back as `eaxe 20`, `Leve1 20` or
@@ -260,14 +265,14 @@ object CatScanResolver {
         LEVEL_IN_LINE.find(trimmed)?.let { match ->
             return match.groupValues[1].toIntOrNull()
         }
-        // A bare number first, so glyph confusions (`l0` -> 10) are honoured before the looser
-        // trailing-number pattern can strip the leading character.
+        // A bare number first, so glyph confusions (`l0` -> 10) are honoured before anything else.
         parseDigits(trimmed)?.let { return it }
         // `+90` is a plus level, never the level itself.
         if (trimmed.startsWith("+")) return null
-        TRAILING_NUMBER.find(trimmed)?.let { match ->
-            return match.groupValues[1].toIntOrNull()
-        }
+        // Otherwise the number is the last whitespace-separated token. The label is mangled in ways
+        // no pattern survives — `Lexe1 45`, `eaxe 20`, `Leave 50` — but the digits stay intact.
+        val last = trimmed.substringAfterLast(' ').trim()
+        if (last.length in 1..3 && last.all { it.isDigit() }) return last.toIntOrNull()
         return null
     }
 

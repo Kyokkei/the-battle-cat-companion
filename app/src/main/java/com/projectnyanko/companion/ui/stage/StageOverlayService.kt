@@ -525,60 +525,64 @@ class StageOverlayService : Service() {
             form.dps
         }
 
-        root.addView(label(form.name, 21f, INK, bold = true))
+        root.addView(label(form.name, 20f, INK, bold = true))
         val subtitle = buildString {
             append(formLabel(formIndex))
             append("  ·  Lv ")
             if (readLevel > 0) {
                 append(readLevel)
                 if (readPlus > 0) append(" +").append(readPlus)
+                if (projectedLevel != readLevel + (if (readPlus > 0) readPlus else 0)) {
+                    append("  (capped ").append(projectedLevel).append(")")
+                }
             } else {
                 append("?  ·  showing Lv ").append(reference)
             }
         }
         root.addView(label(subtitle, 12f, INK_SOFT))
 
-        val tiles = listOf(
-            "Health" to formatStat(hp),
-            "Attack" to formatStat(attack),
-            "DPS" to formatStat(dps),
-            "Range" to form.range.toString(),
-            "Speed" to "${form.speedPerSecond}/s",
-            "Cost" to formatStat(form.cost),
-            "Knockbacks" to form.knockbacks.toString(),
-            "Recharge" to secondsText(form.rechargeSeconds),
-        )
-        tiles.chunked(2).forEach { pair ->
-            val row = LinearLayout(this).apply {
-                orientation = LinearLayout.HORIZONTAL
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                )
-                setPadding(0, dp(2), 0, dp(2))
-            }
-            pair.forEachIndexed { index, (tileLabel, tileValue) ->
-                row.addView(
-                    statTile(tileLabel, tileValue),
-                    LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
-                        marginEnd = if (index == 0) dp(4) else 0
-                    },
-                )
-            }
-            root.addView(row)
-        }
-
-        val abilityLines = buildList {
-            add("Target" to (if (form.areaAttack) "Area" else "Single"))
-            if (form.effects.isNotEmpty()) add("Abilities" to form.effects.joinToString(", "))
-            if (form.immune.isNotEmpty()) add("Immune" to form.immune.joinToString(", "))
-        }
-        if (abilityLines.isNotEmpty()) {
-            root.addView(wideTile(abilityLines), LinearLayout.LayoutParams(
+        val columns = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT,
-            ).apply { topMargin = dp(2) })
+            )
+            setPadding(0, dp(6), 0, dp(2))
         }
+
+        // Left: portrait over the ability box.
+        val leftColumn = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        val portrait = ImageView(this).apply {
+            scaleType = ImageView.ScaleType.FIT_CENTER
+            setPadding(dp(6), dp(6), dp(6), dp(6))
+            background = tileBackground()
+            loadSprite(unitId, formIndex)?.let { setImageBitmap(it) }
+        }
+        leftColumn.addView(portrait, LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, dp(76),
+        ))
+        val abilityRows = buildList {
+            add("Ability" to (if (form.areaAttack) "Area" else "Single") + "  ·  " + formatStat(form.cost) + "c")
+            if (form.effects.isNotEmpty()) add("Effects" to form.effects.joinToString(", "))
+            if (form.immune.isNotEmpty()) add("Immune" to form.immune.joinToString(", "))
+        }
+        val abilityBox = wideTile(abilityRows)
+        leftColumn.addView(abilityBox, LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, dp(92),
+        ).apply { topMargin = dp(4) })
+        columns.addView(leftColumn, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.34f).apply {
+            marginEnd = dp(5)
+        })
+
+        // Right: two columns of stat boxes, matching the template.
+        val rightColumn = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        rightColumn.addView(tileRow("Health" to formatStat(hp), "Damage" to formatStat(attack)))
+        rightColumn.addView(tileRow("Range" to form.range.toString(), "Knockback" to form.knockbacks.toString()))
+        rightColumn.addView(tileRow("Speed" to "${form.speedPerSecond}/s", "DPS" to formatStat(dps)))
+        rightColumn.addView(tileRow("TBA" to secondsText(form.attackCycleSeconds), "Spawn" to secondsText(form.rechargeSeconds)))
+        columns.addView(rightColumn, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.66f))
+
+        root.addView(columns)
 
         val provenance = when {
             readLevel <= 0 -> "Level unreadable — showing the bundled Lv $reference row."
@@ -594,21 +598,63 @@ class StageOverlayService : Service() {
         showResultRoot(root)
     }
 
+    private fun tileBackground() = GradientDrawable().apply {
+        shape = GradientDrawable.RECTANGLE
+        cornerRadius = dp(10).toFloat()
+        setColor(PAPER_DEEP)
+        setStroke(dp(2), INK)
+    }
+
     /** One bordered stat box. */
     private fun statTile(name: String, value: String): View {
         val tile = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            background = GradientDrawable().apply {
-                shape = GradientDrawable.RECTANGLE
-                cornerRadius = dp(12).toFloat()
-                setColor(PAPER_DEEP)
-                setStroke(dp(2), INK)
-            }
-            setPadding(dp(8), dp(5), dp(8), dp(6))
+            background = tileBackground()
+            setPadding(dp(7), dp(4), dp(7), dp(5))
         }
-        tile.addView(label(name, 10f, INK_SOFT))
-        tile.addView(label(value, 16f, INK, bold = true))
+        tile.addView(compactLabel(name, 10f, INK_SOFT))
+        tile.addView(compactLabel(value, 15f, INK, bold = true))
         return tile
+    }
+
+    /** Label without the vertical padding [label] adds, so a box can hold two lines. */
+    private fun compactLabel(textValue: String, size: Float, color: Int, bold: Boolean = false): TextView =
+        TextView(this).apply {
+            text = textValue
+            textSize = size
+            setTextColor(color)
+            maxLines = 1
+            includeFontPadding = false
+            if (bold) setTypeface(typeface, android.graphics.Typeface.BOLD)
+        }
+
+    /** A row of two equal stat boxes. */
+    private fun tileRow(first: Pair<String, String>, second: Pair<String, String>): View {
+        val row = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            setPadding(0, dp(1), 0, dp(1))
+        }
+        row.addView(
+            statTile(first.first, first.second),
+            LinearLayout.LayoutParams(0, dp(38), 1f).apply { marginEnd = dp(4) },
+        )
+        row.addView(statTile(second.first, second.second), LinearLayout.LayoutParams(0, dp(38), 1f))
+        return row
+    }
+
+    /** Loads the unit's portrait from the bundled sprite dump. */
+    private fun loadSprite(unitId: Int, formIndex: Int): android.graphics.Bitmap? {
+        val suffix = when (formIndex) {
+            0 -> "f"
+            1 -> "c"
+            2 -> "s"
+            else -> "u"
+        }
+        return runCatching {
+            assets.open(com.projectnyanko.companion.ui.seed.spritePath(unitId, suffix)).use {
+                BitmapFactory.decodeStream(it)
+            }
+        }.getOrNull()
     }
 
     /** Full-width box for the ability text, which does not fit a half-column. */
@@ -653,7 +699,7 @@ class StageOverlayService : Service() {
             gravity = Gravity.CENTER
             width = (resources.displayMetrics.widthPixels * CARD_WIDTH_FRACTION).toInt()
                 .coerceAtLeast(dp(300))
-            height = (resources.displayMetrics.heightPixels * 0.62f).toInt()
+            height = (resources.displayMetrics.heightPixels * 0.78f).toInt()
         }
         runCatching { windowManager.addView(scrollableRoot, params) }.onSuccess {
             resultView = scrollableRoot

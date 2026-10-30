@@ -25,6 +25,7 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Display
 import android.view.WindowManager
+import com.projectnyanko.companion.domain.cat.CatLevelCurve
 import com.projectnyanko.companion.domain.cat.CatScanHit
 import com.projectnyanko.companion.domain.cat.CatScanResolver
 import com.projectnyanko.companion.domain.seed.GameRegion
@@ -527,7 +528,7 @@ class StageCaptureService : Service() {
                     "cat scan read ${all.size} lines in ${System.currentTimeMillis() - startedAt} ms: " +
                         all.take(16).joinToString(" | ") { "${it.text}(${"%.2f".format(it.bottom - it.top)})" },
                 )
-                CatScanResolver.resolve(all, index)?.let { hit -> if (hit.plusLevel == null) recoverPlus(bitmap, hit) else hit }.also { hit ->
+                CatScanResolver.resolve(all, index)?.let { hit -> refineLevel(bitmap, hit) }.also { hit ->
                     Log.i(TAG, "cat scan hit: ${hit?.displayName ?: "none"} level=${hit?.level} plus=${hit?.plusLevel}")
                     dumpCatScan(all, hit)
                 }
@@ -538,37 +539,40 @@ class StageCaptureService : Service() {
         }
 
     /**
-     * Finds the `+N` plus level, which the full-screen pass misses.
+     * Re-reads the level block from a crop instead of trusting the full-screen digits.
      *
-     * The detector works on a 960 px long side, so the plus level — printed much smaller than the
-     * level itself — falls below what it can see. Cropping the strip directly under the level and
-     * upscaling it 3x puts the text back in range.
+     * The detector splits the level into fragments often enough that `45` arrived as `5`, `30 +1`
+     * lost its plus, and `40 +10` produced nothing. The block always sits directly under the name,
+     * so cropping that strip and upscaling it 3x gives one clean line to parse.
      */
-    private fun recoverPlus(bitmap: Bitmap, hit: CatScanHit): CatScanHit {
-        val level = hit.levelBounds ?: return hit
+    private fun refineLevel(bitmap: Bitmap, hit: CatScanHit): CatScanHit {
+        val name = hit.nameBounds ?: return hit
         val engine = ocrEngine ?: return hit
-        val left = ((level.left - 0.03f) * bitmap.width).toInt().coerceIn(0, bitmap.width - 1)
-        val right = ((level.right + 0.05f) * bitmap.width).toInt().coerceIn(left + 1, bitmap.width)
-        val top = ((level.bottom - 0.01f) * bitmap.height).toInt().coerceIn(0, bitmap.height - 1)
-        val bottom = ((level.bottom + 0.09f) * bitmap.height).toInt().coerceIn(top + 1, bitmap.height)
-        if (right - left < 8 || bottom - top < 8) return hit
+        val left = ((name.left - 0.03f) * bitmap.width).toInt().coerceIn(0, bitmap.width - 1)
+        val right = ((name.right + 0.14f) * bitmap.width).toInt().coerceIn(left + 1, bitmap.width)
+        val top = ((name.bottom + 0.03f) * bitmap.height).toInt().coerceIn(0, bitmap.height - 1)
+        val bottom = ((name.bottom + 0.24f) * bitmap.height).toInt().coerceIn(top + 1, bitmap.height)
+        if (right - left < 16 || bottom - top < 16) return hit
         val crop = runCatching { Bitmap.createBitmap(bitmap, left, top, right - left, bottom - top) }
             .getOrNull() ?: return hit
         return try {
             val big = Bitmap.createScaledBitmap(crop, crop.width * 3, crop.height * 3, true)
             try {
                 val lines = engine.recognizeAllLines(big, locale)
-                Log.i(TAG, "plus recovery read: " + lines.joinToString(" | ") { it.text })
-                val plus = lines.firstNotNullOfOrNull { line ->
-                    CatScanResolver.parsePlus(line.text)
-                        ?: line.text.filter { it.isDigit() }.takeIf { it.length in 1..2 }?.toIntOrNull()
-                }
-                if (plus == null) hit else hit.copy(plusLevel = plus)
+                val joined = lines.joinToString(" ") { it.text }
+                val (level, plus) = CatScanResolver.splitLevelAndPlus(joined)
+                Log.i(TAG, "level block read: \"$joined\" -> level=$level plus=$plus")
+                // A stray `0` is not a level; only accept something the game could actually show.
+                val usableLevel = level?.takeIf { it in CatLevelCurve.MIN_LEVEL..CatLevelCurve.MAX_LEVEL }
+                hit.copy(
+                    level = usableLevel ?: hit.level,
+                    plusLevel = plus ?: hit.plusLevel,
+                )
             } finally {
                 if (big !== crop) big.recycle()
             }
         } catch (error: Exception) {
-            Log.w(TAG, "plus recovery failed: ${error.message}")
+            Log.w(TAG, "level refine failed: ${error.message}")
             hit
         } finally {
             crop.recycle()
