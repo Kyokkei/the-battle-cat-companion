@@ -175,7 +175,15 @@ internal class PpOcrTextDetector(modelFile: File) : AutoCloseable {
     }
 
     private companion object {
-        const val LONG_SIDE = 960
+        /**
+         * Working resolution for the detector.
+         *
+         * 960 was too small for the small stylised text in the game: measured on a real frame, the
+         * level digits scored a peak of 0.65 with 0.1% of pixels over threshold, so the box was
+         * dropped and the level read as unknown. At 1280 the same digits peak at 1.00 with 16% of
+         * pixels over threshold. The cost is ~1.8x the detector's pixel work.
+         */
+        const val LONG_SIDE = 1280
         const val STRIDE = 32
         const val DETECTION_THRESHOLD = 0.30f
         const val BOX_SCORE_THRESHOLD = 0.55f
