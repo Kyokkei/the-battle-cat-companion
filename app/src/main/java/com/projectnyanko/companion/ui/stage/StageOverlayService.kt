@@ -12,6 +12,9 @@ import android.graphics.PixelFormat
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.Icon
 import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
 import android.os.IBinder
 import android.content.pm.ServiceInfo
 import android.content.res.Configuration
@@ -144,12 +147,12 @@ class StageOverlayService : Service() {
                 ?.toLocale() ?: selectedLocale
             StageCaptureService.requestCapture(this, region, currentScanMode())
         }
-        applyScanModeToBubble()
         installDragAndTap(view, params)
         runCatching { windowManager.addView(view, params) }
             .onSuccess {
                 bubble = view
                 bubbleParams = params
+                applyScanModeToBubble()
             }
     }
 
@@ -773,6 +776,10 @@ class StageOverlayService : Service() {
         )
 
     private fun toggleScanMode() {
+        // A result card left open covers the bubble, which made the next tap land on the card and
+        // look like the helper had died.
+        if (resultView != null) removeResult()
+        bubble?.visibility = View.VISIBLE
         val next = currentScanMode().toggled()
         getSharedPreferences(PREFERENCES, MODE_PRIVATE).edit()
             .putString(PREFERENCE_SCAN_MODE, next.name)
@@ -782,14 +789,44 @@ class StageOverlayService : Service() {
             ScanMode.STAGE -> "Stage mode: the paw reads stage names"
             ScanMode.CAT -> "Cat mode: the paw reads cat name + level"
         }
+        buzz()
         runCatching { Toast.makeText(this, message, Toast.LENGTH_SHORT).show() }
         Log.i(TAG, "scan mode -> ${next.name}")
     }
 
-    /** The paw is amber for stages and teal for cats, so the mode is visible without a label. */
+    /** Two short pulses, so the mode change is felt without looking away from the game. */
+    private fun buzz() {
+        runCatching {
+            val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                (getSystemService(VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
+            } else {
+                @Suppress("DEPRECATION")
+                getSystemService(VIBRATOR_SERVICE) as Vibrator
+            }
+            if (!vibrator.hasVibrator()) return@runCatching
+            val pattern = longArrayOf(0L, 28L, 70L, 28L)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrator.vibrate(VibrationEffect.createWaveform(pattern, -1))
+            } else {
+                @Suppress("DEPRECATION")
+                vibrator.vibrate(pattern, -1)
+            }
+        }
+    }
+
+    /**
+     * The bubble changes picture and ring colour per mode: a coloured ring alone was too subtle to
+     * read while playing, and the ring is hidden whenever the icon covers it.
+     */
     private fun applyScanModeToBubble() {
-        val view = bubble ?: return
+        val view = bubble as? ImageView ?: return
         val mode = currentScanMode()
+        view.setImageResource(
+            when (mode) {
+                ScanMode.STAGE -> R.drawable.ic_launcher
+                ScanMode.CAT -> R.drawable.bubble_cat_mode
+            },
+        )
         view.background = bubbleBackground(
             when (mode) {
                 ScanMode.STAGE -> ACCENT

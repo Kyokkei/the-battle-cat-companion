@@ -507,9 +507,18 @@ class StageCaptureService : Service() {
                 val app = application as BattleCatsApplication
                 val region = if (locale == StageLocale.JP) GameRegion.JP else GameRegion.EN
                 val index = app.catScanCatalog.index(region)
-                val all = engine.recognizeAllLines(bitmap, locale)
-                Log.i(TAG, "cat scan read ${all.size} lines: " + all.take(12).joinToString(" | ") { it.text })
-                CatScanResolver.resolve(all, index)
+                val startedAt = System.currentTimeMillis()
+                val all = withTimeout(CAT_SCAN_TIMEOUT_MS) {
+                    engine.recognizeAllLines(bitmap, locale)
+                }
+                Log.i(
+                    TAG,
+                    "cat scan read ${all.size} lines in ${System.currentTimeMillis() - startedAt} ms: " +
+                        all.take(16).joinToString(" | ") { "${it.text}(${"%.2f".format(it.bottom - it.top)})" },
+                )
+                CatScanResolver.resolve(all, index).also { hit ->
+                    Log.i(TAG, "cat scan hit: ${hit?.displayName ?: "none"} level=${hit?.level} plus=${hit?.plusLevel}")
+                }
             } catch (error: Exception) {
                 Log.w(TAG, "cat scan failed: ${error.message}")
                 null
@@ -670,6 +679,8 @@ class StageCaptureService : Service() {
     }
 
     companion object {
+        /** A cat screen is a single frame; anything slower than this means the engine is stuck. */
+        private const val CAT_SCAN_TIMEOUT_MS = 15_000L
         const val ACTION_ENABLE = "com.projectnyanko.companion.stage.ENABLE_CAPTURE"
         const val ACTION_CAPTURE = "com.projectnyanko.companion.stage.CAPTURE_FRAME"
         const val ACTION_STOP = "com.projectnyanko.companion.stage.STOP_CAPTURE"

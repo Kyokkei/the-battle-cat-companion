@@ -32,6 +32,9 @@ object CatScanResolver {
     /** Below this the recognizer is guessing; a wrong cat is worse than no answer. */
     private const val MIN_NAME_CONFIDENCE = 0.45f
 
+    /** Two boxes within this much height count as the same font size. */
+    private const val HEIGHT_EPSILON = 0.002f
+
     /** How far the level number may sit from the word Level, in screen heights. */
     private const val MAX_LEVEL_DISTANCE = 0.15f
 
@@ -64,17 +67,31 @@ object CatScanResolver {
         for (line in lines) {
             if (line.confidence < MIN_NAME_CONFIDENCE) continue
             val match = index.resolve(line.text) ?: continue
-            val current = best
-            // Prefer the more confident read; on a tie prefer the longer name, because a truncated
-            // crop matches short names just as well but says less.
-            val better = current == null ||
-                match.exact && !current.match.exact ||
-                (match.exact == current.match.exact && line.confidence > current.line.confidence) ||
-                (match.exact == current.match.exact && line.confidence == current.line.confidence &&
-                    match.entry.displayName.length > current.match.entry.displayName.length)
-            if (better) best = NamedLine(line, match)
+            val candidate = NamedLine(line, match)
+            if (isBetter(candidate, best)) best = candidate
         }
         return best
+    }
+
+    /**
+     * Picks the cat the player is actually looking at.
+     *
+     * Several cat names are on screen at once — the Upgrade screen shows the neighbours on either
+     * side, and Organize Cats shows a whole row — and choosing by confidence alone returned the cat
+     * two slots to the right. The selected card prints its name in a larger font, so the tallest box
+     * wins; confidence and exactness only break ties.
+     */
+    private fun isBetter(candidate: NamedLine, current: NamedLine?): Boolean {
+        if (current == null) return true
+        val candidateHeight = candidate.line.bottom - candidate.line.top
+        val currentHeight = current.line.bottom - current.line.top
+        if (candidateHeight > currentHeight + HEIGHT_EPSILON) return true
+        if (currentHeight > candidateHeight + HEIGHT_EPSILON) return false
+        if (candidate.match.exact != current.match.exact) return candidate.match.exact
+        if (candidate.line.confidence != current.line.confidence) {
+            return candidate.line.confidence > current.line.confidence
+        }
+        return candidate.match.entry.displayName.length > current.match.entry.displayName.length
     }
 
     private data class LevelRead(val level: Int?, val plus: Int?)

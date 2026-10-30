@@ -175,4 +175,38 @@ class CatScanResolverTest {
         assertEquals(90, CatScanResolver.parsePlus("+9O"))
         assertNull(CatScanResolver.parsePlus("90"))
     }
+
+    @Test
+    fun theSelectedCatWinsWhenItsNeighboursAreAlsoOnScreen() {
+        // Real failure: the Upgrade screen shows the neighbouring cats, and the resolver returned the
+        // cat two slots to the right. The selected card prints its name larger.
+        val lines = listOf(
+            line("Mohawk Cat", 0.99f, 0.130f, 0.195f, 0.40f, 0.57f),
+            line("Eraser Cat", 0.97f, 0.140f, 0.170f, 0.66f, 0.76f),
+            line("Dark Cat", 0.98f, 0.140f, 0.172f, 0.82f, 0.91f),
+        )
+        val hit = requireNotNull(CatScanResolver.resolve(lines, index))
+        assertEquals("Mohawk Cat", hit.displayName)
+    }
+
+    @Test
+    fun theOrganizeRowDoesNotStealTheSelection() {
+        // Organize Cats: a row of small names above, the chosen cat printed large in the panel below.
+        val lines = listOf(
+            line("Ninja Cat", 0.95f, 0.10f, 0.13f, 0.05f, 0.12f),
+            line("Sumo Cat", 0.95f, 0.10f, 0.13f, 0.15f, 0.22f),
+            line("Pastry Cat", 0.97f, 0.470f, 0.530f, 0.20f, 0.45f),
+        )
+        val hit = requireNotNull(CatScanResolver.resolve(lines, index))
+        assertEquals("Pastry Cat", hit.displayName)
+    }
+
+    @Test
+    fun equalSizedNamesFallBackToConfidenceThenLength() {
+        val lines = listOf(
+            line("Sumo Cat", 0.90f, 0.20f, 0.24f, 0.10f, 0.20f),
+            line("Pastry Cat", 0.96f, 0.20f, 0.24f, 0.30f, 0.44f),
+        )
+        assertEquals("Pastry Cat", requireNotNull(CatScanResolver.resolve(lines, index)).displayName)
+    }
 }
