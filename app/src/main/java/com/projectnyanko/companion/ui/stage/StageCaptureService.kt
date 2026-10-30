@@ -527,7 +527,7 @@ class StageCaptureService : Service() {
                     "cat scan read ${all.size} lines in ${System.currentTimeMillis() - startedAt} ms: " +
                         all.take(16).joinToString(" | ") { "${it.text}(${"%.2f".format(it.bottom - it.top)})" },
                 )
-                CatScanResolver.resolve(all, index).also { hit ->
+                CatScanResolver.resolve(all, index)?.let { hit -> if (hit.plusLevel == null) recoverPlus(bitmap, hit) else hit }.also { hit ->
                     Log.i(TAG, "cat scan hit: ${hit?.displayName ?: "none"} level=${hit?.level} plus=${hit?.plusLevel}")
                     dumpCatScan(all, hit)
                 }
@@ -536,6 +536,44 @@ class StageCaptureService : Service() {
                 null
             }
         }
+
+    /**
+     * Finds the `+N` plus level, which the full-screen pass misses.
+     *
+     * The detector works on a 960 px long side, so the plus level — printed much smaller than the
+     * level itself — falls below what it can see. Cropping the strip directly under the level and
+     * upscaling it 3x puts the text back in range.
+     */
+    private fun recoverPlus(bitmap: Bitmap, hit: CatScanHit): CatScanHit {
+        val level = hit.levelBounds ?: return hit
+        val engine = ocrEngine ?: return hit
+        val left = ((level.left - 0.03f) * bitmap.width).toInt().coerceIn(0, bitmap.width - 1)
+        val right = ((level.right + 0.05f) * bitmap.width).toInt().coerceIn(left + 1, bitmap.width)
+        val top = ((level.bottom - 0.01f) * bitmap.height).toInt().coerceIn(0, bitmap.height - 1)
+        val bottom = ((level.bottom + 0.09f) * bitmap.height).toInt().coerceIn(top + 1, bitmap.height)
+        if (right - left < 8 || bottom - top < 8) return hit
+        val crop = runCatching { Bitmap.createBitmap(bitmap, left, top, right - left, bottom - top) }
+            .getOrNull() ?: return hit
+        return try {
+            val big = Bitmap.createScaledBitmap(crop, crop.width * 3, crop.height * 3, true)
+            try {
+                val lines = engine.recognizeAllLines(big, locale)
+                Log.i(TAG, "plus recovery read: " + lines.joinToString(" | ") { it.text })
+                val plus = lines.firstNotNullOfOrNull { line ->
+                    CatScanResolver.parsePlus(line.text)
+                        ?: line.text.filter { it.isDigit() }.takeIf { it.length in 1..2 }?.toIntOrNull()
+                }
+                if (plus == null) hit else hit.copy(plusLevel = plus)
+            } finally {
+                if (big !== crop) big.recycle()
+            }
+        } catch (error: Exception) {
+            Log.w(TAG, "plus recovery failed: ${error.message}")
+            hit
+        } finally {
+            crop.recycle()
+        }
+    }
 
     /**
      * Writes the last cat scan to the cache directory.

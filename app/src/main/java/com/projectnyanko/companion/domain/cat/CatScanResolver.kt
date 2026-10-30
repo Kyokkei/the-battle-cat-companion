@@ -13,6 +13,8 @@ data class CatScanHit(
     val plusLevel: Int?,
     val nameConfidence: Float,
     val matchedText: String,
+    /** Box the level was read from, so the caller can look just below it for a plus level. */
+    val levelBounds: OcrStageLine? = null,
 ) {
     /**
      * Level used for the stat projection. Plus-levels add the same growth as a normal level, so a
@@ -64,7 +66,9 @@ object CatScanResolver {
     fun resolve(lines: List<OcrStageLine>, index: CatNameIndex): CatScanHit? {
         if (lines.isEmpty()) return null
         val name = bestName(lines, index) ?: return null
-        val (level, plus) = readLevel(lines, name.line)
+        val read = readLevel(lines, name.line)
+        val level = read.level
+        val plus = read.plus
         return CatScanHit(
             unitId = name.match.entry.unitId,
             formIndex = name.match.entry.formIndex,
@@ -73,6 +77,7 @@ object CatScanResolver {
             plusLevel = plus,
             nameConfidence = name.line.confidence,
             matchedText = name.line.text,
+            levelBounds = read.levelLine,
         )
     }
 
@@ -110,7 +115,7 @@ object CatScanResolver {
         return candidate.match.entry.displayName.length > current.match.entry.displayName.length
     }
 
-    private data class LevelRead(val level: Int?, val plus: Int?)
+    private data class LevelRead(val level: Int?, val plus: Int?, val levelLine: OcrStageLine? = null)
 
     private fun readLevel(lines: List<OcrStageLine>, nameLine: OcrStageLine): LevelRead {
         // A single detected line can hold both, e.g. `Max Level 38 +1`, so split before parsing.
@@ -136,7 +141,7 @@ object CatScanResolver {
                 else -> null
             }
         }
-        return LevelRead(level?.first, plus)
+        return LevelRead(level?.first, plus, level?.second)
     }
 
     /**
