@@ -1,0 +1,27 @@
+{
+  "source": "User-supplied chapter labels (2026-10-30, corrected twice). The local stage file encodes a map index in each base-36 stage id (id / 1000), so one stage name appears once per chapter with nothing to tell them apart. Map 3000 holds all three Empire of Cats chapters: they share stages 0-46, so only its Moons at 47, 49 and 50 carry a per-chapter label, keyed as map:index. Indexes not listed here have no label and fall back to their stats.",
+  "chapters": {
+    "3000": "Empire of Cats",
+    "3000:47": "Empire of Cats Ch.1",
+    "3000:49": "Empire of Cats Ch.2",
+    "3000:50": "Empire of Cats Ch.3",
+    "3001": "Into the Future Ch.1",
+    "3002": "Into the Future Ch.2",
+    "3003": "Into the Future Ch.3",
+    "3004": "Cats of the Cosmos Ch.1",
+    "3005": "Cats of the Cosmos Ch.2",
+    "3006": "Cats of the Cosmos Ch.3",
+    "3007": "Filibuster Invasion",
+    "3008": "Empire of Cats Ch.1 (Outbreak)",
+    "3009": "Empire of Cats Ch.2 (Outbreak)",
+    "3010": "Empire of Cats Ch.3 (Outbreak)",
+    "3011": "Into the Future Ch.1 (Outbreak)",
+    "3012": "Into the Future Ch.2 (Outbreak)",
+    "3013": "Into the Future Ch.3 (Outbreak)",
+    "3014": "Cats of the Cosmos Ch.1 (Outbreak)",
+    "3015": "Cats of the Cosmos Ch.2 (Outbreak)",
+    "3016": "Cats of the Cosmos Ch.3 (Outbreak)",
+    "3017": "Filibuster Invasion (Outbreak)",
+    "3018": "Aku Realms"
+  }
+}

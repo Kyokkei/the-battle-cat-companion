@@ -1,0 +1,10627 @@
+{
+"source": "https://github.com/battlecatsinfo/battlecatsinfo.github.io (data/enemy.tsv, data/tenemy.tsv, data/units_scheme.json)",
+"fetched": "2026-10-30",
+"license": "MIT (battlecatsinfo.github.io); enemy names and stats are game data from The Battle Cats",
+"notes": "traits decode the trait bitmask via units_scheme.json; isArea is attack_type & 2; abilities decode the ability string ids. Ability ids not in the map (9, 37, 50, 100) are dropped rather than guessed.",
+"enemies": [
+{
+"id": 0,
+"name": "Doge",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 110,
+"speed": 5,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 1,
+"name": "Snache",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 110,
+"speed": 8,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 2,
+"name": "Those Guys",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 110,
+"speed": 10,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 3,
+"name": "Hippoe",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 160,
+"speed": 4,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 4,
+"name": "Pigge",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 150,
+"speed": 5,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 5,
+"name": "Jackie Peng",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 150,
+"speed": 11,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 6,
+"name": "Gory",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 150,
+"speed": 15,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 7,
+"name": "Baa Baa",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 110,
+"speed": 7,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 8,
+"name": "Sir Seal",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 170,
+"speed": 10,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 9,
+"name": "Le'boin",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 400,
+"speed": 4,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 10,
+"name": "Kang Roo",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 160,
+"speed": 20,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 11,
+"name": "One Horn",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 40,
+"speed": 3,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 12,
+"name": "Teacher Bear",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 350,
+"speed": 4,
+"kb": 10,
+"abilities": []
+},
+{
+"id": 13,
+"name": "Croco",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 110,
+"speed": 14,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 14,
+"name": "B.B.Bunny",
+"traits": [
+"Red"
+],
+"isArea": false,
+"range": 110,
+"speed": 22,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 15,
+"name": "Squire Rel",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 110,
+"speed": 30,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 16,
+"name": "Assassin Bear",
+"traits": [
+"Black"
+],
+"isArea": true,
+"range": 800,
+"speed": 150,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 17,
+"name": "Shy Boy",
+"traits": [
+"Red",
+"Floating"
+],
+"isArea": true,
+"range": 150,
+"speed": 40,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 18,
+"name": "The Face",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 340,
+"speed": 1,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 19,
+"name": "Enemy 19",
+"traits": [],
+"isArea": false,
+"range": 150,
+"speed": 60,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 20,
+"name": "Enemy 20",
+"traits": [],
+"isArea": false,
+"range": 150,
+"speed": 40,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 21,
+"name": "Ms. Sign",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 800,
+"speed": 4,
+"kb": 10000,
+"abilities": []
+},
+{
+"id": 22,
+"name": "Mooth",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 340,
+"speed": 20,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 23,
+"name": "Dark Emperor Nyandam",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 500,
+"speed": 2,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 24,
+"name": "Teacher Bun Bun",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 200,
+"speed": 23,
+"kb": 10,
+"abilities": []
+},
+{
+"id": 25,
+"name": "Castle Guard",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 110,
+"speed": 4,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 26,
+"name": "Li'l_Gau_(form_1)_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 112,
+"speed": 6,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 27,
+"name": "Kerihime_(form_1)_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 109,
+"speed": 35,
+"kb": 8000,
+"abilities": []
+},
+{
+"id": 28,
+"name": "Swordsman_(form_2)_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 110,
+"speed": 4,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 29,
+"name": "Li'l_Gau_(form_2)_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 130,
+"speed": 6,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 30,
+"name": "Kerihime_(form_2)_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 1300,
+"speed": 35,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 31,
+"name": "Master A.",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 451,
+"speed": 4,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 32,
+"name": "R.Ost",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 260,
+"speed": 16,
+"kb": 5,
+"abilities": [
+"Critical",
+"Bounty"
+]
+},
+{
+"id": 33,
+"name": "Otta-smack-u",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 180,
+"speed": 10,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 34,
+"name": "Kory",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 200,
+"speed": 7,
+"kb": 5,
+"abilities": [
+"Castle Breaker",
+"Wave"
+]
+},
+{
+"id": 35,
+"name": "Camelle",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 550,
+"speed": 8,
+"kb": 2,
+"abilities": [
+"Castle Breaker"
+]
+},
+{
+"id": 36,
+"name": "Duche",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 120,
+"speed": 10,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 37,
+"name": "Owlbrow",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 340,
+"speed": 14,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 38,
+"name": "Bore",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 130,
+"speed": 14,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 39,
+"name": "THE SLOTH",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 450,
+"speed": 2,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 40,
+"name": "Rain D.",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 300,
+"speed": 25,
+"kb": 20,
+"abilities": []
+},
+{
+"id": 41,
+"name": "Dagshund",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 180,
+"speed": 10,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 42,
+"name": "Celeboodle",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 140,
+"speed": 20,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 43,
+"name": "H. Nah",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 344,
+"speed": 14,
+"kb": 5,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 44,
+"name": "Dober P.D",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 172,
+"speed": 3,
+"kb": 2,
+"abilities": [
+"Wave"
+]
+},
+{
+"id": 45,
+"name": "Ururun Wolf",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 415,
+"speed": 12,
+"kb": 10,
+"abilities": []
+},
+{
+"id": 46,
+"name": "Doge Dark",
+"traits": [
+"Black"
+],
+"isArea": false,
+"range": 110,
+"speed": 30,
+"kb": 8,
+"abilities": []
+},
+{
+"id": 47,
+"name": "Metal Hippoe",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 160,
+"speed": 4,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 48,
+"name": "St. Pigge the 2nd",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 160,
+"speed": 8,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 49,
+"name": "J.K. Bun Bun",
+"traits": [
+"Red",
+"Floating"
+],
+"isArea": true,
+"range": 200,
+"speed": 23,
+"kb": 5,
+"abilities": []
+},
+{
+"id": 50,
+"name": "Bun Bun Black",
+"traits": [
+"Floating",
+"Black"
+],
+"isArea": true,
+"range": 200,
+"speed": 16,
+"kb": 10,
+"abilities": []
+},
+{
+"id": 51,
+"name": "Gory Dark",
+"traits": [
+"Black"
+],
+"isArea": true,
+"range": 155,
+"speed": 30,
+"kb": 8,
+"abilities": []
+},
+{
+"id": 52,
+"name": "Shadow Boxer K",
+"traits": [
+"Black"
+],
+"isArea": true,
+"range": 158,
+"speed": 22,
+"kb": 10,
+"abilities": []
+},
+{
+"id": 53,
+"name": "Director Kurosawah",
+"traits": [
+"Black"
+],
+"isArea": true,
+"range": 700,
+"speed": 2,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 54,
+"name": "Super Metal Hippoe",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 170,
+"speed": 18,
+"kb": 16,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 55,
+"name": "Type_10_(Enemy)",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 240,
+"speed": 4,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 56,
+"name": "Metal One Horn",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 80,
+"speed": 4,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 57,
+"name": "Teacher Cybear",
+"traits": [
+"Metal"
+],
+"isArea": false,
+"range": 600,
+"speed": 3,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 58,
+"name": "CyberFace",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 140,
+"speed": 32,
+"kb": 1,
+"abilities": [
+"Knockback",
+"Castle Breaker",
+"Wave"
+]
+},
+{
+"id": 59,
+"name": "Sir Metal Seal",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 150,
+"speed": 10,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 60,
+"name": "Yurinchi_(Enemy)",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 150,
+"speed": 6,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 61,
+"name": "Princess_Head",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 180,
+"speed": 10,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 62,
+"name": "Chief Peng",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 200,
+"speed": 11,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 63,
+"name": "Dark Emperor Santa",
+"traits": [
+"Red",
+"Aku"
+],
+"isArea": true,
+"range": 500,
+"speed": 4,
+"kb": 3,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 64,
+"name": "Red Cyclone",
+"traits": [
+"Red",
+"Floating"
+],
+"isArea": true,
+"range": 90,
+"speed": 6,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 65,
+"name": "Lione Hippoe",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 180,
+"speed": 10,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 66,
+"name": "Lucky Sloth",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 350,
+"speed": 2,
+"kb": 3,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 67,
+"name": "Bears Be Bare",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 400,
+"speed": 35,
+"kb": 10,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 68,
+"name": "Monkey_King_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 260,
+"speed": 7,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 69,
+"name": "White Cyclone",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 70,
+"speed": 7,
+"kb": 5,
+"abilities": []
+},
+{
+"id": 70,
+"name": "Dark Cyclone",
+"traits": [
+"Floating",
+"Black"
+],
+"isArea": true,
+"range": 120,
+"speed": 10,
+"kb": 10,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 71,
+"name": "Metal Cyclone",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 65,
+"speed": 2,
+"kb": 10,
+"abilities": []
+},
+{
+"id": 72,
+"name": "Nimue_(Enemy)",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 169,
+"speed": 4,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 73,
+"name": "Neutralization_Type_Nimue_(Enemy)",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 340,
+"speed": 4,
+"kb": 5,
+"abilities": []
+},
+{
+"id": 74,
+"name": "SSS_Monkey_King_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 300,
+"speed": 7,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 75,
+"name": "Crazed Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 240,
+"speed": 4,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 76,
+"name": "Crazed Tank Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 390,
+"speed": 2,
+"kb": 1,
+"abilities": [
+"Castle Breaker"
+]
+},
+{
+"id": 77,
+"name": "Crazed Axe Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 360,
+"speed": 7,
+"kb": 5,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 78,
+"name": "Crazed Gross Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 100,
+"speed": 6,
+"kb": 2,
+"abilities": [
+"Wave"
+]
+},
+{
+"id": 79,
+"name": "Crazed Cow Cat",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 100,
+"speed": 20,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 80,
+"name": "Crazed Bird Cat",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 640,
+"speed": 2,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 81,
+"name": "Crazed Fish Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 260,
+"speed": 6,
+"kb": 1,
+"abilities": [
+"Critical",
+"Castle Breaker"
+]
+},
+{
+"id": 82,
+"name": "Crazed Lizard Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 755,
+"speed": 7,
+"kb": 8,
+"abilities": []
+},
+{
+"id": 83,
+"name": "Crazed Titan Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 320,
+"speed": 4,
+"kb": 5,
+"abilities": [
+"Knockback",
+"Slow",
+"Wave"
+]
+},
+{
+"id": 84,
+"name": "Teacher A",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 351,
+"speed": 11,
+"kb": 4,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 85,
+"name": "Samurai Doggy",
+"traits": [
+"Red",
+"Black"
+],
+"isArea": true,
+"range": 120,
+"speed": 8,
+"kb": 2,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 86,
+"name": "Mega Cat",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 1300,
+"speed": 1,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 87,
+"name": "Gory Groom",
+"traits": [
+"Black"
+],
+"isArea": true,
+"range": 175,
+"speed": 10,
+"kb": 7,
+"abilities": [
+"Castle Breaker"
+]
+},
+{
+"id": 88,
+"name": "Celesse",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 140,
+"speed": 10,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 89,
+"name": "Nono",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 180,
+"speed": 8,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 90,
+"name": "Olga",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 310,
+"speed": 10,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 91,
+"name": "Norn",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 150,
+"speed": 12,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 92,
+"name": "Yoichi",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 390,
+"speed": 8,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 93,
+"name": "Serum",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 240,
+"speed": 30,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 94,
+"name": "Fuu",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 200,
+"speed": 4,
+"kb": 1,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 95,
+"name": "Aura",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 350,
+"speed": 3,
+"kb": 2,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 96,
+"name": "Rei",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 130,
+"speed": 18,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 97,
+"name": "Wyvern",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 600,
+"speed": 5,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 98,
+"name": "Healer",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 310,
+"speed": 23,
+"kb": 5,
+"abilities": [
+"Critical",
+"Bounty"
+]
+},
+{
+"id": 99,
+"name": "Sunny Celeboodle",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 400,
+"speed": 10,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 100,
+"name": "Bearkini",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 300,
+"speed": 30,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 101,
+"name": "Lord Enma",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 380,
+"speed": 3,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 102,
+"name": "Dashing Face",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 170,
+"speed": 25,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 103,
+"name": "Ghost Doge",
+"traits": [
+"Floating"
+],
+"isArea": false,
+"range": 110,
+"speed": 5,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 104,
+"name": "Ghost Snache",
+"traits": [
+"Floating"
+],
+"isArea": false,
+"range": 110,
+"speed": 8,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 105,
+"name": "Ghost Baa Baa",
+"traits": [
+"Floating"
+],
+"isArea": false,
+"range": 110,
+"speed": 7,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 106,
+"name": "Fireworks Guys (High-Yield)",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 50,
+"speed": 5,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 107,
+"name": "Fireworks Guys (Low-Yield)",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 100,
+"speed": 5,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 108,
+"name": "Mighty Gui Zuli",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 350,
+"speed": 2,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 109,
+"name": "Hermit Peng",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 280,
+"speed": 11,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 110,
+"name": "Master Da Xun",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 180,
+"speed": 16,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 111,
+"name": "Pigge Back",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 300,
+"speed": 10,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 112,
+"name": "Divine Cyclone",
+"traits": [
+"Angel"
+],
+"isArea": true,
+"range": 70,
+"speed": 6,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 113,
+"name": "Heavenly Hippoe",
+"traits": [
+"Angel"
+],
+"isArea": true,
+"range": 170,
+"speed": 9,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 114,
+"name": "Gabriel",
+"traits": [
+"Angel"
+],
+"isArea": true,
+"range": 80,
+"speed": 50,
+"kb": 10,
+"abilities": []
+},
+{
+"id": 115,
+"name": "Angelic Gory",
+"traits": [
+"Angel"
+],
+"isArea": true,
+"range": 165,
+"speed": 32,
+"kb": 6,
+"abilities": []
+},
+{
+"id": 116,
+"name": "Angel Fanboy",
+"traits": [
+"Metal"
+],
+"isArea": false,
+"range": 800,
+"speed": 4,
+"kb": 5,
+"abilities": []
+},
+{
+"id": 117,
+"name": "Wall Doge",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 110,
+"speed": 4,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 118,
+"name": "Ginger Snache",
+"traits": [
+"Red"
+],
+"isArea": false,
+"range": 120,
+"speed": 22,
+"kb": 5,
+"abilities": []
+},
+{
+"id": 119,
+"name": "Sunfish Jones",
+"traits": [
+"Angel"
+],
+"isArea": true,
+"range": 840,
+"speed": 3,
+"kb": 4,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 120,
+"name": "Birthday_Cake",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 110,
+"speed": 4,
+"kb": 5,
+"abilities": []
+},
+{
+"id": 121,
+"name": "Dragon_League_Witch_(Enemy)",
+"traits": [
+"Black"
+],
+"isArea": true,
+"range": 350,
+"speed": 5,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 122,
+"name": "Dragon_League_Swordsman_(Enemy)",
+"traits": [
+"Black"
+],
+"isArea": false,
+"range": 110,
+"speed": 9,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 123,
+"name": "Pigeon de Sable",
+"traits": [
+"Floating"
+],
+"isArea": false,
+"range": 205,
+"speed": 18,
+"kb": 2,
+"abilities": [
+"Wave"
+]
+},
+{
+"id": 124,
+"name": "Dark Otter",
+"traits": [
+"Black"
+],
+"isArea": true,
+"range": 190,
+"speed": 9,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 125,
+"name": "Angelic Sleipnir",
+"traits": [
+"Angel"
+],
+"isArea": true,
+"range": 372,
+"speed": 5,
+"kb": 2,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 126,
+"name": "Sunrise Doge",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 2000,
+"speed": 0,
+"kb": 1,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 127,
+"name": "Beefcake Cat",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 275,
+"speed": 24,
+"kb": 8,
+"abilities": []
+},
+{
+"id": 128,
+"name": "Dancer Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 435,
+"speed": 9,
+"kb": 5,
+"abilities": []
+},
+{
+"id": 129,
+"name": "Hyper Mr.",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 162,
+"speed": 14,
+"kb": 8,
+"abilities": []
+},
+{
+"id": 130,
+"name": "Ultimate Bondage Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 320,
+"speed": 5,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 131,
+"name": "Dark Lazer",
+"traits": [
+"Black"
+],
+"isArea": true,
+"range": 244,
+"speed": 3,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 132,
+"name": "Heavy Assault C.A.T.",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 400,
+"speed": 20,
+"kb": 5,
+"abilities": []
+},
+{
+"id": 133,
+"name": "Lollycat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 500,
+"speed": 7,
+"kb": 5,
+"abilities": []
+},
+{
+"id": 134,
+"name": "Unicycle Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 370,
+"speed": 10,
+"kb": 6,
+"abilities": []
+},
+{
+"id": 135,
+"name": "Flying Ninja Cat",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 240,
+"speed": 4,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 136,
+"name": "Skelecat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 150,
+"speed": 4,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 137,
+"name": "Pastry Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 235,
+"speed": 6,
+"kb": 4,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 138,
+"name": "Riceball Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 220,
+"speed": 18,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 139,
+"name": "Gato Amigo",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 250,
+"speed": 8,
+"kb": 3,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 140,
+"name": "Loincloth Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 655,
+"speed": 7,
+"kb": 5,
+"abilities": []
+},
+{
+"id": 141,
+"name": "Sho_Ayanokoji_(Enemy)",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 210,
+"speed": 4,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 142,
+"name": "Hikaru_Saotome_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 270,
+"speed": 4,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 143,
+"name": "Hitomi_Saionji_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 90,
+"speed": 4,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 144,
+"name": "Hoshi_Grandmarnier_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 330,
+"speed": 4,
+"kb": 8,
+"abilities": []
+},
+{
+"id": 145,
+"name": "Shouchikubai_Shiratori_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 150,
+"speed": 4,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 146,
+"name": "Trolly Blogger",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 220,
+"speed": 20,
+"kb": 1,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 147,
+"name": "Metal Doge",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 120,
+"speed": 16,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 148,
+"name": "Li'l Nyandam",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 620,
+"speed": 2,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 149,
+"name": "Le'noir",
+"traits": [
+"Black"
+],
+"isArea": true,
+"range": 410,
+"speed": 3,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 150,
+"name": "Young Man Mola",
+"traits": [
+"Floating"
+],
+"isArea": false,
+"range": 350,
+"speed": 5,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 151,
+"name": "Mola King",
+"traits": [
+"Floating"
+],
+"isArea": false,
+"range": 500,
+"speed": 4,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 152,
+"name": "Ayumi Manbosaki",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 800,
+"speed": 4,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 153,
+"name": "Tasmanian Giant Crab",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 180,
+"speed": 5,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 154,
+"name": "Sardine",
+"traits": [
+"Floating"
+],
+"isArea": false,
+"range": 125,
+"speed": 7,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 155,
+"name": "Squid",
+"traits": [
+"Floating"
+],
+"isArea": false,
+"range": 110,
+"speed": 8,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 156,
+"name": "Marching Kory",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 320,
+"speed": 7,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 157,
+"name": "Sakura_Android_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 440,
+"speed": 5,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 158,
+"name": "Takuya",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 310,
+"speed": 22,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 159,
+"name": "Yuki",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 500,
+"speed": 5,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 160,
+"name": "Chickful A",
+"traits": [
+"Angel"
+],
+"isArea": true,
+"range": 370,
+"speed": 8,
+"kb": 3,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 161,
+"name": "Mob_Cat_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 170,
+"speed": 8,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 162,
+"name": "Yakuza_Vampire_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 255,
+"speed": 6,
+"kb": 1,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 163,
+"name": "Hearscht",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 600,
+"speed": 14,
+"kb": 5,
+"abilities": [
+"Critical",
+"Surge Counter"
+]
+},
+{
+"id": 164,
+"name": "Cornelia",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 430,
+"speed": 13,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 165,
+"name": "Alois",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 270,
+"speed": 12,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 166,
+"name": "Healer Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 330,
+"speed": 23,
+"kb": 5,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 167,
+"name": "Shibalien",
+"traits": [
+"Alien"
+],
+"isArea": false,
+"range": 120,
+"speed": 8,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 168,
+"name": "Kroxo",
+"traits": [
+"Alien"
+],
+"isArea": false,
+"range": 130,
+"speed": 8,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 169,
+"name": "Hyppoh",
+"traits": [
+"Alien"
+],
+"isArea": true,
+"range": 222,
+"speed": 12,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 170,
+"name": "Imperator Sael",
+"traits": [
+"Alien"
+],
+"isArea": true,
+"range": 220,
+"speed": 5,
+"kb": 2,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 171,
+"name": "Maawth",
+"traits": [
+"Floating",
+"Alien"
+],
+"isArea": true,
+"range": 370,
+"speed": 15,
+"kb": 1,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 172,
+"name": "LeMurr",
+"traits": [
+"Alien"
+],
+"isArea": false,
+"range": 249,
+"speed": 18,
+"kb": 7,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 173,
+"name": "Helmut Krabbe",
+"traits": [
+"Alien"
+],
+"isArea": true,
+"range": 170,
+"speed": 6,
+"kb": 2,
+"abilities": [
+"Survive"
+]
+},
+{
+"id": 174,
+"name": "I.M. Phace",
+"traits": [
+"Floating",
+"Alien"
+],
+"isArea": true,
+"range": 366,
+"speed": 11,
+"kb": 4,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 175,
+"name": "Ursamajor",
+"traits": [
+"Alien"
+],
+"isArea": true,
+"range": 350,
+"speed": 8,
+"kb": 6,
+"abilities": [
+"Strengthen"
+]
+},
+{
+"id": 176,
+"name": "Cli-One",
+"traits": [
+"Floating",
+"Alien"
+],
+"isArea": true,
+"range": 760,
+"speed": 3,
+"kb": 8,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 177,
+"name": "Nimoy Bore",
+"traits": [
+"Alien"
+],
+"isArea": true,
+"range": 125,
+"speed": 9,
+"kb": 2,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 178,
+"name": "Elizabeth the LVIth",
+"traits": [
+"Alien"
+],
+"isArea": true,
+"range": 170,
+"speed": 10,
+"kb": 4,
+"abilities": [
+"Wave"
+]
+},
+{
+"id": 179,
+"name": "Cosmic Cyclone",
+"traits": [
+"Floating",
+"Alien"
+],
+"isArea": true,
+"range": 240,
+"speed": 4,
+"kb": 3,
+"abilities": [
+"Weaken",
+"Strengthen"
+]
+},
+{
+"id": 180,
+"name": "Galactic Overseer Nyandam",
+"traits": [
+"Alien"
+],
+"isArea": true,
+"range": 600,
+"speed": 2,
+"kb": 3,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 181,
+"name": "Corrupted Valkyrie",
+"traits": [
+"Floating",
+"Alien"
+],
+"isArea": true,
+"range": 350,
+"speed": 18,
+"kb": 5,
+"abilities": [
+"Strengthen"
+]
+},
+{
+"id": 182,
+"name": "Scissoroo",
+"traits": [
+"Alien"
+],
+"isArea": true,
+"range": 199,
+"speed": 24,
+"kb": 3,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 183,
+"name": "Cyberhorn",
+"traits": [
+"Alien"
+],
+"isArea": true,
+"range": 60,
+"speed": 4,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 184,
+"name": "Mistress Celeboodle",
+"traits": [
+"Alien"
+],
+"isArea": false,
+"range": 160,
+"speed": 15,
+"kb": 4,
+"abilities": [
+"Strengthen"
+]
+},
+{
+"id": 185,
+"name": "Professor A.",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 501,
+"speed": 4,
+"kb": 4,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 186,
+"name": "111M DL Anniv. Doge Cake",
+"traits": [
+"Metal"
+],
+"isArea": false,
+"range": 110,
+"speed": 4,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 187,
+"name": "Rathalos_(Enemy)",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 520,
+"speed": 4,
+"kb": 4,
+"abilities": [
+"Strengthen"
+]
+},
+{
+"id": 188,
+"name": "Rathian_(Enemy)",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 320,
+"speed": 6,
+"kb": 2,
+"abilities": [
+"Weaken",
+"Strengthen"
+]
+},
+{
+"id": 189,
+"name": "MARS PEOPLE",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 300,
+"speed": 7,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 190,
+"name": "DONALD MORDEN",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 420,
+"speed": 4,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 191,
+"name": "ALLEN O'NEIL",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 400,
+"speed": 8,
+"kb": 2,
+"abilities": [
+"Survive"
+]
+},
+{
+"id": 192,
+"name": "MARCO",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 160,
+"speed": 8,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 193,
+"name": "SV-001",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 400,
+"speed": 24,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 194,
+"name": "HUGE HERMIT",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 166,
+"speed": 7,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 195,
+"name": "JUPITER KING",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 570,
+"speed": 5,
+"kb": 1,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 196,
+"name": "HI-DO",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 480,
+"speed": 6,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 197,
+"name": "Pumpkin Doge",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 110,
+"speed": 5,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 198,
+"name": "Count Owlbrow",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 370,
+"speed": 12,
+"kb": 2,
+"abilities": [
+"Knockback",
+"Slow"
+]
+},
+{
+"id": 199,
+"name": "Vlad de Sable",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 200,
+"speed": 16,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 200,
+"name": "Junior_God_of_Light_-_Valkyrie_(Enemy)",
+"traits": [
+"Floating"
+],
+"isArea": false,
+"range": 280,
+"speed": 7,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 201,
+"name": "Junior_God_Brynhildr_(Enemy)",
+"traits": [
+"Floating"
+],
+"isArea": false,
+"range": 250,
+"speed": 8,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 202,
+"name": "Junior_God_Suruzu_(Enemy)",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 300,
+"speed": 6,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 203,
+"name": "Goddess_of_Abundance_-_Freya_(Enemy)",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 700,
+"speed": 5,
+"kb": 3,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 204,
+"name": "God_of_War_-_Odin_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 555,
+"speed": 4,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 205,
+"name": "Capy",
+"traits": [
+"Red"
+],
+"isArea": false,
+"range": 335,
+"speed": 7,
+"kb": 3,
+"abilities": [
+"Critical",
+"Surge"
+]
+},
+{
+"id": 206,
+"name": "Berserkory",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 160,
+"speed": 5,
+"kb": 1,
+"abilities": [
+"Wave"
+]
+},
+{
+"id": 207,
+"name": "Brollow",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 150,
+"speed": 99,
+"kb": 10,
+"abilities": []
+},
+{
+"id": 208,
+"name": "Calamary",
+"traits": [
+"Floating",
+"Alien"
+],
+"isArea": true,
+"range": 500,
+"speed": 5,
+"kb": 1,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 209,
+"name": "Alpacky",
+"traits": [
+"Alien"
+],
+"isArea": true,
+"range": 550,
+"speed": 6,
+"kb": 2,
+"abilities": [
+"Castle Breaker",
+"Strengthen",
+"Survive"
+]
+},
+{
+"id": 210,
+"name": "Elder Sloth",
+"traits": [
+"Alien"
+],
+"isArea": true,
+"range": 500,
+"speed": 12,
+"kb": 2,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 211,
+"name": "Bun Bun Symbiote",
+"traits": [
+"Floating",
+"Alien"
+],
+"isArea": true,
+"range": 200,
+"speed": 18,
+"kb": 5,
+"abilities": [
+"Wave"
+]
+},
+{
+"id": 212,
+"name": "Raging Bahamut Cat",
+"traits": [
+"Floating",
+"Alien"
+],
+"isArea": true,
+"range": 320,
+"speed": 40,
+"kb": 10,
+"abilities": []
+},
+{
+"id": 213,
+"name": "Christmas D.",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 300,
+"speed": 20,
+"kb": 10,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 214,
+"name": "Castle Guard",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 150,
+"speed": 7,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 215,
+"name": "Castle Horseman",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 175,
+"speed": 15,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 216,
+"name": "Ashura",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 240,
+"speed": 6,
+"kb": 2,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 217,
+"name": "Battle Balloon",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 333,
+"speed": 4,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 218,
+"name": "Dragon Rider",
+"traits": [
+"Floating"
+],
+"isArea": false,
+"range": 300,
+"speed": 6,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 219,
+"name": "Pretty Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 255,
+"speed": 10,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 220,
+"name": "Cyclops",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 420,
+"speed": 5,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 221,
+"name": "Golem",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 500,
+"speed": 2,
+"kb": 1,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 222,
+"name": "Wise Swordsman",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 150,
+"speed": 7,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 223,
+"name": "Black Thunder Rider",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 175,
+"speed": 18,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 224,
+"name": "Kabuki Ashura",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 240,
+"speed": 6,
+"kb": 2,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 225,
+"name": "Battle UFO",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 333,
+"speed": 4,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 226,
+"name": "Flame Dragon Rider",
+"traits": [
+"Floating"
+],
+"isArea": false,
+"range": 300,
+"speed": 6,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 227,
+"name": "Cyber Pretty Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 255,
+"speed": 10,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 228,
+"name": "4D Cyclops",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 420,
+"speed": 5,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 229,
+"name": "Volcano Golem",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 500,
+"speed": 3,
+"kb": 1,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 230,
+"name": "Prisoner Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 525,
+"speed": 5,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 231,
+"name": "Gentleman Bros.",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 499,
+"speed": 6,
+"kb": 3,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 232,
+"name": "Cruel Angel Clionel",
+"traits": [
+"Angel"
+],
+"isArea": true,
+"range": 600,
+"speed": 4,
+"kb": 4,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 233,
+"name": "Nyalladin",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 190,
+"speed": 10,
+"kb": 4,
+"abilities": [
+"Wave"
+]
+},
+{
+"id": 234,
+"name": "Wrestling Cat",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 300,
+"speed": 4,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 235,
+"name": "Mr. Mole",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 450,
+"speed": 4,
+"kb": 8,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 236,
+"name": "The Perfect Cyclone",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 650,
+"speed": 4,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 237,
+"name": "Nyamusu_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 450,
+"speed": 7,
+"kb": 2,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 238,
+"name": "Pochi_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 175,
+"speed": 12,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 239,
+"name": "Kuromi_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 150,
+"speed": 15,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 240,
+"name": "Setsuko_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 350,
+"speed": 5,
+"kb": 1,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 241,
+"name": "Nebaaru-kun_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 420,
+"speed": 10,
+"kb": 3,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 242,
+"name": "Manic Mohawk Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 240,
+"speed": 8,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 243,
+"name": "Manic Eraser Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 390,
+"speed": 2,
+"kb": 1,
+"abilities": [
+"Castle Breaker"
+]
+},
+{
+"id": 244,
+"name": "Manic Dark Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 360,
+"speed": 7,
+"kb": 3,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 245,
+"name": "Manic Macho Legs",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 100,
+"speed": 6,
+"kb": 2,
+"abilities": [
+"Wave"
+]
+},
+{
+"id": 246,
+"name": "Manic Lion Cat",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 100,
+"speed": 28,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 247,
+"name": "Manic Flying Cat",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 640,
+"speed": 2,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 248,
+"name": "Manic Island Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 260,
+"speed": 6,
+"kb": 1,
+"abilities": [
+"Critical",
+"Castle Breaker"
+]
+},
+{
+"id": 249,
+"name": "Manic King Dragon",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 785,
+"speed": 7,
+"kb": 8,
+"abilities": []
+},
+{
+"id": 250,
+"name": "Manic Jamiera Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 320,
+"speed": 4,
+"kb": 5,
+"abilities": [
+"Knockback",
+"Slow",
+"Wave"
+]
+},
+{
+"id": 251,
+"name": "Kiss and Koi",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 400,
+"speed": 30,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 252,
+"name": "Madam the Savannah",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 270,
+"speed": 8,
+"kb": 2,
+"abilities": [
+"Survive"
+]
+},
+{
+"id": 253,
+"name": "Call Center Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 360,
+"speed": 6,
+"kb": 2,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 254,
+"name": "Mr. Angel",
+"traits": [
+"Angel"
+],
+"isArea": true,
+"range": 160,
+"speed": 45,
+"kb": 8,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 255,
+"name": "Two Can",
+"traits": [
+"Red",
+"Black"
+],
+"isArea": false,
+"range": 240,
+"speed": 10,
+"kb": 4,
+"abilities": [
+"Wave"
+]
+},
+{
+"id": 256,
+"name": "Tackey",
+"traits": [
+"Black"
+],
+"isArea": true,
+"range": 400,
+"speed": 6,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 257,
+"name": "King Wahwah",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 600,
+"speed": 5,
+"kb": 25,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 258,
+"name": "Codename \"Red Riding\"",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 1500,
+"speed": 5,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 259,
+"name": "Takuya & Lovely Yuki",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 410,
+"speed": 22,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 260,
+"name": "Kite Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 450,
+"speed": 6,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 261,
+"name": "Boraphim",
+"traits": [
+"Angel"
+],
+"isArea": true,
+"range": 155,
+"speed": 24,
+"kb": 5,
+"abilities": []
+},
+{
+"id": 262,
+"name": "Ritual Drum Doge",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 1800,
+"speed": 0,
+"kb": 1,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 263,
+"name": "Festive Otter",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 180,
+"speed": 9,
+"kb": 2,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 264,
+"name": "Funghi_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 125,
+"speed": 6,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 265,
+"name": "Iron Claw X",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 410,
+"speed": 6,
+"kb": 5,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 266,
+"name": "Henry",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 450,
+"speed": 4,
+"kb": 4,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 267,
+"name": "Hannya",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 800,
+"speed": 3,
+"kb": 3,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 268,
+"name": "Package_Doge",
+"traits": [
+"Metal"
+],
+"isArea": false,
+"range": 200,
+"speed": 0,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 269,
+"name": "Futenyan_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 135,
+"speed": 6,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 270,
+"name": "Rampage Cats",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 500,
+"speed": 6,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 271,
+"name": "Queen B",
+"traits": [
+"Floating",
+"Alien"
+],
+"isArea": true,
+"range": 999,
+"speed": 3,
+"kb": 5,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 272,
+"name": "Li'l Bun Bun",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 150,
+"speed": 38,
+"kb": 5,
+"abilities": []
+},
+{
+"id": 273,
+"name": "The Rose Garden Witch",
+"traits": [
+"Witch"
+],
+"isArea": true,
+"range": 320,
+"speed": 7,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 274,
+"name": "Dessert Witch - Obsession",
+"traits": [
+"Witch"
+],
+"isArea": true,
+"range": 380,
+"speed": 8,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 275,
+"name": "Dessert Witch",
+"traits": [
+"Witch"
+],
+"isArea": true,
+"range": 150,
+"speed": 5,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 276,
+"name": "Box Witch and Minions",
+"traits": [
+"Witch"
+],
+"isArea": true,
+"range": 250,
+"speed": 9,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 277,
+"name": "Walpurgisnacht",
+"traits": [
+"Witch"
+],
+"isArea": true,
+"range": 400,
+"speed": 8,
+"kb": 2,
+"abilities": [
+"Slow",
+"Critical",
+"Castle Breaker"
+]
+},
+{
+"id": 278,
+"name": "Kyuubei",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 145,
+"speed": 9,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 279,
+"name": "Ritual Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 350,
+"speed": 6,
+"kb": 2,
+"abilities": [
+"Strengthen"
+]
+},
+{
+"id": 280,
+"name": "Razorback",
+"traits": [
+"Black"
+],
+"isArea": true,
+"range": 145,
+"speed": 36,
+"kb": 2,
+"abilities": [
+"Strengthen"
+]
+},
+{
+"id": 281,
+"name": "Festival Sign Girl",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 330,
+"speed": 6,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 282,
+"name": "Vendor El",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 320,
+"speed": 10,
+"kb": 2,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 283,
+"name": "Dummy_(Enemy_Base)",
+"traits": [
+"Dojo"
+],
+"isArea": true,
+"range": 300,
+"speed": 0,
+"kb": 0,
+"abilities": []
+},
+{
+"id": 284,
+"name": "Zoge",
+"traits": [
+"Zombie"
+],
+"isArea": true,
+"range": 100,
+"speed": 8,
+"kb": 2,
+"abilities": [
+"Burrow",
+"Revive"
+]
+},
+{
+"id": 285,
+"name": "Znache",
+"traits": [
+"Zombie"
+],
+"isArea": true,
+"range": 120,
+"speed": 10,
+"kb": 2,
+"abilities": [
+"Burrow",
+"Revive"
+]
+},
+{
+"id": 286,
+"name": "Zomboe",
+"traits": [
+"Zombie"
+],
+"isArea": true,
+"range": 180,
+"speed": 3,
+"kb": 1,
+"abilities": [
+"Slow",
+"Burrow",
+"Revive"
+]
+},
+{
+"id": 287,
+"name": "Zigge",
+"traits": [
+"Zombie"
+],
+"isArea": true,
+"range": 160,
+"speed": 8,
+"kb": 2,
+"abilities": [
+"Knockback",
+"Burrow",
+"Revive"
+]
+},
+{
+"id": 288,
+"name": "Zackie Peng",
+"traits": [
+"Zombie"
+],
+"isArea": false,
+"range": 150,
+"speed": 9,
+"kb": 3,
+"abilities": [
+"Burrow",
+"Revive"
+]
+},
+{
+"id": 289,
+"name": "Zory",
+"traits": [
+"Zombie"
+],
+"isArea": true,
+"range": 165,
+"speed": 15,
+"kb": 2,
+"abilities": [
+"Burrow",
+"Revive"
+]
+},
+{
+"id": 290,
+"name": "Zir Zeal",
+"traits": [
+"Zombie"
+],
+"isArea": true,
+"range": 170,
+"speed": 12,
+"kb": 2,
+"abilities": [
+"Freeze",
+"Burrow",
+"Revive"
+]
+},
+{
+"id": 291,
+"name": "Zang Roo",
+"traits": [
+"Zombie"
+],
+"isArea": true,
+"range": 175,
+"speed": 18,
+"kb": 2,
+"abilities": [
+"Burrow",
+"Revive"
+]
+},
+{
+"id": 292,
+"name": "Zroco",
+"traits": [
+"Zombie"
+],
+"isArea": false,
+"range": 120,
+"speed": 15,
+"kb": 1,
+"abilities": [
+"Weaken",
+"Burrow",
+"Revive"
+]
+},
+{
+"id": 293,
+"name": "Lord Gravey",
+"traits": [
+"Zombie"
+],
+"isArea": true,
+"range": 250,
+"speed": 4,
+"kb": 2,
+"abilities": [
+"Knockback",
+"Revive"
+]
+},
+{
+"id": 294,
+"name": "Zyclone",
+"traits": [
+"Zombie"
+],
+"isArea": true,
+"range": 120,
+"speed": 4,
+"kb": 4,
+"abilities": [
+"Revive"
+]
+},
+{
+"id": 295,
+"name": "Xmas Pudding Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 250,
+"speed": 10,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 296,
+"name": "Mega Cat EX",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 1500,
+"speed": 1,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 297,
+"name": "4th_Anniversary_Birthday_Cake",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 110,
+"speed": 4,
+"kb": 5,
+"abilities": []
+},
+{
+"id": 298,
+"name": "Niconico_TV_(Enemy_Base)",
+"traits": [
+"Dojo"
+],
+"isArea": true,
+"range": 300,
+"speed": 0,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 299,
+"name": "W_(form_1)",
+"traits": [
+"Floating"
+],
+"isArea": false,
+"range": 100,
+"speed": 60,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 300,
+"name": "W_(form_2)",
+"traits": [
+"Floating"
+],
+"isArea": false,
+"range": 100,
+"speed": 30,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 301,
+"name": "W_(form_3)",
+"traits": [
+"Floating"
+],
+"isArea": false,
+"range": 100,
+"speed": 40,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 302,
+"name": "Neko_Hakase_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 145,
+"speed": 10,
+"kb": 3,
+"abilities": [
+"Critical",
+"Apostle Killer"
+]
+},
+{
+"id": 303,
+"name": "Miss Haka",
+"traits": [
+"Zombie"
+],
+"isArea": true,
+"range": 150,
+"speed": 4,
+"kb": 24,
+"abilities": [
+"Burrow",
+"Revive"
+]
+},
+{
+"id": 304,
+"name": "Big Sal",
+"traits": [
+"Zombie"
+],
+"isArea": true,
+"range": 120,
+"speed": 3,
+"kb": 1,
+"abilities": [
+"Castle Breaker",
+"Burrow",
+"Revive"
+]
+},
+{
+"id": 305,
+"name": "Pikotaro_(Enemy)",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 500,
+"speed": 4,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 306,
+"name": "Le'mammoth",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 400,
+"speed": 5,
+"kb": 1,
+"abilities": [
+"Wave"
+]
+},
+{
+"id": 307,
+"name": "Ice Doge",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 120,
+"speed": 3,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 308,
+"name": "Snowball",
+"traits": [
+"Floating"
+],
+"isArea": false,
+"range": 100,
+"speed": 75,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 309,
+"name": "Coffin Zoge",
+"traits": [
+"Zombie"
+],
+"isArea": true,
+"range": 120,
+"speed": 4,
+"kb": 1,
+"abilities": [
+"Revive"
+]
+},
+{
+"id": 310,
+"name": "Zamelle",
+"traits": [
+"Zombie"
+],
+"isArea": true,
+"range": 550,
+"speed": 6,
+"kb": 1,
+"abilities": [
+"Castle Breaker",
+"Revive"
+]
+},
+{
+"id": 311,
+"name": "Killer Cat",
+"traits": [
+"Black"
+],
+"isArea": false,
+"range": 140,
+"speed": 15,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 312,
+"name": "Corrupted_Cat_Base_(Enemy_Base)",
+"traits": [],
+"isArea": false,
+"range": 500,
+"speed": 0,
+"kb": 1,
+"abilities": [
+"Wave"
+]
+},
+{
+"id": 313,
+"name": "Hiroshi_Mihara_(Enemy)",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 300,
+"speed": 4,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 314,
+"name": "Nazousagi_(Enemy)",
+"traits": [
+"Black"
+],
+"isArea": true,
+"range": 330,
+"speed": 6,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 315,
+"name": "Doge_Base_(Enemy_Base)",
+"traits": [],
+"isArea": false,
+"range": 1000,
+"speed": 0,
+"kb": 1,
+"abilities": [
+"Wave"
+]
+},
+{
+"id": 316,
+"name": "Inumusha",
+"traits": [
+"Zombie"
+],
+"isArea": true,
+"range": 600,
+"speed": 5,
+"kb": 50,
+"abilities": [
+"Revive"
+]
+},
+{
+"id": 317,
+"name": "Daboo of the Dead",
+"traits": [
+"Zombie"
+],
+"isArea": true,
+"range": 300,
+"speed": 4,
+"kb": 3,
+"abilities": [
+"Slow",
+"Revive"
+]
+},
+{
+"id": 318,
+"name": "Dolphina",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 150,
+"speed": 36,
+"kb": 30,
+"abilities": []
+},
+{
+"id": 319,
+"name": "Mobius_(Enemy)",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 520,
+"speed": 6,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 320,
+"name": "Belial_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 320,
+"speed": 33,
+"kb": 8,
+"abilities": [
+"Strengthen"
+]
+},
+{
+"id": 321,
+"name": "Happy_100_(Enemy)",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 300,
+"speed": 12,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 322,
+"name": "Li'l Mohawk Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 240,
+"speed": 4,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 323,
+"name": "Li'l Eraser Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 390,
+"speed": 2,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 324,
+"name": "Li'l Dark Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 360,
+"speed": 7,
+"kb": 3,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 325,
+"name": "Li'l Macho Legs Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 100,
+"speed": 6,
+"kb": 2,
+"abilities": [
+"Wave"
+]
+},
+{
+"id": 326,
+"name": "Li'l Lion Cat",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 100,
+"speed": 28,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 327,
+"name": "Li'l Flying Cat",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 640,
+"speed": 2,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 328,
+"name": "Li'l Island Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 260,
+"speed": 8,
+"kb": 1,
+"abilities": [
+"Critical",
+"Zombie Killer"
+]
+},
+{
+"id": 329,
+"name": "Li'l King Dragon Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 755,
+"speed": 7,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 330,
+"name": "Li'l Jamiera Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 320,
+"speed": 4,
+"kb": 5,
+"abilities": [
+"Wave"
+]
+},
+{
+"id": 331,
+"name": "Easter Duche",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 250,
+"speed": 8,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 332,
+"name": "Easter B.B.Bunny",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 200,
+"speed": 17,
+"kb": 3,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 333,
+"name": "Moai_Statue_(Enemy_Base)",
+"traits": [],
+"isArea": true,
+"range": 600,
+"speed": 0,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 334,
+"name": "Bridal_Princess_Punt_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 1300,
+"speed": 35,
+"kb": 1,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 335,
+"name": "Oversleeping_Beauty_Punt_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 350,
+"speed": 5,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 336,
+"name": "Golden Doge",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 110,
+"speed": 10,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 337,
+"name": "Gold Hippoe",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 210,
+"speed": 6,
+"kb": 1,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 338,
+"name": "Pure Gold R.Ost",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 260,
+"speed": 16,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 339,
+"name": "Lost World Yuki",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 480,
+"speed": 6,
+"kb": 3,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 340,
+"name": "Cala Maria",
+"traits": [
+"Angel"
+],
+"isArea": false,
+"range": 500,
+"speed": 8,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 341,
+"name": "Red Slug",
+"traits": [
+"Red"
+],
+"isArea": false,
+"range": 140,
+"speed": 8,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 342,
+"name": "Black Slug",
+"traits": [
+"Black"
+],
+"isArea": true,
+"range": 170,
+"speed": 15,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 343,
+"name": "Angelic Slug",
+"traits": [
+"Angel"
+],
+"isArea": true,
+"range": 300,
+"speed": 6,
+"kb": 3,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 344,
+"name": "Cat Kart P",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 350,
+"speed": 24,
+"kb": 5,
+"abilities": []
+},
+{
+"id": 345,
+"name": "Catkwondo SP",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 300,
+"speed": 9,
+"kb": 3,
+"abilities": [
+"Wave"
+]
+},
+{
+"id": 346,
+"name": "Merc & Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 155,
+"speed": 34,
+"kb": 2,
+"abilities": [
+"Critical",
+"Zombie Killer"
+]
+},
+{
+"id": 347,
+"name": "Titi Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 350,
+"speed": 8,
+"kb": 4,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 348,
+"name": "Orthos",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 270,
+"speed": 16,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 349,
+"name": "Michelia",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 440,
+"speed": 8,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 350,
+"name": "Todomeki",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 370,
+"speed": 11,
+"kb": 2,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 351,
+"name": "Gudetama_Plate_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 125,
+"speed": 10,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 352,
+"name": "Gudegude_à_la_mode_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 250,
+"speed": 6,
+"kb": 2,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 353,
+"name": "Nisetama_Army_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 330,
+"speed": 24,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 354,
+"name": "Hermit Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 255,
+"speed": 8,
+"kb": 12,
+"abilities": [
+"Wave"
+]
+},
+{
+"id": 355,
+"name": "Croakley",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 900,
+"speed": 3,
+"kb": 4,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 356,
+"name": "Gary Gory",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 160,
+"speed": 24,
+"kb": 4,
+"abilities": [
+"Strengthen"
+]
+},
+{
+"id": 357,
+"name": "Value Meal Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 360,
+"speed": 6,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 358,
+"name": "Metal Snache",
+"traits": [
+"Metal"
+],
+"isArea": false,
+"range": 120,
+"speed": 16,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 359,
+"name": "THE METAL SLOTH",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 300,
+"speed": 24,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 360,
+"name": "Shibalien Elite",
+"traits": [
+"Alien"
+],
+"isArea": false,
+"range": 120,
+"speed": 12,
+"kb": 3,
+"abilities": [
+"Warp"
+]
+},
+{
+"id": 361,
+"name": "Star Peng",
+"traits": [
+"Alien"
+],
+"isArea": false,
+"range": 150,
+"speed": 14,
+"kb": 2,
+"abilities": [
+"Warp"
+]
+},
+{
+"id": 362,
+"name": "General GreGory",
+"traits": [
+"Alien"
+],
+"isArea": true,
+"range": 165,
+"speed": 15,
+"kb": 5,
+"abilities": [
+"Barrier"
+]
+},
+{
+"id": 363,
+"name": "Le'Solar",
+"traits": [
+"Alien"
+],
+"isArea": true,
+"range": 400,
+"speed": 4,
+"kb": 1,
+"abilities": [
+"Barrier"
+]
+},
+{
+"id": 364,
+"name": "Project A",
+"traits": [
+"Alien"
+],
+"isArea": true,
+"range": 451,
+"speed": 4,
+"kb": 4,
+"abilities": [
+"Warp"
+]
+},
+{
+"id": 365,
+"name": "Corporal Weyland",
+"traits": [
+"Alien"
+],
+"isArea": true,
+"range": 300,
+"speed": 6,
+"kb": 6,
+"abilities": [
+"Barrier",
+"Warp"
+]
+},
+{
+"id": 366,
+"name": "Spacefish Jones",
+"traits": [
+"Floating",
+"Alien"
+],
+"isArea": true,
+"range": 840,
+"speed": 6,
+"kb": 3,
+"abilities": [
+"Barrier"
+]
+},
+{
+"id": 367,
+"name": "The Cat God",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 1000,
+"speed": 3,
+"kb": 5,
+"abilities": []
+},
+{
+"id": 368,
+"name": "Saber",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 300,
+"speed": 36,
+"kb": 8,
+"abilities": []
+},
+{
+"id": 369,
+"name": "Lancer",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 550,
+"speed": 10,
+"kb": 3,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 370,
+"name": "Archer",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 550,
+"speed": 9,
+"kb": 5,
+"abilities": []
+},
+{
+"id": 371,
+"name": "Rider",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 450,
+"speed": 10,
+"kb": 4,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 372,
+"name": "Gilgamesh",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 600,
+"speed": 6,
+"kb": 8,
+"abilities": [
+"Strengthen"
+]
+},
+{
+"id": 373,
+"name": "Rin Tohsaka",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 350,
+"speed": 11,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 374,
+"name": "Illyasviel",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 400,
+"speed": 7,
+"kb": 3,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 375,
+"name": "Youcan",
+"traits": [
+"Angel",
+"Alien"
+],
+"isArea": true,
+"range": 240,
+"speed": 12,
+"kb": 4,
+"abilities": [
+"Barrier",
+"Wave"
+]
+},
+{
+"id": 376,
+"name": "5th_Anniversary_Birthday_Cake",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 110,
+"speed": 3,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 377,
+"name": "Super Cosmic Cyclone",
+"traits": [
+"Alien"
+],
+"isArea": true,
+"range": 275,
+"speed": 6,
+"kb": 3,
+"abilities": [
+"Warp"
+]
+},
+{
+"id": 378,
+"name": "5th_Anniversary_Dummy_(Enemy_Base)",
+"traits": [
+"Dojo"
+],
+"isArea": true,
+"range": 300,
+"speed": 0,
+"kb": 0,
+"abilities": []
+},
+{
+"id": 379,
+"name": "Winged Pigge",
+"traits": [
+"Angel"
+],
+"isArea": true,
+"range": 170,
+"speed": 12,
+"kb": 4,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 380,
+"name": "Mystic Mask Yulala",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 200,
+"speed": 30,
+"kb": 10,
+"abilities": [
+"Warp"
+]
+},
+{
+"id": 381,
+"name": "Karin_Nekozuka_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 350,
+"speed": 20,
+"kb": 4,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 382,
+"name": "Misaki_Konno_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 160,
+"speed": 12,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 383,
+"name": "Sairi_Nijitani_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 300,
+"speed": 10,
+"kb": 3,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 384,
+"name": "Ren_Katagiri_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 150,
+"speed": 6,
+"kb": 3,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 385,
+"name": "Hater",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 155,
+"speed": 9,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 386,
+"name": "Prof._Wild_Base_(Enemy_Base)",
+"traits": [],
+"isArea": true,
+"range": 750,
+"speed": 0,
+"kb": 1,
+"abilities": [
+"Weaken",
+"Slow"
+]
+},
+{
+"id": 387,
+"name": "Hackey",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 800,
+"speed": 6,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 388,
+"name": "UltraBaaBaa",
+"traits": [
+"Alien"
+],
+"isArea": false,
+"range": 110,
+"speed": 10,
+"kb": 3,
+"abilities": [
+"Barrier"
+]
+},
+{
+"id": 389,
+"name": "Pigge Victorious",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 330,
+"speed": 10,
+"kb": 2,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 390,
+"name": "Bang-Bang",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 240,
+"speed": 8,
+"kb": 1,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 391,
+"name": "Mentori_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 120,
+"speed": 8,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 392,
+"name": "The 4th Angel",
+"traits": [
+"Apostle"
+],
+"isArea": true,
+"range": 500,
+"speed": 6,
+"kb": 3,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 393,
+"name": "The 6th Angel",
+"traits": [
+"Apostle"
+],
+"isArea": true,
+"range": 1000,
+"speed": 2,
+"kb": 2,
+"abilities": [
+"Castle Breaker"
+]
+},
+{
+"id": 394,
+"name": "The 9th Angel",
+"traits": [
+"Apostle"
+],
+"isArea": true,
+"range": 475,
+"speed": 4,
+"kb": 4,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 395,
+"name": "The 10th Angel",
+"traits": [
+"Apostle"
+],
+"isArea": true,
+"range": 400,
+"speed": 8,
+"kb": 5,
+"abilities": []
+},
+{
+"id": 396,
+"name": "Crazed Moneko",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 240,
+"speed": 5,
+"kb": 12,
+"abilities": [
+"Critical",
+"Wave"
+]
+},
+{
+"id": 397,
+"name": "Corrupted Moneko",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 240,
+"speed": 5,
+"kb": 12,
+"abilities": [
+"Critical",
+"Wave"
+]
+},
+{
+"id": 398,
+"name": "Glowstick Guys",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 100,
+"speed": 8,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 399,
+"name": "Pokota_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 400,
+"speed": 12,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 400,
+"name": "Ovis_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 220,
+"speed": 6,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 401,
+"name": "Coco_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 330,
+"speed": 10,
+"kb": 2,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 402,
+"name": "Moe_Uzumasa_&_Doge",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 400,
+"speed": 8,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 403,
+"name": "Saki_Matsuga_&_Doge",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 260,
+"speed": 26,
+"kb": 2,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 404,
+"name": "Misa_Ono_&_Doge",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 480,
+"speed": 6,
+"kb": 3,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 405,
+"name": "Mecha-Bun",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 200,
+"speed": 23,
+"kb": 10,
+"abilities": []
+},
+{
+"id": 406,
+"name": "Relic Bun-Bun",
+"traits": [
+"Relic"
+],
+"isArea": true,
+"range": 200,
+"speed": 13,
+"kb": 5,
+"abilities": [
+"Curse"
+]
+},
+{
+"id": 407,
+"name": "Relic Doge",
+"traits": [
+"Relic"
+],
+"isArea": true,
+"range": 120,
+"speed": 20,
+"kb": 3,
+"abilities": [
+"Curse"
+]
+},
+{
+"id": 408,
+"name": "Crazed Yuki",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 300,
+"speed": 15,
+"kb": 6,
+"abilities": []
+},
+{
+"id": 409,
+"name": "Gude-Doge_Machine",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 390,
+"speed": 9,
+"kb": 2,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 410,
+"name": "Gudebene_Cat_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 420,
+"speed": 7,
+"kb": 2,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 411,
+"name": "Gorilliam",
+"traits": [
+"Alien"
+],
+"isArea": true,
+"range": 225,
+"speed": 15,
+"kb": 4,
+"abilities": [
+"Warp"
+]
+},
+{
+"id": 412,
+"name": "Sir Rel",
+"traits": [
+"Relic"
+],
+"isArea": false,
+"range": 110,
+"speed": 40,
+"kb": 5,
+"abilities": [
+"Curse"
+]
+},
+{
+"id": 413,
+"name": "Oldhorn",
+"traits": [
+"Relic"
+],
+"isArea": true,
+"range": 80,
+"speed": 4,
+"kb": 1,
+"abilities": [
+"Curse"
+]
+},
+{
+"id": 414,
+"name": "Othom",
+"traits": [
+"Floating",
+"Relic"
+],
+"isArea": true,
+"range": 340,
+"speed": 20,
+"kb": 1,
+"abilities": [
+"Curse"
+]
+},
+{
+"id": 415,
+"name": "Betakkuma_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 120,
+"speed": 9,
+"kb": 2,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 416,
+"name": "Selena",
+"traits": [
+"Black"
+],
+"isArea": true,
+"range": 270,
+"speed": 15,
+"kb": 3,
+"abilities": [
+"Knockback",
+"Slow"
+]
+},
+{
+"id": 417,
+"name": "Kid Tappa",
+"traits": [
+"Alien"
+],
+"isArea": true,
+"range": 100,
+"speed": 50,
+"kb": 1,
+"abilities": [
+"Barrier"
+]
+},
+{
+"id": 418,
+"name": "Ribbo",
+"traits": [
+"Alien"
+],
+"isArea": true,
+"range": 450,
+"speed": 6,
+"kb": 4,
+"abilities": [
+"Barrier",
+"Warp"
+]
+},
+{
+"id": 419,
+"name": "Cat God",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 300,
+"speed": 3,
+"kb": 5,
+"abilities": [
+"Knockback",
+"Slow"
+]
+},
+{
+"id": 420,
+"name": "Loris",
+"traits": [
+"Relic"
+],
+"isArea": true,
+"range": 449,
+"speed": 9,
+"kb": 6,
+"abilities": [
+"Curse"
+]
+},
+{
+"id": 421,
+"name": "Heavenly Le'saint",
+"traits": [
+"Angel"
+],
+"isArea": true,
+"range": 320,
+"speed": 6,
+"kb": 1,
+"abilities": [
+"Strengthen"
+]
+},
+{
+"id": 422,
+"name": "The Red Malice",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 300,
+"speed": 20,
+"kb": 10,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 423,
+"name": "Lowkey",
+"traits": [
+"Floating",
+"Relic"
+],
+"isArea": true,
+"range": 500,
+"speed": 2,
+"kb": 1,
+"abilities": [
+"Curse"
+]
+},
+{
+"id": 424,
+"name": "M. Ost",
+"traits": [
+"Relic"
+],
+"isArea": true,
+"range": 310,
+"speed": 32,
+"kb": 10,
+"abilities": [
+"Knockback",
+"Slow",
+"Curse"
+]
+},
+{
+"id": 425,
+"name": "Dead Donny Dash",
+"traits": [
+"Zombie"
+],
+"isArea": true,
+"range": 400,
+"speed": 25,
+"kb": 2,
+"abilities": [
+"Burrow",
+"Revive"
+]
+},
+{
+"id": 426,
+"name": "CTO Seal",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 380,
+"speed": 10,
+"kb": 2,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 427,
+"name": "Cadaver Bear",
+"traits": [
+"Zombie"
+],
+"isArea": true,
+"range": 360,
+"speed": 10,
+"kb": 4,
+"abilities": [
+"Burrow",
+"Revive"
+]
+},
+{
+"id": 428,
+"name": "Dread Bore",
+"traits": [
+"Zombie"
+],
+"isArea": true,
+"range": 130,
+"speed": 22,
+"kb": 2,
+"abilities": [
+"Burrow",
+"Revive"
+]
+},
+{
+"id": 429,
+"name": "Nutcracker Witch",
+"traits": [
+"Witch"
+],
+"isArea": true,
+"range": 300,
+"speed": 4,
+"kb": 3,
+"abilities": [
+"Knockback",
+"Weaken",
+"Castle Breaker"
+]
+},
+{
+"id": 430,
+"name": "Satan Claus",
+"traits": [
+"Alien"
+],
+"isArea": true,
+"range": 360,
+"speed": 12,
+"kb": 3,
+"abilities": [
+"Warp"
+]
+},
+{
+"id": 431,
+"name": "Bakoo",
+"traits": [
+"Black"
+],
+"isArea": true,
+"range": 180,
+"speed": 4,
+"kb": 10,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 432,
+"name": "Hikakin_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 300,
+"speed": 8,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 433,
+"name": "Mukyakin_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 350,
+"speed": 6,
+"kb": 10,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 434,
+"name": "Sister Lione",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 375,
+"speed": 10,
+"kb": 5,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 435,
+"name": "6th_Anniversary_Birthday_Cake",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 110,
+"speed": 3,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 436,
+"name": "6th_Anniversary_Dummy_(Enemy_Base)",
+"traits": [
+"Dojo"
+],
+"isArea": true,
+"range": 300,
+"speed": 0,
+"kb": 0,
+"abilities": []
+},
+{
+"id": 437,
+"name": "Lucky Dags",
+"traits": [
+"Black"
+],
+"isArea": false,
+"range": 380,
+"speed": 14,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 438,
+"name": "Primeval Cyclone",
+"traits": [
+"Relic"
+],
+"isArea": true,
+"range": 180,
+"speed": 18,
+"kb": 1,
+"abilities": [
+"Curse",
+"Strengthen"
+]
+},
+{
+"id": 439,
+"name": "Li'l Bore",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 100,
+"speed": 7,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 440,
+"name": "Bears Be Back",
+"traits": [
+"Red",
+"Floating",
+"Black",
+"Angel",
+"Alien",
+"Zombie"
+],
+"isArea": true,
+"range": 420,
+"speed": 30,
+"kb": 3,
+"abilities": [
+"Knockback",
+"Weaken",
+"Freeze",
+"Slow",
+"Warp"
+]
+},
+{
+"id": 441,
+"name": "Saber Alter",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 300,
+"speed": 40,
+"kb": 8,
+"abilities": [
+"Wave"
+]
+},
+{
+"id": 442,
+"name": "Ms. Madonna",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 200,
+"speed": 10,
+"kb": 6,
+"abilities": [
+"Knockback",
+"Wave"
+]
+},
+{
+"id": 443,
+"name": "Mesocosmocyclone",
+"traits": [
+"Alien"
+],
+"isArea": true,
+"range": 50,
+"speed": 14,
+"kb": 2,
+"abilities": [
+"Warp"
+]
+},
+{
+"id": 444,
+"name": "Gardeneel Bros.",
+"traits": [
+"Alien"
+],
+"isArea": true,
+"range": 1800,
+"speed": 5,
+"kb": 4,
+"abilities": [
+"Warp"
+]
+},
+{
+"id": 445,
+"name": "Axoloty",
+"traits": [
+"Alien"
+],
+"isArea": true,
+"range": 450,
+"speed": 10,
+"kb": 5,
+"abilities": [
+"Barrier",
+"Wave"
+]
+},
+{
+"id": 446,
+"name": "Final Boss Giga-God",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 800,
+"speed": 3,
+"kb": 5,
+"abilities": [
+"Warp",
+"Wave"
+]
+},
+{
+"id": 447,
+"name": "Filibuster Obstructa",
+"traits": [
+"Floating",
+"Alien"
+],
+"isArea": true,
+"range": 2000,
+"speed": 30,
+"kb": 200,
+"abilities": []
+},
+{
+"id": 448,
+"name": "Idol_Mihara_&_Cat_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 300,
+"speed": 4,
+"kb": 4,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 449,
+"name": "Haterbaa 2.0",
+"traits": [
+"Metal"
+],
+"isArea": false,
+"range": 110,
+"speed": 10,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 450,
+"name": "Dogumaru",
+"traits": [
+"Relic"
+],
+"isArea": true,
+"range": 500,
+"speed": 15,
+"kb": 3,
+"abilities": [
+"Curse"
+]
+},
+{
+"id": 451,
+"name": "Maji_Cat_&_Cat_Tour_Group_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 250,
+"speed": 8,
+"kb": 3,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 452,
+"name": "Super_Devil_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 666,
+"speed": 4,
+"kb": 2,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 453,
+"name": "Satanmaria_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 345,
+"speed": 14,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 454,
+"name": "Wondermaria_(Enemy)",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 345,
+"speed": 28,
+"kb": 4,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 455,
+"name": "Beastly_Nero_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 200,
+"speed": 9,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 456,
+"name": "Head_Rococo_(Enemy)",
+"traits": [
+"Angel"
+],
+"isArea": true,
+"range": 325,
+"speed": 18,
+"kb": 4,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 457,
+"name": "Gummy Cat",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 140,
+"speed": 12,
+"kb": 100000,
+"abilities": []
+},
+{
+"id": 458,
+"name": "Kitarou_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 380,
+"speed": 9,
+"kb": 3,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 459,
+"name": "Medama-Oyaji_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 210,
+"speed": 8,
+"kb": 3,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 460,
+"name": "Neko-Musume_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 280,
+"speed": 15,
+"kb": 4,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 461,
+"name": "Kano ＆ Souma",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 220,
+"speed": 18,
+"kb": 2,
+"abilities": [
+"Wave"
+]
+},
+{
+"id": 462,
+"name": "Gekirinchi_(Enemy)",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 340,
+"speed": 18,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 463,
+"name": "Judgment_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 360,
+"speed": 10,
+"kb": 3,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 464,
+"name": "Unit-13's False Evolution",
+"traits": [
+"Apostle"
+],
+"isArea": true,
+"range": 200,
+"speed": 4,
+"kb": 6,
+"abilities": [
+"Knockback",
+"Weaken",
+"Freeze",
+"Strengthen"
+]
+},
+{
+"id": 465,
+"name": "HAPPI_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 100,
+"speed": 30,
+"kb": 2,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 466,
+"name": "HAPPI_&_Maji_Cat_&_Cat_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 75,
+"speed": 30,
+"kb": 2,
+"abilities": [
+"Knockback",
+"Slow"
+]
+},
+{
+"id": 467,
+"name": "Chocolate_Cat_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 300,
+"speed": 9,
+"kb": 3,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 468,
+"name": "Zuche",
+"traits": [
+"Zombie"
+],
+"isArea": true,
+"range": 120,
+"speed": 30,
+"kb": 1,
+"abilities": [
+"Burrow",
+"Revive"
+]
+},
+{
+"id": 469,
+"name": "The Thrillerz",
+"traits": [
+"Zombie"
+],
+"isArea": false,
+"range": 110,
+"speed": 18,
+"kb": 1,
+"abilities": [
+"Burrow",
+"Revive"
+]
+},
+{
+"id": 470,
+"name": "Shakurel_Doge",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 110,
+"speed": 5,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 471,
+"name": "Shakurel_Gory",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 150,
+"speed": 15,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 472,
+"name": "Shakurel_Face",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 350,
+"speed": 2,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 473,
+"name": "Shakurel_Lion_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 140,
+"speed": 8,
+"kb": 2,
+"abilities": [
+"Strengthen"
+]
+},
+{
+"id": 474,
+"name": "Shakurel_Tiger_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 140,
+"speed": 9,
+"kb": 3,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 475,
+"name": "Shakurel_Panda_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 140,
+"speed": 7,
+"kb": 1,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 476,
+"name": "Dot_Hero",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 300,
+"speed": 25,
+"kb": 3,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 477,
+"name": "Mr. Puffington",
+"traits": [
+"Relic"
+],
+"isArea": true,
+"range": 150,
+"speed": 40,
+"kb": 400,
+"abilities": [
+"Curse"
+]
+},
+{
+"id": 478,
+"name": "Li'l Cake Doge",
+"traits": [
+"Metal"
+],
+"isArea": false,
+"range": 110,
+"speed": 3,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 479,
+"name": "Puffsley's Comet",
+"traits": [
+"Alien"
+],
+"isArea": true,
+"range": 200,
+"speed": 40,
+"kb": 400,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 480,
+"name": "Ryu",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 380,
+"speed": 14,
+"kb": 6,
+"abilities": []
+},
+{
+"id": 481,
+"name": "Chun-Li",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 360,
+"speed": 25,
+"kb": 3,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 482,
+"name": "Guile",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 420,
+"speed": 18,
+"kb": 2,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 483,
+"name": "Zangief",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 160,
+"speed": 7,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 484,
+"name": "Blanka",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 150,
+"speed": 55,
+"kb": 160,
+"abilities": []
+},
+{
+"id": 485,
+"name": "Dhalsim",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 390,
+"speed": 6,
+"kb": 3,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 486,
+"name": "Ken",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 180,
+"speed": 16,
+"kb": 2,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 487,
+"name": "Car_(Enemy_Base)",
+"traits": [],
+"isArea": true,
+"range": 0,
+"speed": 0,
+"kb": 0,
+"abilities": []
+},
+{
+"id": 488,
+"name": "Akuma",
+"traits": [
+"Black"
+],
+"isArea": true,
+"range": 450,
+"speed": 18,
+"kb": 6,
+"abilities": []
+},
+{
+"id": 489,
+"name": "7th_Anniversary_Birthday_Cake",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 110,
+"speed": 3,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 490,
+"name": "7th_Anniversary_Dummy_(Enemy_Base)",
+"traits": [
+"Dojo"
+],
+"isArea": true,
+"range": 300,
+"speed": 0,
+"kb": 0,
+"abilities": []
+},
+{
+"id": 491,
+"name": "Masked Okame",
+"traits": [
+"Red",
+"Black"
+],
+"isArea": true,
+"range": 320,
+"speed": 3,
+"kb": 1,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 492,
+"name": "Heavenly Herald Papuu",
+"traits": [
+"Angel"
+],
+"isArea": true,
+"range": 250,
+"speed": 8,
+"kb": 1,
+"abilities": [
+"Strengthen",
+"Toxic"
+]
+},
+{
+"id": 493,
+"name": "Queen Mother V",
+"traits": [
+"Floating",
+"Relic"
+],
+"isArea": true,
+"range": 999,
+"speed": 4,
+"kb": 8,
+"abilities": [
+"Curse"
+]
+},
+{
+"id": 494,
+"name": "Rat_Doge",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 110,
+"speed": 8,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 495,
+"name": "Kappy Jr.",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 230,
+"speed": 14,
+"kb": 6,
+"abilities": [
+"Surge"
+]
+},
+{
+"id": 496,
+"name": "Urs & Fenrir",
+"traits": [
+"Relic"
+],
+"isArea": true,
+"range": 300,
+"speed": 4,
+"kb": 5,
+"abilities": [
+"Weaken",
+"Curse"
+]
+},
+{
+"id": 497,
+"name": "Croconator",
+"traits": [
+"Metal"
+],
+"isArea": false,
+"range": 110,
+"speed": 12,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 498,
+"name": "Gobble",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 200,
+"speed": 8,
+"kb": 3,
+"abilities": [
+"Toxic"
+]
+},
+{
+"id": 499,
+"name": "Baron Seal",
+"traits": [
+"Red",
+"Colossus"
+],
+"isArea": true,
+"range": 320,
+"speed": 8,
+"kb": 4,
+"abilities": [
+"Weaken",
+"Freeze"
+]
+},
+{
+"id": 500,
+"name": "Hatsune_Miku_(Enemy)",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 320,
+"speed": 10,
+"kb": 4,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 501,
+"name": "Sakura_Miku_(Enemy)",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 450,
+"speed": 5,
+"kb": 4,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 502,
+"name": "Kagamine_Rin_&_Len_(Enemy)",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 390,
+"speed": 16,
+"kb": 4,
+"abilities": [
+"Knockback",
+"Slow"
+]
+},
+{
+"id": 503,
+"name": "MikuDoge",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 110,
+"speed": 18,
+"kb": 3,
+"abilities": [
+"Dodge"
+]
+},
+{
+"id": 504,
+"name": "MikuGory",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 160,
+"speed": 24,
+"kb": 2,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 505,
+"name": "MikuBear",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 360,
+"speed": 8,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 506,
+"name": "Everlord Wanwan",
+"traits": [
+"Alien"
+],
+"isArea": true,
+"range": 600,
+"speed": 3,
+"kb": 20,
+"abilities": [
+"Warp"
+]
+},
+{
+"id": 507,
+"name": "Messier",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 200,
+"speed": 6,
+"kb": 14,
+"abilities": [
+"Strengthen"
+]
+},
+{
+"id": 508,
+"name": "Yakisoba_U.F.O._Cat_(Enemy)",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 170,
+"speed": 8,
+"kb": 4,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 509,
+"name": "Yakisoba_Face",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 500,
+"speed": 6,
+"kb": 1,
+"abilities": [
+"Warp"
+]
+},
+{
+"id": 510,
+"name": "Le'Grim",
+"traits": [
+"Black",
+"Colossus"
+],
+"isArea": true,
+"range": 480,
+"speed": 3,
+"kb": 1,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 511,
+"name": "Death Angel Z-Onel",
+"traits": [
+"Zombie"
+],
+"isArea": true,
+"range": 666,
+"speed": 4,
+"kb": 4,
+"abilities": [
+"Freeze",
+"Revive"
+]
+},
+{
+"id": 512,
+"name": "Li'l Zyclone",
+"traits": [
+"Zombie"
+],
+"isArea": true,
+"range": 100,
+"speed": 14,
+"kb": 1,
+"abilities": [
+"Burrow",
+"Revive"
+]
+},
+{
+"id": 513,
+"name": "St. Dober",
+"traits": [
+"Angel"
+],
+"isArea": true,
+"range": 130,
+"speed": 8,
+"kb": 2,
+"abilities": [
+"Surge"
+]
+},
+{
+"id": 514,
+"name": "Doremi",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 180,
+"speed": 14,
+"kb": 20,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 515,
+"name": "Mega-Mooth",
+"traits": [
+"Floating",
+"Colossus"
+],
+"isArea": true,
+"range": 370,
+"speed": 10,
+"kb": 4,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 516,
+"name": "Master Uril",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 200,
+"speed": 5,
+"kb": 12,
+"abilities": [
+"Curse",
+"Surge"
+]
+},
+{
+"id": 517,
+"name": "Koronium",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 240,
+"speed": 5,
+"kb": 5,
+"abilities": [
+"Wave"
+]
+},
+{
+"id": 518,
+"name": "Super_Zeus_(Enemy)",
+"traits": [
+"Angel"
+],
+"isArea": true,
+"range": 450,
+"speed": 9,
+"kb": 5,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 519,
+"name": "Shaman_Khan_(Enemy)",
+"traits": [
+"Angel"
+],
+"isArea": true,
+"range": 550,
+"speed": 8,
+"kb": 4,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 520,
+"name": "Heracrist_(Enemy)",
+"traits": [
+"Angel"
+],
+"isArea": false,
+"range": 180,
+"speed": 4,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 521,
+"name": "Johnnyleon",
+"traits": [
+"Red",
+"Alien",
+"Zombie"
+],
+"isArea": true,
+"range": 150,
+"speed": 10,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 522,
+"name": "Relic_Doge_Base_(Enemy_Base)",
+"traits": [],
+"isArea": true,
+"range": 2000,
+"speed": 0,
+"kb": 1,
+"abilities": [
+"Curse"
+]
+},
+{
+"id": 523,
+"name": "Happy_Birthday_Cake",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 110,
+"speed": 3,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 524,
+"name": "Surge_Base_(Enemy_Base)",
+"traits": [],
+"isArea": false,
+"range": 2000,
+"speed": 0,
+"kb": 1,
+"abilities": [
+"Surge"
+]
+},
+{
+"id": 525,
+"name": "Super Hyppoh",
+"traits": [
+"Alien",
+"Colossus"
+],
+"isArea": true,
+"range": 222,
+"speed": 12,
+"kb": 20,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 526,
+"name": "Idi:Re",
+"traits": [
+"Relic"
+],
+"isArea": true,
+"range": 150,
+"speed": 44,
+"kb": 33,
+"abilities": [
+"Curse",
+"Strengthen"
+]
+},
+{
+"id": 527,
+"name": "Zollow",
+"traits": [
+"Floating",
+"Zombie"
+],
+"isArea": true,
+"range": 100,
+"speed": 55,
+"kb": 1,
+"abilities": [
+"Revive",
+"Toxic"
+]
+},
+{
+"id": 528,
+"name": "E. Honda",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 100,
+"speed": 50,
+"kb": 5,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 529,
+"name": "Balrog",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 250,
+"speed": 20,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 530,
+"name": "Vega",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 450,
+"speed": 25,
+"kb": 6,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 531,
+"name": "Sagat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 175,
+"speed": 17,
+"kb": 4,
+"abilities": [
+"Strengthen",
+"Wave"
+]
+},
+{
+"id": 532,
+"name": "M. Bison",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 400,
+"speed": 8,
+"kb": 4,
+"abilities": [
+"Toxic"
+]
+},
+{
+"id": 533,
+"name": "8th_Anniversary_Birthday_Cake",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 110,
+"speed": 3,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 534,
+"name": "8th_Anniversary_Dummy_(Enemy_Base)",
+"traits": [
+"Dojo"
+],
+"isArea": true,
+"range": 300,
+"speed": 0,
+"kb": 0,
+"abilities": []
+},
+{
+"id": 535,
+"name": "Evil Emperor Cat",
+"traits": [
+"Relic"
+],
+"isArea": true,
+"range": 520,
+"speed": 6,
+"kb": 8,
+"abilities": [
+"Freeze",
+"Curse",
+"Surge"
+]
+},
+{
+"id": 536,
+"name": "Megurine_Luka_(Enemy)",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 425,
+"speed": 18,
+"kb": 4,
+"abilities": [
+"Warp"
+]
+},
+{
+"id": 537,
+"name": "Cow_Doge",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 110,
+"speed": 30,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 538,
+"name": "Bore Jr.",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 130,
+"speed": 20,
+"kb": 2,
+"abilities": [
+"Mini-Wave"
+]
+},
+{
+"id": 539,
+"name": "Chocolate Doge",
+"traits": [
+"Black"
+],
+"isArea": true,
+"range": 110,
+"speed": 4,
+"kb": 1,
+"abilities": [
+"Mini-Wave"
+]
+},
+{
+"id": 540,
+"name": "Snow_Miku_2021_(Enemy)",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 400,
+"speed": 7,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 541,
+"name": "Raynard",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 1700,
+"speed": 4,
+"kb": 4,
+"abilities": [
+"Surge"
+]
+},
+{
+"id": 542,
+"name": "Ranma_Saotome_(M)_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 300,
+"speed": 18,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 543,
+"name": "Akane_Tendo_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 400,
+"speed": 14,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 544,
+"name": "Ryoga_Hibiki_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 380,
+"speed": 17,
+"kb": 2,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 545,
+"name": "Shampoo_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 350,
+"speed": 18,
+"kb": 4,
+"abilities": [
+"Slow",
+"Mini-Wave"
+]
+},
+{
+"id": 546,
+"name": "Mousse_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 650,
+"speed": 14,
+"kb": 3,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 547,
+"name": "Mr. Mer",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 260,
+"speed": 4,
+"kb": 1,
+"abilities": [
+"Mini-Wave"
+]
+},
+{
+"id": 548,
+"name": "Wafer Cat XL",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 100,
+"speed": 20,
+"kb": 1,
+"abilities": [
+"Knockback",
+"Slow"
+]
+},
+{
+"id": 549,
+"name": "Ragin' Gory",
+"traits": [
+"Black",
+"Behemoth"
+],
+"isArea": true,
+"range": 180,
+"speed": 30,
+"kb": 8,
+"abilities": []
+},
+{
+"id": 550,
+"name": "Shin_Godzilla",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 3800,
+"speed": 3,
+"kb": 1,
+"abilities": [
+"Castle Breaker"
+]
+},
+{
+"id": 551,
+"name": "Elder Flame Doron",
+"traits": [
+"Relic"
+],
+"isArea": true,
+"range": 400,
+"speed": 20,
+"kb": 1,
+"abilities": [
+"Weaken",
+"Surge"
+]
+},
+{
+"id": 552,
+"name": "Aku Doge",
+"traits": [
+"Aku"
+],
+"isArea": false,
+"range": 110,
+"speed": 25,
+"kb": 3,
+"abilities": [
+"Shield"
+]
+},
+{
+"id": 553,
+"name": "Sinner Snache",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 120,
+"speed": 12,
+"kb": 2,
+"abilities": [
+"Death Surge"
+]
+},
+{
+"id": 554,
+"name": "Cerberus Kids",
+"traits": [
+"Aku"
+],
+"isArea": false,
+"range": 120,
+"speed": 10,
+"kb": 1,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 555,
+"name": "Condemned Peng",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 280,
+"speed": 10,
+"kb": 3,
+"abilities": [
+"Slow",
+"Death Surge"
+]
+},
+{
+"id": 556,
+"name": "Aku Gory",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 160,
+"speed": 18,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 557,
+"name": "Le'Behemoth",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 380,
+"speed": 5,
+"kb": 1,
+"abilities": [
+"Shield"
+]
+},
+{
+"id": 558,
+"name": "Fallen Bear",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 345,
+"speed": 8,
+"kb": 3,
+"abilities": [
+"Shield",
+"Death Surge"
+]
+},
+{
+"id": 559,
+"name": "Wicked Face",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 460,
+"speed": 2,
+"kb": 2,
+"abilities": [
+"Freeze",
+"Shield",
+"Mini-Wave"
+]
+},
+{
+"id": 560,
+"name": "Aku Cyclone",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 200,
+"speed": 3,
+"kb": 4,
+"abilities": [
+"Shield"
+]
+},
+{
+"id": 561,
+"name": "Wicked Cat",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 240,
+"speed": 25,
+"kb": 30,
+"abilities": [
+"Shield"
+]
+},
+{
+"id": 562,
+"name": "Wicked Tank Cat",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 380,
+"speed": 2,
+"kb": 1,
+"abilities": [
+"Surge"
+]
+},
+{
+"id": 563,
+"name": "Wicked Axe Cat",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 360,
+"speed": 7,
+"kb": 3,
+"abilities": [
+"Strengthen",
+"Shield"
+]
+},
+{
+"id": 564,
+"name": "E-564",
+"traits": [
+"Aku"
+],
+"isArea": false,
+"range": 110,
+"speed": 5,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 565,
+"name": "E-565",
+"traits": [
+"Aku"
+],
+"isArea": false,
+"range": 110,
+"speed": 5,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 566,
+"name": "E-566",
+"traits": [
+"Aku"
+],
+"isArea": false,
+"range": 110,
+"speed": 5,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 567,
+"name": "E-567",
+"traits": [
+"Aku"
+],
+"isArea": false,
+"range": 110,
+"speed": 5,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 568,
+"name": "E-568",
+"traits": [
+"Aku"
+],
+"isArea": false,
+"range": 110,
+"speed": 5,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 569,
+"name": "E-569",
+"traits": [
+"Aku"
+],
+"isArea": false,
+"range": 110,
+"speed": 5,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 570,
+"name": "Dark Priest Mamon",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 360,
+"speed": 5,
+"kb": 3,
+"abilities": [
+"Shield"
+]
+},
+{
+"id": 571,
+"name": "High Priest Mamon",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 400,
+"speed": 5,
+"kb": 3,
+"abilities": [
+"Toxic",
+"Shield"
+]
+},
+{
+"id": 572,
+"name": "Lord of Ruin Jagando",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 300,
+"speed": 6,
+"kb": 2,
+"abilities": [
+"Shield",
+"Surge"
+]
+},
+{
+"id": 573,
+"name": "Possessed Empress",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 520,
+"speed": 6,
+"kb": 10,
+"abilities": [
+"Slow",
+"Shield",
+"Mini-Wave"
+]
+},
+{
+"id": 574,
+"name": "Aku_Altar_(Enemy_Base)",
+"traits": [],
+"isArea": false,
+"range": 0,
+"speed": 0,
+"kb": 0,
+"abilities": []
+},
+{
+"id": 575,
+"name": "Inactive_Aku_Altar_(Enemy_Base)",
+"traits": [],
+"isArea": false,
+"range": 0,
+"speed": 0,
+"kb": 0,
+"abilities": []
+},
+{
+"id": 576,
+"name": "Large White Ball",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 100,
+"speed": 15,
+"kb": 5,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 577,
+"name": "Large Red Ball",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 100,
+"speed": 30,
+"kb": 15,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 578,
+"name": "Large Iron Ball",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 100,
+"speed": 5,
+"kb": 1,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 579,
+"name": "Incubator",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 145,
+"speed": 9,
+"kb": 3,
+"abilities": [
+"Wave"
+]
+},
+{
+"id": 580,
+"name": "White Wind",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 150,
+"speed": 5,
+"kb": 1,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 581,
+"name": "Red Wind",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 150,
+"speed": 8,
+"kb": 3,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 582,
+"name": "Dark Wind",
+"traits": [
+"Black"
+],
+"isArea": true,
+"range": 150,
+"speed": 12,
+"kb": 10,
+"abilities": []
+},
+{
+"id": 583,
+"name": "Medu-san",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 240,
+"speed": 6,
+"kb": 1,
+"abilities": [
+"Surge"
+]
+},
+{
+"id": 584,
+"name": "Miz Devil",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 100,
+"speed": 40,
+"kb": 1,
+"abilities": [
+"Weaken",
+"Shield"
+]
+},
+{
+"id": 585,
+"name": "Sathankhamun VIII",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 650,
+"speed": 3,
+"kb": 3,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 586,
+"name": "Midnite D.",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 300,
+"speed": 25,
+"kb": 20,
+"abilities": [
+"Shield"
+]
+},
+{
+"id": 587,
+"name": "Ackey",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 450,
+"speed": 6,
+"kb": 2,
+"abilities": [
+"Freeze",
+"Shield"
+]
+},
+{
+"id": 588,
+"name": "Deathkory",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 190,
+"speed": 5,
+"kb": 4,
+"abilities": [
+"Shield",
+"Wave"
+]
+},
+{
+"id": 589,
+"name": "Masked Grandmaster Cat",
+"traits": [
+"Relic"
+],
+"isArea": true,
+"range": 255,
+"speed": 8,
+"kb": 10,
+"abilities": [
+"Curse",
+"Wave"
+]
+},
+{
+"id": 590,
+"name": "9th_Anniversary_Birthday_Cake",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 110,
+"speed": 3,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 591,
+"name": "9th_Anniversary_Dummy_(Enemy_Base)",
+"traits": [
+"Dojo"
+],
+"isArea": true,
+"range": 300,
+"speed": 0,
+"kb": 0,
+"abilities": []
+},
+{
+"id": 592,
+"name": "Red EnerG",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 370,
+"speed": 10,
+"kb": 3,
+"abilities": [
+"Knockback",
+"Surge"
+]
+},
+{
+"id": 593,
+"name": "Archangel Exiel",
+"traits": [
+"Angel",
+"Colossus"
+],
+"isArea": true,
+"range": 210,
+"speed": 35,
+"kb": 8,
+"abilities": [
+"Weaken",
+"Warp"
+]
+},
+{
+"id": 594,
+"name": "Big Peng Z",
+"traits": [
+"Zombie",
+"Colossus"
+],
+"isArea": true,
+"range": 150,
+"speed": 9,
+"kb": 3,
+"abilities": [
+"Revive",
+"Toxic"
+]
+},
+{
+"id": 595,
+"name": "Tiger_Doge",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 110,
+"speed": 30,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 596,
+"name": "Nana_&_Doge",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 160,
+"speed": 8,
+"kb": 3,
+"abilities": [
+"Slow",
+"Mini-Wave"
+]
+},
+{
+"id": 597,
+"name": "Emilia_&_Doge",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 200,
+"speed": 10,
+"kb": 3,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 598,
+"name": "Firecracker",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 75,
+"speed": 20,
+"kb": 1,
+"abilities": [
+"Knockback",
+"Slow"
+]
+},
+{
+"id": 599,
+"name": "Ultima Beast Naala",
+"traits": [
+"Relic",
+"Behemoth"
+],
+"isArea": true,
+"range": 400,
+"speed": 16,
+"kb": 3,
+"abilities": [
+"Freeze",
+"Curse"
+]
+},
+{
+"id": 600,
+"name": "Zapy",
+"traits": [
+"Zombie"
+],
+"isArea": false,
+"range": 300,
+"speed": 15,
+"kb": 2,
+"abilities": [
+"Revive",
+"Warp"
+]
+},
+{
+"id": 601,
+"name": "Secret_Crush_Base_(Enemy_Base)",
+"traits": [],
+"isArea": false,
+"range": 50,
+"speed": 0,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 602,
+"name": "Confessional_Tree_(Enemy_Base)",
+"traits": [],
+"isArea": false,
+"range": 50,
+"speed": 0,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 603,
+"name": "Wild Doge",
+"traits": [
+"Traitless",
+"Behemoth"
+],
+"isArea": true,
+"range": 150,
+"speed": 25,
+"kb": 3,
+"abilities": [
+"Survive",
+"Knockback"
+]
+},
+{
+"id": 604,
+"name": "Casaurian Ahirujo",
+"traits": [
+"Red",
+"Behemoth"
+],
+"isArea": true,
+"range": 250,
+"speed": 15,
+"kb": 5,
+"abilities": []
+},
+{
+"id": 605,
+"name": "Pterowl Hazuku",
+"traits": [
+"Floating",
+"Behemoth"
+],
+"isArea": true,
+"range": 480,
+"speed": 8,
+"kb": 3,
+"abilities": [
+"Surge"
+]
+},
+{
+"id": 606,
+"name": "Crustaceous Scissorex",
+"traits": [
+"Alien",
+"Behemoth"
+],
+"isArea": true,
+"range": 400,
+"speed": 6,
+"kb": 2,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 607,
+"name": "J.J. Jackrabbit",
+"traits": [
+"Red",
+"Colossus"
+],
+"isArea": true,
+"range": 150,
+"speed": 22,
+"kb": 3,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 608,
+"name": "Li'l Doge",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 100,
+"speed": 20,
+"kb": 3,
+"abilities": [
+"Dodge"
+]
+},
+{
+"id": 609,
+"name": "Golem Sunfish",
+"traits": [
+"Floating",
+"Relic"
+],
+"isArea": true,
+"range": 650,
+"speed": 3,
+"kb": 3,
+"abilities": [
+"Freeze",
+"Curse"
+]
+},
+{
+"id": 610,
+"name": "THE FOLIVOREAN",
+"traits": [
+"Aku",
+"Behemoth"
+],
+"isArea": true,
+"range": 500,
+"speed": 13,
+"kb": 2,
+"abilities": [
+"Freeze",
+"Shield"
+]
+},
+{
+"id": 611,
+"name": "Casaurian Darkjo",
+"traits": [
+"Black",
+"Behemoth"
+],
+"isArea": true,
+"range": 250,
+"speed": 20,
+"kb": 11,
+"abilities": [
+"Toxic"
+]
+},
+{
+"id": 612,
+"name": "Haniwanwan",
+"traits": [
+"Relic"
+],
+"isArea": false,
+"range": 120,
+"speed": 4,
+"kb": 1,
+"abilities": [
+"Knockback",
+"Weaken",
+"Freeze",
+"Slow",
+"Curse",
+"Mini-Wave"
+]
+},
+{
+"id": 613,
+"name": "Angelic Beast Rajakong",
+"traits": [
+"Angel",
+"Behemoth"
+],
+"isArea": true,
+"range": 200,
+"speed": 36,
+"kb": 24,
+"abilities": [
+"Wave"
+]
+},
+{
+"id": 614,
+"name": "Formicidaean Ariant",
+"traits": [
+"Zombie",
+"Behemoth"
+],
+"isArea": true,
+"range": 100,
+"speed": 7,
+"kb": 1,
+"abilities": [
+"Burrow",
+"Revive"
+]
+},
+{
+"id": 615,
+"name": "Great Angel Chibinel",
+"traits": [
+"Angel",
+"Colossus"
+],
+"isArea": true,
+"range": 350,
+"speed": 7,
+"kb": 4,
+"abilities": [
+"Weaken",
+"Slow"
+]
+},
+{
+"id": 616,
+"name": "Spiritual Yulala",
+"traits": [
+"Relic"
+],
+"isArea": true,
+"range": 200,
+"speed": 30,
+"kb": 9,
+"abilities": [
+"Curse",
+"Warp"
+]
+},
+{
+"id": 617,
+"name": "Osamu_Mikumo_&_Doge",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 100,
+"speed": 5,
+"kb": 2,
+"abilities": [
+"Wave"
+]
+},
+{
+"id": 618,
+"name": "Yuma_Kuga_&_Doge",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 200,
+"speed": 15,
+"kb": 4,
+"abilities": [
+"Strengthen"
+]
+},
+{
+"id": 619,
+"name": "Marmod",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 100,
+"speed": 11,
+"kb": 3,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 620,
+"name": "Red_Marmod",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 110,
+"speed": 8,
+"kb": 1,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 621,
+"name": "Black_Marmod",
+"traits": [
+"Black"
+],
+"isArea": true,
+"range": 120,
+"speed": 14,
+"kb": 5,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 622,
+"name": "Sakura",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 200,
+"speed": 20,
+"kb": 4,
+"abilities": [
+"Strengthen"
+]
+},
+{
+"id": 623,
+"name": "Luke",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 300,
+"speed": 22,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 624,
+"name": "Cumulus Gallus",
+"traits": [
+"Traitless",
+"Behemoth"
+],
+"isArea": true,
+"range": 320,
+"speed": 10,
+"kb": 6,
+"abilities": [
+"Strengthen"
+]
+},
+{
+"id": 625,
+"name": "10th_Anniv._Cake_Doge",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 110,
+"speed": 3,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 626,
+"name": "10th_Anniversary_Dummy_(Enemy_Base)",
+"traits": [
+"Dojo"
+],
+"isArea": true,
+"range": 300,
+"speed": 0,
+"kb": 0,
+"abilities": []
+},
+{
+"id": 627,
+"name": "Ancient Magamojoe",
+"traits": [
+"Relic",
+"Behemoth"
+],
+"isArea": true,
+"range": 250,
+"speed": 13,
+"kb": 3,
+"abilities": [
+"Curse",
+"Surge"
+]
+},
+{
+"id": 628,
+"name": "Great Ape Luza",
+"traits": [
+"Relic",
+"Behemoth"
+],
+"isArea": true,
+"range": 400,
+"speed": 6,
+"kb": 4,
+"abilities": [
+"Curse"
+]
+},
+{
+"id": 629,
+"name": "Zero Luza",
+"traits": [
+"Relic",
+"Colossus"
+],
+"isArea": true,
+"range": 450,
+"speed": 4,
+"kb": 3,
+"abilities": [
+"Curse",
+"Strengthen"
+]
+},
+{
+"id": 630,
+"name": "Metafilibuster",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 2000,
+"speed": 30,
+"kb": 200,
+"abilities": []
+},
+{
+"id": 631,
+"name": "Rabbit_Doge",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 110,
+"speed": 25,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 632,
+"name": "Origin_Base_(Enemy_Base)",
+"traits": [],
+"isArea": false,
+"range": 0,
+"speed": 0,
+"kb": 0,
+"abilities": []
+},
+{
+"id": 633,
+"name": "Killer Tank Cat",
+"traits": [
+"Black"
+],
+"isArea": true,
+"range": 110,
+"speed": 10,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 634,
+"name": "Vermilingua Rangmaster",
+"traits": [
+"Aku",
+"Behemoth"
+],
+"isArea": true,
+"range": 300,
+"speed": 10,
+"kb": 4,
+"abilities": [
+"Shield"
+]
+},
+{
+"id": 635,
+"name": "Easter Egg Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 200,
+"speed": 7,
+"kb": 3,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 636,
+"name": "Devil Wife",
+"traits": [
+"Aku"
+],
+"isArea": false,
+"range": 150,
+"speed": 18,
+"kb": 2,
+"abilities": [
+"Death Surge"
+]
+},
+{
+"id": 637,
+"name": "Omens",
+"traits": [
+"Aku",
+"Colossus"
+],
+"isArea": true,
+"range": 430,
+"speed": 7,
+"kb": 4,
+"abilities": [
+"Freeze",
+"Surge"
+]
+},
+{
+"id": 638,
+"name": "Mini White Cyclone",
+"traits": [
+"Floating"
+],
+"isArea": false,
+"range": 100,
+"speed": 5,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 639,
+"name": "Infernal Pegasus Deonil",
+"traits": [
+"Red",
+"Behemoth"
+],
+"isArea": true,
+"range": 400,
+"speed": 4,
+"kb": 4,
+"abilities": [
+"Freeze",
+"Mini-Wave"
+]
+},
+{
+"id": 640,
+"name": "Suidae Piggicus",
+"traits": [
+"Alien",
+"Behemoth"
+],
+"isArea": true,
+"range": 200,
+"speed": 8,
+"kb": 2,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 641,
+"name": "Elephantidae Papaou",
+"traits": [
+"Traitless",
+"Behemoth"
+],
+"isArea": true,
+"range": 420,
+"speed": 2,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 642,
+"name": "Infernal Tyrant Nyandam",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 400,
+"speed": 3,
+"kb": 3,
+"abilities": [
+"Toxic"
+]
+},
+{
+"id": 643,
+"name": "Grand Mage Mimon",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 400,
+"speed": 4,
+"kb": 3,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 644,
+"name": "E-644_(Enemy_Base)",
+"traits": [
+"Dojo"
+],
+"isArea": true,
+"range": 300,
+"speed": 0,
+"kb": 0,
+"abilities": []
+},
+{
+"id": 645,
+"name": "10th_and_1/2_Anniversary_Birthday_Cake",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 110,
+"speed": 3,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 646,
+"name": "Redhead Yuki Cat",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 340,
+"speed": 8,
+"kb": 3,
+"abilities": [
+"Freeze",
+"Surge"
+]
+},
+{
+"id": 647,
+"name": "EVA Unit-13",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 210,
+"speed": 8,
+"kb": 3,
+"abilities": [
+"Slow",
+"Mini-Surge"
+]
+},
+{
+"id": 648,
+"name": "Clown_Base_(Enemy_Base)",
+"traits": [],
+"isArea": false,
+"range": 50,
+"speed": 0,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 649,
+"name": "Lutrinae Gokurakko",
+"traits": [
+"Angel"
+],
+"isArea": true,
+"range": 150,
+"speed": 15,
+"kb": 3,
+"abilities": [
+"Knockback",
+"Surge Counter"
+]
+},
+{
+"id": 650,
+"name": "Iguanidae Ibilujon",
+"traits": [
+"Relic",
+"Behemoth"
+],
+"isArea": true,
+"range": 400,
+"speed": 5,
+"kb": 4,
+"abilities": [
+"Curse",
+"Surge Counter"
+]
+},
+{
+"id": 651,
+"name": "Finale_Base_(Enemy_Base)",
+"traits": [
+"Metal"
+],
+"isArea": false,
+"range": 50,
+"speed": 0,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 652,
+"name": "Lophiiformes Angaburu",
+"traits": [
+"Floating",
+"Zombie",
+"Behemoth"
+],
+"isArea": true,
+"range": 280,
+"speed": 10,
+"kb": 3,
+"abilities": [
+"Slow",
+"Revive",
+"Mini-Surge"
+]
+},
+{
+"id": 653,
+"name": "Kappy Kawano",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 380,
+"speed": 12,
+"kb": 4,
+"abilities": [
+"Surge Counter",
+"Surge"
+]
+},
+{
+"id": 654,
+"name": "Mega Baa Baa",
+"traits": [
+"Traitless",
+"Colossus"
+],
+"isArea": false,
+"range": 200,
+"speed": 8,
+"kb": 1,
+"abilities": [
+"Surge Counter"
+]
+},
+{
+"id": 655,
+"name": "Crocodylidae Kurocroc",
+"traits": [
+"Black",
+"Behemoth"
+],
+"isArea": true,
+"range": 300,
+"speed": 40,
+"kb": 20,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 656,
+"name": "Hatsune_Miku_XVI_(Enemy)",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 350,
+"speed": 10,
+"kb": 3,
+"abilities": [
+"Slow",
+"Surge"
+]
+},
+{
+"id": 657,
+"name": "Relay_Base_(Enemy_Base)",
+"traits": [],
+"isArea": false,
+"range": 50,
+"speed": 0,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 658,
+"name": "Mini Angel Cyclone",
+"traits": [
+"Angel"
+],
+"isArea": true,
+"range": 100,
+"speed": 44,
+"kb": 44,
+"abilities": [
+"Mini-Surge"
+]
+},
+{
+"id": 659,
+"name": "Ensanglion the Calamity",
+"traits": [
+"Floating",
+"Behemoth"
+],
+"isArea": true,
+"range": 350,
+"speed": 35,
+"kb": 4,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 660,
+"name": "Malevolent Mohawk Cat",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 240,
+"speed": 25,
+"kb": 30,
+"abilities": [
+"Shield",
+"Surge Counter"
+]
+},
+{
+"id": 661,
+"name": "Malevolent Eraser Cat",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 380,
+"speed": 2,
+"kb": 1,
+"abilities": [
+"Surge Counter",
+"Surge"
+]
+},
+{
+"id": 662,
+"name": "Malevolent Dark Cat",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 360,
+"speed": 7,
+"kb": 3,
+"abilities": [
+"Curse",
+"Strengthen",
+"Shield",
+"Surge Counter"
+]
+},
+{
+"id": 663,
+"name": "Malevolent Macho Leg Cat",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 100,
+"speed": 6,
+"kb": 2,
+"abilities": [
+"Surge Counter",
+"Surge"
+]
+},
+{
+"id": 664,
+"name": "Malevolent Lion Cat",
+"traits": [
+"Aku"
+],
+"isArea": false,
+"range": 100,
+"speed": 28,
+"kb": 2,
+"abilities": [
+"Shield",
+"Surge Counter"
+]
+},
+{
+"id": 665,
+"name": "Malevolent Flying Cat",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 640,
+"speed": 2,
+"kb": 3,
+"abilities": [
+"Shield",
+"Surge Counter",
+"Mini-Wave"
+]
+},
+{
+"id": 666,
+"name": "Malevolent Island Cat",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 260,
+"speed": 6,
+"kb": 1,
+"abilities": [
+"Death Surge",
+"Surge Counter"
+]
+},
+{
+"id": 667,
+"name": "Malevolent King Dragon Cat",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 785,
+"speed": 7,
+"kb": 4,
+"abilities": [
+"Shield",
+"Surge Counter"
+]
+},
+{
+"id": 668,
+"name": "Malevolent Jamiera Cat",
+"traits": [
+"Aku"
+],
+"isArea": true,
+"range": 160,
+"speed": 4,
+"kb": 4,
+"abilities": [
+"Shield",
+"Surge Counter"
+]
+},
+{
+"id": 669,
+"name": "Jar_Base_(Enemy_Base)",
+"traits": [],
+"isArea": true,
+"range": 0,
+"speed": 0,
+"kb": 0,
+"abilities": []
+},
+{
+"id": 670,
+"name": "King's Mimic",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 270,
+"speed": 8,
+"kb": 2,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 671,
+"name": "King Doge",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 1000,
+"speed": 2,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 672,
+"name": "11th Anniv. Doge Cake",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 110,
+"speed": 3,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 673,
+"name": "11th_Anniversary_Dummy_(Enemy_Base)",
+"traits": [
+"Dojo"
+],
+"isArea": true,
+"range": 300,
+"speed": 0,
+"kb": 0,
+"abilities": []
+},
+{
+"id": 674,
+"name": "Esoteric Uril",
+"traits": [
+"Relic"
+],
+"isArea": true,
+"range": 300,
+"speed": 5,
+"kb": 14,
+"abilities": [
+"Slow",
+"Curse",
+"Surge"
+]
+},
+{
+"id": 675,
+"name": "SOL DAE ROKKER",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 300,
+"speed": 16,
+"kb": 6,
+"abilities": []
+},
+{
+"id": 676,
+"name": "Dragon_Doge",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 110,
+"speed": 25,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 677,
+"name": "Sage of Mind Soractes",
+"traits": [
+"Floating",
+"Sage"
+],
+"isArea": true,
+"range": 250,
+"speed": 18,
+"kb": 10,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 678,
+"name": "Killer_Axe_Cat_Base_(Enemy_Base)",
+"traits": [],
+"isArea": true,
+"range": 2000,
+"speed": 0,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 679,
+"name": "Dogenstein",
+"traits": [
+"Traitless",
+"Sage"
+],
+"isArea": true,
+"range": 120,
+"speed": 18,
+"kb": 3,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 680,
+"name": "Tarsiriel",
+"traits": [
+"Angel",
+"Sage"
+],
+"isArea": true,
+"range": 320,
+"speed": 8,
+"kb": 6,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 681,
+"name": "Artillery_Dummy_(Enemy_Base)",
+"traits": [
+"Dojo"
+],
+"isArea": true,
+"range": 450,
+"speed": 0,
+"kb": 0,
+"abilities": []
+},
+{
+"id": 682,
+"name": "Dark Dober",
+"traits": [
+"Black",
+"Sage"
+],
+"isArea": true,
+"range": 200,
+"speed": 12,
+"kb": 6,
+"abilities": [
+"Weaken",
+"Mini-Wave"
+]
+},
+{
+"id": 683,
+"name": "Gigahaniwan",
+"traits": [
+"Relic",
+"Colossus"
+],
+"isArea": true,
+"range": 350,
+"speed": 5,
+"kb": 1,
+"abilities": [
+"Knockback",
+"Weaken",
+"Freeze",
+"Slow",
+"Curse",
+"Wave"
+]
+},
+{
+"id": 684,
+"name": "Mysterious Calamity",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 250,
+"speed": 3,
+"kb": 3,
+"abilities": [
+"Weaken",
+"Strengthen"
+]
+},
+{
+"id": 685,
+"name": "Possessed King Doge",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 1000,
+"speed": 2,
+"kb": 3,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 686,
+"name": "Voluptuous Peony - Daji",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 300,
+"speed": 8,
+"kb": 8,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 687,
+"name": "Madhead",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 200,
+"speed": 10,
+"kb": 3,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 688,
+"name": "Kenshin Himura",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 435,
+"speed": 9,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 689,
+"name": "Sanosuke Sagara",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 340,
+"speed": 10,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 690,
+"name": "Aoshi Shinomori",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 400,
+"speed": 15,
+"kb": 5,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 691,
+"name": "Hajime Saito",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 200,
+"speed": 55,
+"kb": 10,
+"abilities": []
+},
+{
+"id": 692,
+"name": "Doctor K.O.",
+"traits": [
+"Red",
+"Sage"
+],
+"isArea": true,
+"range": 170,
+"speed": 28,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 693,
+"name": "Wave_Dummy_(Enemy_Base)",
+"traits": [
+"Dojo"
+],
+"isArea": true,
+"range": 300,
+"speed": 0,
+"kb": 0,
+"abilities": [
+"Wave"
+]
+},
+{
+"id": 694,
+"name": "Techn-Old Hyena",
+"traits": [
+"Alien",
+"Sage"
+],
+"isArea": true,
+"range": 350,
+"speed": 9,
+"kb": 3,
+"abilities": [
+"Warp",
+"Surge Counter"
+]
+},
+{
+"id": 695,
+"name": "Log",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 75,
+"speed": 25,
+"kb": 3,
+"abilities": [
+"Knockback",
+"Slow"
+]
+},
+{
+"id": 696,
+"name": "Boulder",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 100,
+"speed": 15,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 697,
+"name": "Diabrollow",
+"traits": [
+"Aku",
+"Sage"
+],
+"isArea": true,
+"range": 150,
+"speed": 77,
+"kb": 15,
+"abilities": [
+"Knockback",
+"Mini-Wave"
+]
+},
+{
+"id": 698,
+"name": "Oldstrich",
+"traits": [
+"Zombie",
+"Sage"
+],
+"isArea": true,
+"range": 300,
+"speed": 22,
+"kb": 4,
+"abilities": [
+"Revive",
+"Toxic"
+]
+},
+{
+"id": 699,
+"name": "Sage of Life Dr. Nova",
+"traits": [
+"Relic",
+"Sage"
+],
+"isArea": true,
+"range": 350,
+"speed": 7,
+"kb": 8,
+"abilities": [
+"Slow",
+"Curse",
+"Explosion Wave"
+]
+},
+{
+"id": 700,
+"name": "Idi:Ne",
+"traits": [
+"Relic"
+],
+"isArea": true,
+"range": 150,
+"speed": 44,
+"kb": 20,
+"abilities": [
+"Curse"
+]
+},
+{
+"id": 701,
+"name": "Cafeteria Cat",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 150,
+"speed": 25,
+"kb": 8,
+"abilities": [
+"Curse"
+]
+},
+{
+"id": 702,
+"name": "Bannerman Doge",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 110,
+"speed": 5,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 703,
+"name": "Commander Face",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 340,
+"speed": 8,
+"kb": 5,
+"abilities": []
+},
+{
+"id": 704,
+"name": "Commander Nyandam",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 500,
+"speed": 2,
+"kb": 4,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 705,
+"name": "Commander Hannya",
+"traits": [
+"Red",
+"Black"
+],
+"isArea": true,
+"range": 800,
+"speed": 3,
+"kb": 3,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 706,
+"name": "Commander Bun Bun",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 200,
+"speed": 23,
+"kb": 10,
+"abilities": []
+},
+{
+"id": 707,
+"name": "Revolutionary Nobunaga",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 410,
+"speed": 7,
+"kb": 3,
+"abilities": [
+"Freeze",
+"Surge Counter"
+]
+},
+{
+"id": 708,
+"name": "12th_Anniversary_Birthday_Cake",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 110,
+"speed": 3,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 709,
+"name": "12th_Anniversary_Dummy_(Enemy_Base)",
+"traits": [
+"Dojo"
+],
+"isArea": true,
+"range": 300,
+"speed": 0,
+"kb": 0,
+"abilities": []
+},
+{
+"id": 710,
+"name": "Catclaw_Castle_(Enemy_Base)",
+"traits": [],
+"isArea": false,
+"range": 50,
+"speed": 0,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 711,
+"name": "Snache Doge",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 110,
+"speed": 25,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 712,
+"name": "Mystery Snowmound",
+"traits": [
+"Black"
+],
+"isArea": true,
+"range": 145,
+"speed": 36,
+"kb": 2,
+"abilities": [
+"Strengthen"
+]
+},
+{
+"id": 713,
+"name": "Prof. Owlbrowley",
+"traits": [
+"Floating",
+"Black",
+"Sage"
+],
+"isArea": true,
+"range": 360,
+"speed": 20,
+"kb": 1,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 714,
+"name": "Xenobeast Bunaglios",
+"traits": [
+"Alien",
+"Behemoth"
+],
+"isArea": true,
+"range": 400,
+"speed": 11,
+"kb": 4,
+"abilities": [
+"Critical",
+"Apostle Killer",
+"Explosion Wave"
+]
+},
+{
+"id": 715,
+"name": "Shachiko",
+"traits": [
+"Relic",
+"Sage"
+],
+"isArea": true,
+"range": 190,
+"speed": 40,
+"kb": 30,
+"abilities": [
+"Curse"
+]
+},
+{
+"id": 716,
+"name": "Holy Valkyrie Cat",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 350,
+"speed": 20,
+"kb": 12,
+"abilities": [
+"Freeze",
+"Strengthen"
+]
+},
+{
+"id": 717,
+"name": "Awakened Bahamut Cat",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 300,
+"speed": 60,
+"kb": 12,
+"abilities": [
+"Explosion Wave"
+]
+},
+{
+"id": 718,
+"name": "Choco Capsule",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 200,
+"speed": 35,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 719,
+"name": "Killer Gross Cat",
+"traits": [
+"Black"
+],
+"isArea": false,
+"range": 700,
+"speed": 10,
+"kb": 1,
+"abilities": [
+"Knockback"
+]
+},
+{
+"id": 720,
+"name": "Talent_Orb_Castle_(Enemy_Base)",
+"traits": [
+"Dojo"
+],
+"isArea": false,
+"range": 10,
+"speed": 0,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 721,
+"name": "Perry Duche",
+"traits": [
+"Black"
+],
+"isArea": true,
+"range": 250,
+"speed": 10,
+"kb": 4,
+"abilities": [
+"Explosion Wave"
+]
+},
+{
+"id": 722,
+"name": "Puffzerker",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 150,
+"speed": 40,
+"kb": 400,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 723,
+"name": "Commander Ostromeda",
+"traits": [
+"Alien"
+],
+"isArea": true,
+"range": 290,
+"speed": 16,
+"kb": 5,
+"abilities": [
+"Warp"
+]
+},
+{
+"id": 724,
+"name": "Baki Hanma",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 300,
+"speed": 12,
+"kb": 3,
+"abilities": [
+"Knockback",
+"Critical",
+"Zombie Killer"
+]
+},
+{
+"id": 725,
+"name": "Retsu Kaioh",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 470,
+"speed": 12,
+"kb": 4,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 726,
+"name": "Kaoru Hanayama",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 300,
+"speed": 7,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 727,
+"name": "Katsumi Orochi",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 450,
+"speed": 9,
+"kb": 5,
+"abilities": []
+},
+{
+"id": 728,
+"name": "Jack Hammer",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 350,
+"speed": 8,
+"kb": 4,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 729,
+"name": "Sage of Logic Newtone",
+"traits": [
+"Red",
+"Sage"
+],
+"isArea": true,
+"range": 700,
+"speed": 4,
+"kb": 8,
+"abilities": [
+"Slow",
+"Strengthen",
+"Mini-Wave"
+]
+},
+{
+"id": 730,
+"name": "Sonic",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 120,
+"speed": 95,
+"kb": 8,
+"abilities": [
+"Knockback",
+"Slow"
+]
+},
+{
+"id": 731,
+"name": "Tails",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 440,
+"speed": 15,
+"kb": 4,
+"abilities": [
+"Weaken",
+"Explosion Wave"
+]
+},
+{
+"id": 732,
+"name": "Knuckles",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 350,
+"speed": 35,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 733,
+"name": "Shadow",
+"traits": [
+"Black"
+],
+"isArea": true,
+"range": 500,
+"speed": 95,
+"kb": 5,
+"abilities": []
+},
+{
+"id": 734,
+"name": "Goal_Plate_Base_(Enemy_Base)",
+"traits": [],
+"isArea": false,
+"range": 50,
+"speed": 0,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 735,
+"name": "Ange Lackey",
+"traits": [
+"Angel",
+"Sage"
+],
+"isArea": true,
+"range": 600,
+"speed": 6,
+"kb": 3,
+"abilities": [
+"Knockback",
+"Explosion Wave"
+]
+},
+{
+"id": 736,
+"name": "South Seas Doge",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 110,
+"speed": 8,
+"kb": 3,
+"abilities": [
+"Knockback",
+"Survive",
+"Apostle Killer"
+]
+},
+{
+"id": 737,
+"name": "South Seas Otter",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 300,
+"speed": 5,
+"kb": 3,
+"abilities": [
+"Slow",
+"Mini-Surge"
+]
+},
+{
+"id": 738,
+"name": "Parasol_Base_(Enemy_Base)",
+"traits": [],
+"isArea": true,
+"range": 2950,
+"speed": 0,
+"kb": 1,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 739,
+"name": "Freeze_Dummy_(Enemy_Base)",
+"traits": [
+"Dojo"
+],
+"isArea": true,
+"range": 800,
+"speed": 0,
+"kb": 0,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 740,
+"name": "Mass Production EVA",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 410,
+"speed": 8,
+"kb": 3,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 741,
+"name": "Whiskingmeister",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 200,
+"speed": 5,
+"kb": 5,
+"abilities": [
+"Knockback",
+"Wave"
+]
+},
+{
+"id": 742,
+"name": "Fireworks Gang",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 250,
+"speed": 7,
+"kb": 5,
+"abilities": [
+"Mini-Surge"
+]
+},
+{
+"id": 743,
+"name": "Jumbo Jones",
+"traits": [
+"Angel",
+"Colossus"
+],
+"isArea": true,
+"range": 450,
+"speed": 35,
+"kb": 5,
+"abilities": [
+"Slow",
+"Wave"
+]
+},
+{
+"id": 744,
+"name": "Deathshund",
+"traits": [
+"Zombie"
+],
+"isArea": true,
+"range": 440,
+"speed": 8,
+"kb": 1,
+"abilities": [
+"Freeze",
+"Burrow",
+"Revive"
+]
+},
+{
+"id": 745,
+"name": "Darkmadillo",
+"traits": [
+"Black"
+],
+"isArea": true,
+"range": 250,
+"speed": 10,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 746,
+"name": "Manager_Cat_&_Clerk_Cat_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 130,
+"speed": 10,
+"kb": 2,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 747,
+"name": "Enemy 747",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 110,
+"speed": 5,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 748,
+"name": "Cammy",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 375,
+"speed": 20,
+"kb": 5,
+"abilities": []
+},
+{
+"id": 749,
+"name": "Juri",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 430,
+"speed": 20,
+"kb": 4,
+"abilities": [
+"Freeze",
+"Slow"
+]
+},
+{
+"id": 750,
+"name": "Kaijin Doge",
+"traits": [
+"Red",
+"Fiend"
+],
+"isArea": false,
+"range": 120,
+"speed": 30,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 751,
+"name": "Malizabeth",
+"traits": [
+"Aku",
+"Fiend"
+],
+"isArea": true,
+"range": 150,
+"speed": 6,
+"kb": 1,
+"abilities": [
+"Shield",
+"Mini-Wave"
+]
+},
+{
+"id": 752,
+"name": "Madam Peng",
+"traits": [
+"Black",
+"Fiend"
+],
+"isArea": true,
+"range": 130,
+"speed": 12,
+"kb": 3,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 753,
+"name": "Baron Face",
+"traits": [
+"Red",
+"Floating",
+"Fiend"
+],
+"isArea": true,
+"range": 340,
+"speed": 2,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 754,
+"name": "Archbaron Face",
+"traits": [
+"Red",
+"Floating",
+"Fiend"
+],
+"isArea": true,
+"range": 490,
+"speed": 2,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 755,
+"name": "Countess Koryessa",
+"traits": [
+"Black",
+"Fiend"
+],
+"isArea": true,
+"range": 200,
+"speed": 7,
+"kb": 5,
+"abilities": [
+"Wave"
+]
+},
+{
+"id": 756,
+"name": "High Countess Koryessa",
+"traits": [
+"Black",
+"Fiend"
+],
+"isArea": true,
+"range": 600,
+"speed": 7,
+"kb": 5,
+"abilities": [
+"Wave"
+]
+},
+{
+"id": 757,
+"name": "Emperor Warumongar",
+"traits": [
+"Aku",
+"Fiend"
+],
+"isArea": true,
+"range": 420,
+"speed": 5,
+"kb": 3,
+"abilities": [
+"Shield",
+"Explosion Wave"
+]
+},
+{
+"id": 758,
+"name": "Grand Emperor Warumongar",
+"traits": [
+"Aku",
+"Fiend"
+],
+"isArea": true,
+"range": 420,
+"speed": 5,
+"kb": 3,
+"abilities": [
+"Explosion Wave"
+]
+},
+{
+"id": 759,
+"name": "13th Anniv. Doge Cake",
+"traits": [
+"Metal"
+],
+"isArea": true,
+"range": 110,
+"speed": 3,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 760,
+"name": "Horse Doge",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 110,
+"speed": 25,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 761,
+"name": "Rui",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 450,
+"speed": 6,
+"kb": 3,
+"abilities": [
+"Slow"
+]
+},
+{
+"id": 762,
+"name": "Enmu",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 400,
+"speed": 7,
+"kb": 5,
+"abilities": [
+"Freeze"
+]
+},
+{
+"id": 763,
+"name": "Akaza",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 350,
+"speed": 8,
+"kb": 4,
+"abilities": [
+"Explosion Wave"
+]
+},
+{
+"id": 764,
+"name": "Demon Doge",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 120,
+"speed": 10,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 765,
+"name": "Demon Gory",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 150,
+"speed": 15,
+"kb": 3,
+"abilities": [
+"Mini-Wave"
+]
+},
+{
+"id": 766,
+"name": "Demon Teacher Bear",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 350,
+"speed": 8,
+"kb": 2,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 767,
+"name": "Eyes_of_Forced_Unconscious_Sleep_(Enemy_Base)",
+"traits": [],
+"isArea": false,
+"range": 50,
+"speed": 0,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 768,
+"name": "Le'Prude",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 250,
+"speed": 6,
+"kb": 1,
+"abilities": [
+"Explosion Wave"
+]
+},
+{
+"id": 769,
+"name": "Poultrio",
+"traits": [
+"Red",
+"Black",
+"Aku"
+],
+"isArea": true,
+"range": 290,
+"speed": 60,
+"kb": 20,
+"abilities": [
+"Knockback",
+"Castle Breaker",
+"Shield",
+"Explosion Wave"
+]
+},
+{
+"id": 770,
+"name": "Killer Cowbird Cat",
+"traits": [
+"Floating",
+"Black"
+],
+"isArea": false,
+"range": 270,
+"speed": 7,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 771,
+"name": "The Golden Face",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 355,
+"speed": 29,
+"kb": 2,
+"abilities": [
+"Critical",
+"Knockback"
+]
+},
+{
+"id": 772,
+"name": "Sage of Selection Darvin",
+"traits": [
+"Alien",
+"Sage"
+],
+"isArea": true,
+"range": 350,
+"speed": 4,
+"kb": 4,
+"abilities": [
+"Curse",
+"Delay"
+]
+},
+{
+"id": 773,
+"name": "Nyanko_Village_Cat_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 260,
+"speed": 8,
+"kb": 3,
+"abilities": [
+"Freeze",
+"Explosion Wave"
+]
+},
+{
+"id": 774,
+"name": "Naughty_Woody_(Enemy_Base)",
+"traits": [],
+"isArea": true,
+"range": 2000,
+"speed": 0,
+"kb": 1,
+"abilities": [
+"Knockback",
+"Slow"
+]
+},
+{
+"id": 775,
+"name": "Possessed_Silver_Nyanko_Ranger",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 240,
+"speed": 16,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 776,
+"name": "Possessed_Gold_Nyanko_Ranger",
+"traits": [
+"Floating"
+],
+"isArea": true,
+"range": 310,
+"speed": 10,
+"kb": 3,
+"abilities": [
+"Knockback",
+"Wave"
+]
+},
+{
+"id": 777,
+"name": "Enchanting_Mage_Vibon",
+"traits": [
+"Angel",
+"Fiend"
+],
+"isArea": true,
+"range": 450,
+"speed": 4,
+"kb": 4,
+"abilities": [
+"Weaken",
+"Surge"
+]
+},
+{
+"id": 778,
+"name": "True Assassin",
+"traits": [
+"Black"
+],
+"isArea": true,
+"range": 500,
+"speed": 40,
+"kb": 5,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 779,
+"name": "Inky Doge",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 110,
+"speed": 35,
+"kb": 3,
+"abilities": []
+},
+{
+"id": 780,
+"name": "Clyde Gory",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 150,
+"speed": 10,
+"kb": 2,
+"abilities": []
+},
+{
+"id": 781,
+"name": "Pinky Bear",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 350,
+"speed": 4,
+"kb": 6,
+"abilities": [
+"Knockback",
+"Slow"
+]
+},
+{
+"id": 782,
+"name": "Blinky Kory",
+"traits": [
+"Red"
+],
+"isArea": true,
+"range": 200,
+"speed": 7,
+"kb": 5,
+"abilities": [
+"Slow",
+"Mini-Wave"
+]
+},
+{
+"id": 783,
+"name": "Giant PAC-MAN",
+"traits": [
+"Traitless"
+],
+"isArea": false,
+"range": 250,
+"speed": 30,
+"kb": 4,
+"abilities": []
+},
+{
+"id": 784,
+"name": "Cherries_(Enemy_Base)",
+"traits": [],
+"isArea": false,
+"range": 50,
+"speed": 0,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 785,
+"name": "Gavel_Base_(Enemy_Base)",
+"traits": [],
+"isArea": false,
+"range": 0,
+"speed": 0,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 786,
+"name": "Marquis Clionius",
+"traits": [
+"Aku",
+"Sage"
+],
+"isArea": true,
+"range": 600,
+"speed": 4,
+"kb": 4,
+"abilities": [
+"Freeze",
+"Shield",
+"Delay"
+]
+},
+{
+"id": 787,
+"name": "Speaker_Base_(Enemy_Base)",
+"traits": [
+"Dojo"
+],
+"isArea": false,
+"range": 10,
+"speed": 0,
+"kb": 1,
+"abilities": []
+},
+{
+"id": 788,
+"name": "Anji_Yukyuzan_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 360,
+"speed": 8,
+"kb": 2,
+"abilities": [
+"Knockback",
+"Wave"
+]
+},
+{
+"id": 789,
+"name": "Sojiro_Seta_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 400,
+"speed": 10,
+"kb": 5,
+"abilities": [
+"Weaken"
+]
+},
+{
+"id": 790,
+"name": "Makoto_Shishio_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 350,
+"speed": 10,
+"kb": 1,
+"abilities": [
+"Slow",
+"Strengthen",
+"Explosion Wave"
+]
+},
+{
+"id": 791,
+"name": "Seijuro_Hiko_(Enemy)",
+"traits": [
+"Traitless"
+],
+"isArea": true,
+"range": 410,
+"speed": 12,
+"kb": 2,
+"abilities": [
+"Freeze",
+"Strengthen"
+]
+}
+]
+}

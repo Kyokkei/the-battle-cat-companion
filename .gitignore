@@ -1,0 +1,12 @@
+*.iml
+.gradle/
+/local.properties
+/.idea/
+/build/
+**/build/
+.cxx/
+.externalNativeBuild/
+.DS_Store
+
+# Local agent workspace data (session state, not source)
+.workbuddy-ai/

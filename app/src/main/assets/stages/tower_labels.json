@@ -1,0 +1,8 @@
+{
+  "source": "User-supplied tower grouping (2026-10-29). The local stage file stores only the floor label, so the same floor number exists once per tower and identical names could not be told apart in the candidate list. Ranges are inclusive decoded stage IDs (the base-36 'id' column converted to a number).",
+  "groups": [
+    { "name": "Heavenly Tower", "firstStageId": 6000000, "lastStageId": 6000049 },
+    { "name": "Inferno Tower", "firstStageId": 6006000, "lastStageId": 6006049 },
+    { "name": "Heavenly Tower (Alt)", "firstStageId": 6010000, "lastStageId": 6010049 }
+  ]
+}

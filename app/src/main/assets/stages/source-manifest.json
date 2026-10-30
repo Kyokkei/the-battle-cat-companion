@@ -1,0 +1,10 @@
+{
+  "source": "Battle Cats Wiki on Miraheze",
+  "sourceUrl": "https://battlecats.miraheze.org/",
+  "attribution": "Battle Cats Wiki contributors",
+  "license": "CC BY-SA 4.0",
+  "snapshotCommit": "not supplied",
+  "snapshotDate": "not supplied",
+  "sourceFiles": ["stage.tsv", "tstage.tsv", "stage_scheme.json", "../enemies/enemy_*.png"],
+  "note": "Local snapshot was supplied by the user. Runtime parser records SHA-256 hashes for the TSV and schema inputs. Enemy image assets are displayed as user-supplied in-game reference sprites."
+}

@@ -1,0 +1,59 @@
+{
+  "sourceProject": "Fukidashi MCP local Android OCR model setup",
+  "sourceRepository": "https://github.com/Kyokkei/fukidashi-mcp",
+  "sourcePath": "D:/coding/fukidashi-mcp/android/app/src/main/java/com/fukidashi/probe",
+  "copiedFrom": "E:/Fukidashi/models/ocr",
+  "sourceSnapshotDate": "2026-10-29",
+  "license": "Apache-2.0 (Fukidashi Android README attributes the source model pages as Apache-2.0)",
+  "models": [
+    {
+      "asset": "shared/ppocrv5_det.onnx",
+      "source": "ppocr-v5-onnx/ch_PP-OCRv5_mobile_det.onnx",
+      "size": 4819576,
+      "sha256": "4d97c44a20d30a81aad087d6a396b08f786c4635742afc391f6621f5c6ae78ae",
+      "license": "Apache-2.0 per source model page"
+    },
+    {
+      "asset": "en/PP-OCRv6_small_rec.onnx",
+      "source": "ppocr-v6-onnx/PP-OCRv6_small_rec.onnx",
+      "size": 21159378,
+      "sha256": "5435fd747c9e0efe15a96d0b378d5bd157e9492ed8fd80edf08f30d02fa24634",
+      "license": "Apache-2.0 per source model page"
+    },
+    {
+      "asset": "en/ppocrv6_dict.txt",
+      "source": "ppocr-v6-onnx/PP-OCRv6_small_rec.txt",
+      "size": 74947,
+      "sha256": "b5f2bfe2bdd9448429e3e82b51c789775d9b42f2403d082b00662eb77e401c5d",
+      "license": "Apache-2.0 per source model page"
+    },
+    {
+      "asset": "ja/encoder.onnx",
+      "source": "manga-ocr-mobile-onnx/encoder.onnx",
+      "size": 17070003,
+      "sha256": "d1fb455a07c1508cc56a4f4e15e2ed74aca9a4d78fd220ecc0ff39625d67e1b3",
+      "license": "Apache-2.0 per source model page"
+    },
+    {
+      "asset": "ja/decoder_init.onnx",
+      "source": "manga-ocr-mobile-onnx/decoder_init.onnx",
+      "size": 24875052,
+      "sha256": "612f97e22848620fb36fcac611467689cb4213d91f2d84f6a19042ad57d475f1",
+      "license": "Apache-2.0 per source model page"
+    },
+    {
+      "asset": "ja/decoder_step.onnx",
+      "source": "manga-ocr-mobile-onnx/decoder_step.onnx",
+      "size": 22776797,
+      "sha256": "a244b814a3a669190f9eae737960997633597cfa055fa186347e872bee834bc9",
+      "license": "Apache-2.0 per source model page"
+    },
+    {
+      "asset": "ja/vocab.txt",
+      "source": "manga-ocr-mobile-onnx/vocab.txt",
+      "size": 37193,
+      "sha256": "879d9a69df070dbdf143f64bb3daf73d367741980f18a2f6d08a12e68a598a11",
+      "license": "Apache-2.0 per source model page"
+    }
+  ]
+}

@@ -1,0 +1,699 @@
+package com.projectnyanko.companion.ui.stage
+
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.Service
+import android.content.Context
+import android.content.Intent
+import android.content.pm.ServiceInfo
+import android.graphics.Bitmap
+import android.graphics.PixelFormat
+import android.graphics.drawable.Icon
+import androidx.core.graphics.createBitmap
+import android.hardware.display.DisplayManager
+import android.hardware.display.VirtualDisplay
+import android.media.Image
+import android.media.ImageReader
+import android.media.projection.MediaProjection
+import android.media.projection.MediaProjectionManager
+import android.os.Build
+import android.os.Handler
+import android.os.HandlerThread
+import android.os.IBinder
+import android.util.DisplayMetrics
+import android.util.Log
+import android.view.Display
+import android.view.WindowManager
+import com.projectnyanko.companion.BattleCatsApplication
+import com.projectnyanko.companion.domain.stage.StageLocale
+import com.projectnyanko.companion.domain.stage.OcrStageLine
+import com.projectnyanko.companion.domain.stage.StageCandidate
+import com.projectnyanko.companion.domain.stage.StageMatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
+import kotlin.math.abs
+
+/** Holds the user-approved screen stream and reads a frame only after the bubble is tapped. */
+class StageCaptureService : Service() {
+    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    private val ocrLock = Any()
+    private var ocrEngine: StageOcrEngine? = null
+    private var projection: MediaProjection? = null
+    private var virtualDisplay: VirtualDisplay? = null
+    private var imageReader: ImageReader? = null
+    private var displayManager: DisplayManager? = null
+    private var displayListener: DisplayManager.DisplayListener? = null
+    private var captureWidth = 0
+    private var captureHeight = 0
+    private var captureDensity = 0
+    private var captureThread: HandlerThread? = null
+    private var captureHandler: Handler? = null
+    @Volatile
+    private var captureRequested = false
+
+    @Volatile
+    private var captureInProgress = false
+
+    /**
+     * Timestamp of the newest frame this session has delivered, in the frame clock's own units.
+     *
+     * A mirroring surface that is re-attached can hand back the composition it was showing before it
+     * was detached. Accepting that frame made the helper OCR a screen the player had already left —
+     * it reported `Slumbering Cavern` and `Cozy Corpses` while `Sodden Bones` was on screen, and
+     * garbage such as `cYanmaGentaYellow` when the stale composition had the card row elsewhere.
+     * Comparing timestamps is clock-base independent and needs no knowledge of the device, so only a
+     * frame newer than everything seen before the tap can reach OCR.
+     */
+    @Volatile
+    private var newestFrameTimestamp = Long.MIN_VALUE
+
+    /** Frames older than this were composed before the bubble was hidden, so they are not used. */
+    @Volatile
+    private var acceptFromTimestamp = Long.MIN_VALUE
+
+    /** False until [hideBubbleAndAccept] runs; frames arriving in the probe window are only drained. */
+    @Volatile
+    private var acceptingFrames = false
+
+    private var staleFrameCount = 0
+
+    /** How many times this tap has re-captured because the frame held no stage name. */
+    private var ocrRetries = 0
+
+    private var captureAttempt = 0
+
+    private var isUserStopping = false
+    private var projectionActive = false
+    private var locale = StageLocale.EN
+    private var projectionCallback: MediaProjection.Callback? = null
+
+    override fun onCreate() {
+        super.onCreate()
+        displayManager = getSystemService(DisplayManager::class.java)
+        createNotificationChannel()
+        captureThread = HandlerThread("stage-capture").also { it.start() }
+        captureHandler = Handler(captureThread!!.looper)
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        locale = intent?.getStringExtra(StageOverlayService.EXTRA_REGION)?.toLocale() ?: locale
+        try {
+            when (intent?.action) {
+                ACTION_ENABLE -> enableProjection(intent)
+                ACTION_CAPTURE -> requestCapture()
+                ACTION_STOP -> {
+                    isUserStopping = true
+                    stopSelf()
+                }
+            }
+        } catch (error: Exception) {
+            StageOverlayService.showMessage(
+                this,
+                locale.name,
+                error.message?.let { "Stage capture failed: $it" } ?: "Stage capture failed. Return to the app and retry.",
+            )
+            stopSelf()
+        }
+        return START_NOT_STICKY
+    }
+
+    override fun onBind(intent: Intent?): IBinder? = null
+
+    /**
+     * Swiping the task away must not end the session: the projection belongs to this service, not to
+     * the activity. Logged because if a device still drops it, this line tells us whether the task
+     * removal reached the service at all.
+     */
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        Log.i(TAG, "task removed; keeping the screen-share session")
+        super.onTaskRemoved(rootIntent)
+    }
+
+    override fun onDestroy() {
+        isRunning = false
+        projectionActive = false
+        isProjectionActive = false
+        captureRequested = false
+        displayListener?.let { listener -> displayManager?.unregisterDisplayListener(listener) }
+        displayListener = null
+        releaseProjection()
+        captureThread?.quitSafely()
+        captureThread = null
+        captureHandler = null
+        serviceScope.cancel()
+        val engineToClose = ocrEngine
+        ocrEngine = null
+        if (engineToClose != null) {
+            Thread({ synchronized(ocrLock) { engineToClose.close() } }, "stage-ocr-release").start()
+        }
+        stopForeground(STOP_FOREGROUND_REMOVE)
+        super.onDestroy()
+    }
+
+    private fun enableProjection(intent: Intent?) {
+        val resultCode = intent?.getIntExtra(EXTRA_RESULT_CODE, 0) ?: 0
+        val resultData = intent?.parcelableIntent(EXTRA_RESULT_DATA)
+        if (resultCode == 0 || resultData == null) {
+            StageOverlayService.showMessage(this, locale.name, "Screen capture permission was not received. Tap the helper to try again.")
+            stopSelf()
+            return
+        }
+
+        startForegroundProjectionNotification()
+        val manager = getSystemService(MediaProjectionManager::class.java)
+        projection = runCatching { manager.getMediaProjection(resultCode, resultData) }
+            .getOrElse {
+                StageOverlayService.showMessage(this, locale.name, "Android could not start screen capture. Tap the helper to try again.")
+                stopSelf()
+                return
+            }
+        val activeProjection = projection ?: run {
+            stopSelf()
+            return
+        }
+        projectionCallback = object : MediaProjection.Callback() {
+            override fun onStop() {
+                if (!isUserStopping) {
+                    StageOverlayService.showMessage(this@StageCaptureService, locale.name, "Android ended screen sharing. Start the helper again to continue.")
+                }
+                stopSelf()
+            }
+        }.also { activeProjection.registerCallback(it, captureHandler) }
+        val (width, height, density) = displaySize()
+        captureWidth = width
+        captureHeight = height
+        captureDensity = density
+        imageReader = ImageReader.newInstance(width, height, PixelFormat.RGBA_8888, 2)
+        virtualDisplay = activeProjection.createVirtualDisplay(
+            "Battle Cats stage helper",
+            width,
+            height,
+            density,
+            DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
+            imageReader!!.surface,
+            null,
+            captureHandler,
+        )
+        if (virtualDisplay == null) {
+            StageOverlayService.showMessage(this, locale.name, "Android could not start the screen session. Tap Start helper and approve it again.")
+            stopSelf()
+            return
+        }
+        virtualDisplay?.setSurface(null)
+        projectionActive = true
+        isProjectionActive = true
+        isRunning = true
+        registerDisplayListener()
+        StageOverlayService.startBubble(this, locale)
+    }
+
+    /** Keeps the last unreadable frame so a failure can be inspected instead of guessed at. */
+    private fun dumpFrame(bitmap: Bitmap, index: Int) {
+        runCatching {
+            val dir = getExternalFilesDir(null) ?: filesDir
+            java.io.File(dir, "unread-frame-$index.png").outputStream().use { output ->
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, output)
+            }
+        }
+    }
+
+    private fun requestCapture() {
+        if (!projectionActive || projection == null || imageReader == null || virtualDisplay == null) {
+            Log.w(TAG, "capture requested without a live projection session")
+            StageOverlayService.showMessage(
+                this,
+                locale.name,
+                "The helper session ended. Return to the app and press Start helper to approve a new session.",
+            )
+            return
+        }
+        if (captureInProgress || captureRequested) {
+            Log.i(TAG, "capture already running; ignoring tap")
+            return
+        }
+        Log.i(TAG, "capture requested")
+        captureAttempt = 0
+        staleFrameCount = 0
+        ocrRetries = 0
+        acceptingFrames = false
+        // The bubble is deliberately left visible here. See [hideBubbleAndAccept].
+        captureHandler?.postDelayed({ attachCaptureSurface() }, CAPTURE_SETTLE_DELAY_MS)
+    }
+
+    /**
+     * Attaches the reader surface, then hides the bubble only once the surface is live.
+     *
+     * Order matters and was the cause of "the first four taps do nothing". A mirroring surface that
+     * is attached to a display whose content is already static can only hand back the composition it
+     * last rendered, so hiding the bubble *before* attaching composed the change while nothing was
+     * listening and the surface had nothing newer to replay. Attaching first and hiding afterwards
+     * makes the hide a real composition change on a live surface, so its frame is both current and
+     * free of the overlay.
+     *
+     * A failed attempt is retried: the bubble is shown again first, so the next hide is another real
+     * composition change rather than a no-op.
+     */
+    private fun attachCaptureSurface() {
+        val reader = imageReader
+        val display = virtualDisplay
+        if (!projectionActive || projection == null || reader == null || display == null) {
+            abortCapture("The helper session ended. Return to the app and press Start helper to approve a new session.")
+            return
+        }
+        if (captureInProgress) return
+        if (captureAttempt >= MAX_CAPTURE_ATTEMPTS) {
+            abortCapture(
+                if (staleFrameCount > 0) {
+                    "Only a stale frame arrived. Return to the stage screen and tap the paw again."
+                } else {
+                    "No frame arrived. Return to the game and tap the paw again."
+                },
+            )
+            return
+        }
+        captureAttempt += 1
+        val attempt = captureAttempt
+        Log.i(TAG, "waiting for a frame (attempt $attempt/$MAX_CAPTURE_ATTEMPTS)")
+        if (attempt > 1) StageOverlayService.startBubble(this, locale)
+        runCatching {
+            while (true) {
+                val stale = reader.acquireLatestImage() ?: break
+                newestFrameTimestamp = maxOf(newestFrameTimestamp, stale.timestamp)
+                stale.close()
+            }
+            acceptingFrames = false
+            captureRequested = true
+            reader.setOnImageAvailableListener(::onImageAvailable, captureHandler)
+            display.setSurface(null)
+            display.setSurface(reader.surface)
+        }.onFailure { error ->
+            Log.w(TAG, "attaching the capture surface failed", error)
+            captureRequested = false
+            reader.setOnImageAvailableListener(null, null)
+            runCatching { display.setSurface(null) }
+            StageOverlayService.showMessage(this, locale.name, error.message?.let { "Could not capture a still: $it" } ?: "Could not capture a still. Tap again.")
+        }
+        captureHandler?.postDelayed({ hideBubbleAndAccept(attempt) }, CAPTURE_PROBE_DELAY_MS)
+        captureHandler?.postDelayed({
+            if (attempt == captureAttempt && captureRequested && !captureInProgress) {
+                Log.w(TAG, "no frame on attempt $attempt; retrying")
+                captureRequested = false
+                reader.setOnImageAvailableListener(null, null)
+                runCatching { display.setSurface(null) }
+                captureHandler?.postDelayed({ attachCaptureSurface() }, CAPTURE_RETRY_DELAY_MS)
+            }
+        }, CAPTURE_ATTEMPT_TIMEOUT_MS)
+    }
+
+    /**
+     * Hides the bubble now that the mirroring surface is live, and starts accepting frames newer
+     * than everything seen so far. The snapshot is taken before the hide so a replayed composition
+     * delivered afterwards still compares as stale.
+     */
+    private fun hideBubbleAndAccept(attempt: Int) {
+        if (attempt != captureAttempt || captureInProgress || !captureRequested) return
+        acceptFromTimestamp = newestFrameTimestamp
+        acceptingFrames = true
+        StageOverlayService.hideBubble(this, locale)
+        Log.i(TAG, "bubble hidden; accepting frames newer than $acceptFromTimestamp")
+    }
+
+    private fun abortCapture(message: String) {
+        captureRequested = false
+        acceptingFrames = false
+        captureAttempt = 0
+        imageReader?.setOnImageAvailableListener(null, null)
+        runCatching { virtualDisplay?.setSurface(null) }
+        StageOverlayService.showMessage(this, locale.name, message)
+    }
+
+    private fun onImageAvailable(reader: ImageReader) {
+        try {
+            processImageAvailable(reader)
+        } catch (error: Exception) {
+            captureRequested = false
+            captureInProgress = false
+            StageOverlayService.showMessage(
+                this,
+                locale.name,
+                error.message?.let { "Could not process the captured frame: $it" } ?: "Could not process the captured frame.",
+            )
+        }
+    }
+
+    private fun processImageAvailable(reader: ImageReader) {
+        val image = runCatching { reader.acquireLatestImage() }.getOrNull() ?: return
+        if (!captureRequested || captureInProgress) {
+            image.close()
+            return
+        }
+        if (!acceptingFrames) {
+            // Probe window: the surface has just been attached and may still be replaying. Keep the
+            // newest timestamp so the frame the hide produces is the first one accepted.
+            newestFrameTimestamp = maxOf(newestFrameTimestamp, image.timestamp)
+            image.close()
+            return
+        }
+        if (image.timestamp <= acceptFromTimestamp) {
+            // A re-attached mirroring surface replays its previous composition. Drop it and keep
+            // waiting instead of reading a screen the player is no longer looking at.
+            staleFrameCount += 1
+            Log.w(TAG, "discarding stale frame (timestamp ${image.timestamp} <= ${acceptFromTimestamp})")
+            newestFrameTimestamp = maxOf(newestFrameTimestamp, image.timestamp)
+            image.close()
+            return
+        }
+        newestFrameTimestamp = maxOf(newestFrameTimestamp, image.timestamp)
+        captureRequested = false
+        captureAttempt = 0
+        captureInProgress = true
+        Log.i(TAG, "frame received (${image.width}x${image.height}, timestamp ${image.timestamp})")
+        val bitmap = try {
+            image.toBitmap()
+        } catch (error: OutOfMemoryError) {
+            captureInProgress = false
+            StageOverlayService.showMessage(this, locale.name, "Not enough memory to read that screen. Close other apps and retry.")
+            return
+        } catch (error: Exception) {
+            captureInProgress = false
+            StageOverlayService.showMessage(
+                this,
+                locale.name,
+                error.message?.let { "Could not read that frame: $it" } ?: "Could not read that frame. Tap the paw to retry.",
+            )
+            return
+        } finally {
+            image.close()
+        }
+        virtualDisplay?.setSurface(null)
+        reader.setOnImageAvailableListener(null, null)
+        serviceScope.launch {
+            try {
+                val catalog = withContext(Dispatchers.IO) {
+                    (application as BattleCatsApplication).stageCatalogRepository.getCatalog()
+                }
+                val lines = withTimeout(OCR_TIMEOUT_MS) {
+                    withContext(Dispatchers.IO) {
+                        synchronized(ocrLock) {
+                            val modelStore = (application as BattleCatsApplication).stageOcrModelStore
+                            val engine = ocrEngine ?: StageOcrEngine(modelStore).also { ocrEngine = it }
+                            engine.recognize(bitmap, locale)
+                        }
+                    }
+                }
+                val matches = StageMatcher.match(catalog, lines, locale)
+                val selectedEnergy = energyUnderSelectedCard(lines, matches.likelySelected)
+                Log.i(
+                    TAG,
+                    "OCR read (${bitmap.width}x${bitmap.height}, try ${ocrRetries + 1}): " +
+                        lines.map { it.text }.take(12).joinToString(" | "),
+                )
+                if (matches.candidates.isEmpty() && ocrRetries < MAX_OCR_RETRIES) {
+                    // The engine reads a real stage-select screenshot perfectly, so an empty result
+                    // means this frame is not the screen: the mirroring surface replayed a
+                    // composition from before the cards were drawn. Capture again rather than
+                    // telling the player nothing was found.
+                    ocrRetries += 1
+                    dumpFrame(bitmap, ocrRetries)
+                    Log.w(TAG, "no stage name in this frame; capturing again (retry $ocrRetries)")
+                    captureAttempt = 0
+                    captureHandler?.postDelayed({ attachCaptureSurface() }, OCR_RETRY_DELAY_MS)
+                    return@launch
+                }
+                if (matches.candidates.isEmpty()) dumpFrame(bitmap, ocrRetries)
+                // Detection reads every label on the screen, so the diagnostic line shows the reads
+                // that actually resolved to a stage. When nothing resolves it falls back to the raw
+                // text, which is exactly the case where that text is needed.
+                val reportedTexts = matches.candidates.map { it.matchedText }.distinct()
+                    .ifEmpty { lines.map { it.text } }
+                    .take(8)
+                    .toTypedArray()
+                val resultIntent = Intent(this@StageCaptureService, StageOverlayService::class.java)
+                    .setAction(StageOverlayService.ACTION_SHOW_RESULT)
+                    .putExtra(StageOverlayService.EXTRA_REGION, locale.name)
+                    .putExtra(StageOverlayService.EXTRA_STAGE_IDS, matches.candidates.map { it.stage.id }.toLongArray())
+                    .putExtra(StageOverlayService.EXTRA_LIKELY_STAGE_ID, matches.likelySelected?.stage?.id ?: -1L)
+                    .putExtra(StageOverlayService.EXTRA_SELECTED_ENERGY, selectedEnergy ?: -1)
+                    .putExtra(StageOverlayService.EXTRA_OCR_TEXTS, matches.candidates.map { it.matchedText }.toTypedArray())
+                    .putExtra(StageOverlayService.EXTRA_RECOGNIZED_TEXT, reportedTexts)
+                startService(resultIntent)
+            } catch (error: OutOfMemoryError) {
+                StageOverlayService.showMessage(this@StageCaptureService, locale.name, "OCR ran out of memory. Close other apps and try again.")
+            } catch (error: LinkageError) {
+                StageOverlayService.showMessage(
+                    this@StageCaptureService,
+                    locale.name,
+                    "ONNX Runtime could not load on this device: ${error.message ?: error.javaClass.simpleName}",
+                )
+            } catch (error: Exception) {
+                StageOverlayService.showMessage(
+                    this@StageCaptureService,
+                    locale.name,
+                    error.message?.let { "Could not scan this screen: $it" } ?: "Could not scan this screen. Tap the helper to retry.",
+                )
+            } finally {
+                bitmap.recycle()
+                captureInProgress = false
+            }
+        }
+    }
+
+    /**
+     * Reads the energy the game prints under the selected card.
+     *
+     * One name can map to several records — `Crimson Star` has six — and the player has no way to tell
+     * them apart from the stage list. The game does show one fact about the centred stage: its energy.
+     * Reading it lets the overlay drop every candidate whose cost disagrees instead of asking the
+     * player to compare numbers they cannot see.
+     */
+    private fun energyUnderSelectedCard(lines: List<OcrStageLine>, selected: StageCandidate?): Int? {
+        val anchor = selected ?: return null
+        val energyLabel = Regex("(?i)energy")
+        val number = Regex("-?\\d+")
+        val below = lines.filter { line -> line.top >= anchor.bottom - ENERGY_ROW_TOLERANCE }
+        val labelLine = below
+            .filter { energyLabel.containsMatchIn(it.text) }
+            .filter { line -> minOf(line.right, anchor.right) - maxOf(line.left, anchor.left) > 0f }
+            .minByOrNull { it.top } ?: return null
+        number.find(labelLine.text)?.value?.toIntOrNull()?.let { return abs(it) }
+        // The detector often splits `Energy` and `-250` into two boxes on the same row.
+        return below
+            .filter { line -> abs(line.top - labelLine.top) < ENERGY_ROW_TOLERANCE }
+            .filter { line -> line.left >= labelLine.right - ENERGY_ROW_TOLERANCE }
+            .minByOrNull { it.left }
+            ?.text
+            ?.let { number.find(it)?.value?.toIntOrNull() }
+            ?.let { abs(it) }
+    }
+
+    private fun releaseProjection() {
+        projectionCallback?.let { callback -> projection?.unregisterCallback(callback) }
+        projectionCallback = null
+        virtualDisplay?.release()
+        virtualDisplay = null
+        imageReader?.setOnImageAvailableListener(null, null)
+        imageReader?.close()
+        imageReader = null
+        projection?.stop()
+        projection = null
+        projectionActive = false
+        isProjectionActive = false
+        isRunning = false
+    }
+
+    private fun registerDisplayListener() {
+        val manager = displayManager ?: return
+        if (displayListener != null) return
+        displayListener = object : DisplayManager.DisplayListener {
+            override fun onDisplayAdded(displayId: Int) = Unit
+            override fun onDisplayRemoved(displayId: Int) = Unit
+            override fun onDisplayChanged(displayId: Int) {
+                if (displayId == Display.DEFAULT_DISPLAY) captureHandler?.post(::resizeCaptureDisplay)
+            }
+        }.also { manager.registerDisplayListener(it, captureHandler) }
+    }
+
+    private fun resizeCaptureDisplay() {
+        if (!projectionActive || captureRequested || captureInProgress) return
+        val display = virtualDisplay ?: return
+        if (projection == null) return
+        val currentReader = imageReader ?: return
+        val (width, height, density) = displaySize()
+        if (width == captureWidth && height == captureHeight && density == captureDensity) return
+        val resizedReader = runCatching { ImageReader.newInstance(width, height, PixelFormat.RGBA_8888, 2) }
+            .getOrElse {
+                StageOverlayService.showMessage(this, locale.name, "Could not resize the capture surface after screen rotation.")
+                return
+            }
+        try {
+            display.setSurface(null)
+            display.resize(width, height, density)
+            imageReader = resizedReader
+            captureWidth = width
+            captureHeight = height
+            captureDensity = density
+            currentReader.setOnImageAvailableListener(null, null)
+            currentReader.close()
+        } catch (error: Exception) {
+            resizedReader.close()
+            StageOverlayService.showMessage(
+                this,
+                locale.name,
+                error.message?.let { "Could not resize the capture session: $it" } ?: "Could not resize the capture session.",
+            )
+        }
+    }
+
+    private fun displaySize(): Triple<Int, Int, Int> {
+        val metrics = DisplayMetrics()
+        @Suppress("DEPRECATION")
+        (getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay.getRealMetrics(metrics)
+        return Triple(metrics.widthPixels, metrics.heightPixels, metrics.densityDpi)
+    }
+
+    private fun Image.toBitmap(): Bitmap {
+        val plane = planes.first()
+        val pixelStride = plane.pixelStride
+        val rowPadding = plane.rowStride - pixelStride * width
+        val paddedWidth = width + rowPadding / pixelStride
+        val padded = createBitmap(paddedWidth, height, Bitmap.Config.ARGB_8888)
+        padded.copyPixelsFromBuffer(plane.buffer)
+        if (paddedWidth == width) return padded
+        return Bitmap.createBitmap(padded, 0, 0, width, height).also { padded.recycle() }
+    }
+
+    private fun startForegroundProjectionNotification() {
+        val builder = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Notification.Builder(this, CHANNEL_ID)
+        } else {
+            @Suppress("DEPRECATION")
+            Notification.Builder(this)
+        }
+        val notification = builder
+            .setSmallIcon(android.R.drawable.ic_menu_camera)
+            .setContentTitle("Stage helper screen sharing is active")
+            .setContentText("Only paw taps read a single frame. Nothing is saved; stop here to end the session.")
+            .addAction(
+                Notification.Action.Builder(
+                    Icon.createWithResource(this, android.R.drawable.ic_menu_close_clear_cancel),
+                    "Stop sharing",
+                    android.app.PendingIntent.getService(
+                        this,
+                        NOTIFICATION_ID,
+                        Intent(this, StageCaptureService::class.java).setAction(ACTION_STOP),
+                        android.app.PendingIntent.FLAG_UPDATE_CURRENT or android.app.PendingIntent.FLAG_IMMUTABLE,
+                    ),
+                ).build(),
+            )
+            .setOngoing(true)
+            .build()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION)
+        } else {
+            startForeground(NOTIFICATION_ID, notification)
+        }
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            getSystemService(NotificationManager::class.java).createNotificationChannel(
+                NotificationChannel(CHANNEL_ID, "Stage scan screen sharing", NotificationManager.IMPORTANCE_LOW),
+            )
+        }
+    }
+
+    private fun String.toLocale() = if (equals("JP", ignoreCase = true)) StageLocale.JP else StageLocale.EN
+
+    private fun Intent.parcelableIntent(key: String) = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        getParcelableExtra(key, Intent::class.java)
+    } else {
+        @Suppress("DEPRECATION")
+        getParcelableExtra(key)
+    }
+
+    companion object {
+        const val ACTION_ENABLE = "com.projectnyanko.companion.stage.ENABLE_CAPTURE"
+        const val ACTION_CAPTURE = "com.projectnyanko.companion.stage.CAPTURE_FRAME"
+        const val ACTION_STOP = "com.projectnyanko.companion.stage.STOP_CAPTURE"
+        const val EXTRA_RESULT_CODE = "capture_result_code"
+        const val EXTRA_RESULT_DATA = "capture_result_data"
+        private const val CHANNEL_ID = "stage_capture"
+        private const val NOTIFICATION_ID = 4102
+        private const val TAG = "StageCapture"
+        private const val CAPTURE_SETTLE_DELAY_MS = 250L
+        private const val CAPTURE_PROBE_DELAY_MS = 150L
+        private const val OCR_TIMEOUT_MS = 30_000L
+        private const val CAPTURE_ATTEMPT_TIMEOUT_MS = 1_500L
+        private const val CAPTURE_RETRY_DELAY_MS = 350L
+        private const val MAX_CAPTURE_ATTEMPTS = 3
+
+        /**
+         * A frame that contains no stage name at all is a bad frame, not a bad scan: re-capture
+         * instead of reporting "no match". Two retries cost well under a second each.
+         */
+        private const val MAX_OCR_RETRIES = 2
+        private const val OCR_RETRY_DELAY_MS = 250L
+
+        /** Two labels on the same row, or a label just under the card, in normalised frame units. */
+        private const val ENERGY_ROW_TOLERANCE = 0.02f
+
+        @Volatile
+        var isRunning: Boolean = false
+            private set
+
+        @Volatile
+        var isProjectionActive: Boolean = false
+            private set
+
+        fun requestConsent(context: Context, locale: StageLocale) {
+            if (isProjectionActive) return
+            launchConsent(context, locale)
+        }
+
+        private fun launchConsent(context: Context, locale: StageLocale) {
+            val consent = Intent(context, StageCapturePermissionActivity::class.java)
+                .putExtra(StageOverlayService.EXTRA_REGION, locale.name)
+            if (context !is android.app.Activity) {
+                consent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
+            }
+            context.startActivity(consent)
+        }
+
+        fun enable(context: Context, resultCode: Int, data: Intent, locale: StageLocale) {
+            val intent = Intent(context, StageCaptureService::class.java)
+                .setAction(ACTION_ENABLE)
+                .putExtra(EXTRA_RESULT_CODE, resultCode)
+                .putExtra(EXTRA_RESULT_DATA, data)
+                .putExtra(StageOverlayService.EXTRA_REGION, locale.name)
+            startCaptureService(context, intent)
+        }
+
+        fun requestCapture(context: Context, locale: StageLocale) {
+            val intent = Intent(context, StageCaptureService::class.java)
+                .setAction(ACTION_CAPTURE)
+                .putExtra(StageOverlayService.EXTRA_REGION, locale.name)
+            if (isRunning && isProjectionActive) startCaptureService(context, intent)
+            else requestConsent(context, locale)
+        }
+
+        fun stop(context: Context) {
+            if (isRunning) {
+                context.startService(Intent(context, StageCaptureService::class.java).setAction(ACTION_STOP))
+            } else {
+                context.stopService(Intent(context, StageCaptureService::class.java))
+            }
+            context.stopService(Intent(context, StageOverlayService::class.java))
+        }
+
+        private fun startCaptureService(context: Context, intent: Intent) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) context.startForegroundService(intent)
+            else context.startService(intent)
+        }
+    }
+}

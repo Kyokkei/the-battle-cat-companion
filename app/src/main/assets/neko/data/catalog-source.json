@@ -1,0 +1,9 @@
+{
+  "sourceRepository": "https://github.com/IliyanGavrilov/NekoOptimizer",
+  "sourcePath": "neko/data/{en,jp}/gacha_events.json, gacha_pools.json, units.json",
+  "sourceCommit": "not recorded in the supplied folder",
+  "regionSnapshots": ["en", "jp"],
+  "attribution": "NekoOptimizer (Iliyan Gavrilov)",
+  "license": "No license file/metadata was present in the supplied repository folder; redistribution rights are unverified.",
+  "note": "Files were supplied in the workspace and copied to app assets. CatalogRepository computes per-file SHA-256 at runtime. Do not publish these data assets unless the upstream rights are resolved."
+}

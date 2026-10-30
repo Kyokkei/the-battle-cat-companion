@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Battle Cats Companion</string>
+    <string name="stage_stop_drop">× Drop here to stop</string>
+</resources>
