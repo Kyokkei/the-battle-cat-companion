@@ -42,6 +42,9 @@ object CatScanResolver {
     /** How far below the cat's name its level may print, in screen heights. */
     private const val MAX_LEVEL_BELOW = 0.35f
 
+    /** How far sideways a `+N` may sit from its level, in screen widths. */
+    private const val MAX_PLUS_ACROSS = 0.05f
+
     /** How far sideways the level may sit from the name, in screen widths. */
     private const val MAX_LEVEL_ACROSS = 0.22f
 
@@ -135,17 +138,20 @@ object CatScanResolver {
             ?: levelAbovePlus(levels, pluses)
             ?: nearestNumberBelow(levels, nameLine)
 
-        val plus = pluses.minByOrNull { (_, line) ->
-            val reference = level?.second
-            if (reference == null) 0f else verticalDistance(reference, line)
-        }?.let { (value, line) ->
-            val reference = level?.second
-            when {
-                reference == null -> value
-                verticalDistance(reference, line) <= MAX_LEVEL_DISTANCE -> value
-                else -> null
-            }
-        }
+        // The plus must belong to the same card: directly below the level and in its column.
+        // Neighbours print their own "+13" at the same height, and matching on height alone
+        // handed back the cat next door's plus level.
+        val plus = pluses.filter { (_, line) ->
+            val reference = level?.second ?: return@filter false
+            val below = (line.top + line.bottom) / 2f - (reference.top + reference.bottom) / 2f
+            val across = kotlin.math.abs(
+                (line.left + line.right) / 2f - (reference.left + reference.right) / 2f,
+            )
+            below > 0f && below <= MAX_LEVEL_DISTANCE && across <= MAX_PLUS_ACROSS
+        }.minByOrNull { (_, line) ->
+            val reference = level?.second ?: return@minByOrNull 0f
+            verticalDistance(reference, line)
+        }?.first
         return LevelRead(level?.first, plus, level?.second)
     }
 

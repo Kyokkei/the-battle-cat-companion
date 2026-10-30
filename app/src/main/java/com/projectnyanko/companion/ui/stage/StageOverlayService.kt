@@ -561,9 +561,10 @@ class StageOverlayService : Service() {
         leftColumn.addView(portrait, LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT, dp(76),
         ))
+        // The ability box is the cat's special ability (Strong, Massive Damage, Slow, ...). Single vs
+        // area is an attack property, so it goes in the small Target box instead.
         val abilityRows = buildList {
-            add("Ability" to (if (form.areaAttack) "Area" else "Single") + "  ·  " + formatStat(form.cost) + "c")
-            if (form.effects.isNotEmpty()) add("Effects" to form.effects.joinToString(", "))
+            add("Special ability" to form.effects.joinToString(", ").ifBlank { "None" })
             if (form.immune.isNotEmpty()) add("Immune" to form.immune.joinToString(", "))
         }
         val abilityBox = wideTile(abilityRows)
@@ -580,6 +581,7 @@ class StageOverlayService : Service() {
         rightColumn.addView(tileRow("Range" to form.range.toString(), "Knockback" to form.knockbacks.toString()))
         rightColumn.addView(tileRow("Speed" to "${form.speedPerSecond}/s", "DPS" to formatStat(dps)))
         rightColumn.addView(tileRow("TBA" to secondsText(form.attackCycleSeconds), "Spawn" to secondsText(form.rechargeSeconds)))
+        rightColumn.addView(tileRow("Target" to (if (form.areaAttack) "Area" else "Single"), "Cost" to formatStat(form.cost)))
         columns.addView(rightColumn, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 0.66f))
 
         root.addView(columns)
@@ -699,7 +701,7 @@ class StageOverlayService : Service() {
             gravity = Gravity.CENTER
             width = (resources.displayMetrics.widthPixels * CARD_WIDTH_FRACTION).toInt()
                 .coerceAtLeast(dp(300))
-            height = (resources.displayMetrics.heightPixels * 0.78f).toInt()
+            height = (resources.displayMetrics.heightPixels * 0.86f).toInt()
         }
         runCatching { windowManager.addView(scrollableRoot, params) }.onSuccess {
             resultView = scrollableRoot

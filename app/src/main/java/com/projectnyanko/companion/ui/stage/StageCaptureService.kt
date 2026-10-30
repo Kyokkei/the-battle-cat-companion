@@ -561,12 +561,15 @@ class StageCaptureService : Service() {
                 val lines = engine.recognizeAllLines(big, locale)
                 val joined = lines.joinToString(" ") { it.text }
                 val (level, plus) = CatScanResolver.splitLevelAndPlus(joined)
+                // Only the first `+N` in the crop belongs to this card; the rest are neighbours.
+                val firstPlus = joined.substringAfter('+', "").trim().substringBefore(' ').take(2)
+                val plusHere = if (firstPlus.isNotEmpty()) CatScanResolver.parsePlus("+$firstPlus") else plus
                 Log.i(TAG, "level block read: \"$joined\" -> level=$level plus=$plus")
                 // A stray `0` is not a level; only accept something the game could actually show.
                 val usableLevel = level?.takeIf { it in CatLevelCurve.MIN_LEVEL..CatLevelCurve.MAX_LEVEL }
                 hit.copy(
                     level = usableLevel ?: hit.level,
-                    plusLevel = plus ?: hit.plusLevel,
+                    plusLevel = plusHere ?: plus ?: hit.plusLevel,
                 )
             } finally {
                 if (big !== crop) big.recycle()
