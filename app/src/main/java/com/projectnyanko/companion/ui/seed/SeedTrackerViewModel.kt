@@ -286,7 +286,7 @@ class SeedTrackerViewModel(
 
     /** Opens the cat page for [unitId]; the stat table is read off the main thread. */
     fun showStats(unitId: Int) {
-        if (unitId <= 0) return
+        if (unitId < 0) return
         _stats.value = StatsUiState(loading = true)
         viewModelScope.launch {
             val region = when (val ready = tracker.value) {

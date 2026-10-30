@@ -751,7 +751,7 @@ private fun JumpLine(
 /** The little paw from the web tracker: opens that cat's stat page. */
 @Composable
 private fun PawButton(unitId: Int, onStats: (Int) -> Unit) {
-    if (unitId <= 0) return
+    if (unitId < 0) return
     Image(
         painter = painterResource(R.drawable.icon_paw),
         contentDescription = "Cat stats",

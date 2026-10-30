@@ -485,7 +485,7 @@ class StageOverlayService : Service() {
      */
     private fun showCat(intent: Intent) {
         val unitId = intent.getIntExtra(EXTRA_CAT_UNIT_ID, -1)
-        if (unitId <= 0) return
+        if (unitId < 0) return
         val formIndex = intent.getIntExtra(EXTRA_CAT_FORM_INDEX, 0)
         val readLevel = intent.getIntExtra(EXTRA_CAT_LEVEL, -1)
         val readPlus = intent.getIntExtra(EXTRA_CAT_PLUS, -1)

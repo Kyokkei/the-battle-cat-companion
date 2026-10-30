@@ -135,6 +135,9 @@ class CatScanResolverTest {
         )
         val hit = requireNotNull(CatScanResolver.resolve(lines, index))
         assertEquals("Mohawk Cat", hit.displayName)
+        // Unit 0 is Basic Cat, not "no unit". Treating 0 as missing silently hid every
+        // Cat/Macho/Mohawk/Eraser/Dark scan.
+        assertEquals(0, hit.unitId)
         assertEquals(20, hit.level)
         assertNull(hit.plusLevel)
         assertEquals(20, hit.effectiveLevel)
@@ -208,5 +211,31 @@ class CatScanResolverTest {
             line("Pastry Cat", 0.96f, 0.20f, 0.24f, 0.30f, 0.44f),
         )
         assertEquals("Pastry Cat", requireNotNull(CatScanResolver.resolve(lines, index)).displayName)
+    }
+
+    @Test
+    fun aGarbledLabelIsRescuedByThePlusLevelUnderneath() {
+        // Real read from the Mohawk card: the label came back as "eaxe 20", which matches no label
+        // pattern, but "+90" printed directly below it.
+        val lines = listOf(
+            line("Mohawk Cat", 1.0f, 0.14f, 0.20f, 0.40f, 0.57f),
+            line("eaxe 20", 0.52f, 0.280f, 0.320f, 0.49f, 0.55f),
+            line("+90", 0.877f, 0.330f, 0.365f, 0.55f, 0.59f),
+        )
+        val hit = requireNotNull(CatScanResolver.resolve(lines, index))
+        assertEquals(20, hit.level)
+        assertEquals(90, hit.plusLevel)
+        assertEquals(110, hit.effectiveLevel)
+    }
+
+    @Test
+    fun aPlusWithNoNumberAboveItLeavesTheLevelUnknown() {
+        val lines = listOf(
+            line("Mohawk Cat", 1.0f, 0.14f, 0.20f, 0.40f, 0.57f),
+            line("+90", 0.877f, 0.330f, 0.365f, 0.55f, 0.59f),
+        )
+        val hit = requireNotNull(CatScanResolver.resolve(lines, index))
+        assertNull(hit.level)
+        assertNull(hit.effectiveLevel)
     }
 }

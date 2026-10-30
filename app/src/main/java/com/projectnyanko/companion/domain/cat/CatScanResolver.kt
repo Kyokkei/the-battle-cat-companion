@@ -35,6 +35,9 @@ object CatScanResolver {
     /** Two boxes within this much height count as the same font size. */
     private const val HEIGHT_EPSILON = 0.002f
 
+    /** How far above a `+N` the level number may sit, in screen heights. */
+    private const val MAX_PLUS_GAP = 0.06f
+
     /** How far the level number may sit from the word Level, in screen heights. */
     private const val MAX_LEVEL_DISTANCE = 0.15f
 
@@ -44,6 +47,13 @@ object CatScanResolver {
      */
     private val LEVEL_IN_LINE = Regex("""leve[l1]\s*(\d{1,3})""", RegexOption.IGNORE_CASE)
     private val PLUS_LINE = Regex("""^\+\s*([0-9OoIl]{1,2})$""")
+
+    /**
+     * A short word followed by the number, for labels the recognizer mangled past the point of
+     * matching — `eaxe 20` instead of `Level 20`. The prefix cannot contain digits, so a counter like
+     * `XP 38869800` does not qualify.
+     */
+    private val TRAILING_NUMBER = Regex("""^[^\d]{1,12}(\d{1,3})$""")
 
     fun resolve(lines: List<OcrStageLine>, index: CatNameIndex): CatScanHit? {
         if (lines.isEmpty()) return null
@@ -101,22 +111,44 @@ object CatScanResolver {
         val levels = lines.mapNotNull { line -> parseLevel(line.text)?.let { it to line } }
         val pluses = lines.mapNotNull { line -> parsePlus(line.text)?.let { it to line } }
 
-        val level = pick(levels, anchors)
-        // A plus level belongs to the same card, so it only counts when it sits near the level.
+        // The label is often too garbled to match — one real read was `eaxe 20` — but the plus level
+        // prints directly beneath the number, so it can anchor the level instead.
+        val level = pick(levels, anchors) ?: levelAbovePlus(levels, pluses)
         val plus = pluses.minByOrNull { (_, line) ->
-            val centre = (line.top + line.bottom) / 2f
             val reference = level?.second
-            if (reference == null) 0f else kotlin.math.abs((reference.top + reference.bottom) / 2f - centre)
+            if (reference == null) 0f else verticalDistance(reference, line)
         }?.let { (value, line) ->
             val reference = level?.second
-            if (reference == null) {
-                value
-            } else {
-                val distance = kotlin.math.abs((reference.top + reference.bottom) / 2f - (line.top + line.bottom) / 2f)
-                if (distance <= MAX_LEVEL_DISTANCE) value else null
+            when {
+                reference == null -> value
+                verticalDistance(reference, line) <= MAX_LEVEL_DISTANCE -> value
+                else -> null
             }
         }
         return LevelRead(level?.first, plus)
+    }
+
+    /** The number printed immediately above a `+N` plus level. */
+    private fun levelAbovePlus(
+        levels: List<Pair<Int, OcrStageLine>>,
+        pluses: List<Pair<Int, OcrStageLine>>,
+    ): Pair<Int, OcrStageLine>? {
+        if (pluses.isEmpty() || levels.isEmpty()) return null
+        var best: Pair<Int, OcrStageLine>? = null
+        var bestGap = Float.MAX_VALUE
+        for ((_, plusLine) in pluses) {
+            val plusCentre = (plusLine.top + plusLine.bottom) / 2f
+            for ((value, line) in levels) {
+                val gap = plusCentre - (line.top + line.bottom) / 2f
+                // Only numbers above the plus, and close enough to belong to the same card.
+                if (gap <= 0f || gap > MAX_PLUS_GAP) continue
+                if (gap < bestGap) {
+                    bestGap = gap
+                    best = value to line
+                }
+            }
+        }
+        return best
     }
 
     private fun pick(
@@ -158,7 +190,15 @@ object CatScanResolver {
         LEVEL_IN_LINE.find(trimmed)?.let { match ->
             return match.groupValues[1].toIntOrNull()
         }
-        return parseDigits(trimmed)
+        // A bare number first, so glyph confusions (`l0` -> 10) are honoured before the looser
+        // trailing-number pattern can strip the leading character.
+        parseDigits(trimmed)?.let { return it }
+        // `+90` is a plus level, never the level itself.
+        if (trimmed.startsWith("+")) return null
+        TRAILING_NUMBER.find(trimmed)?.let { match ->
+            return match.groupValues[1].toIntOrNull()
+        }
+        return null
     }
 
     /** `+90` on a hyper-levelled cat. */
