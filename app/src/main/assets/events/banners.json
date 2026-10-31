@@ -1,0 +1,1904 @@
+{
+"source": "Battle Cats Wiki (Miraheze) - Template:CurrentEvents/Images.json",
+"sourceUrl": "https://battlecats.miraheze.org/wiki/Template:CurrentEvents/Images.json",
+"license": "CC BY-SA 4.0",
+"fetched": "2026-10-31",
+"host": "static.wikitide.net",
+"banners": {
+"THE DYNAMITES": {
+"url": "https://static.wikitide.net/battlecatswiki/2/23/Gatya_bnr1068_en.png",
+"w": 300,
+"h": 84
+},
+"Tales of the Nekoluga": {
+"url": "https://static.wikitide.net/battlecatswiki/3/39/Gatya_bnr962_en.png",
+"w": 300,
+"h": 84
+},
+"Sengoku Wargods Vajiras": {
+"url": "https://static.wikitide.net/battlecatswiki/b/b2/Gatya_bnr1044_en.png",
+"w": 300,
+"h": 84
+},
+"Cyber Academy Galaxy Gals": {
+"url": "https://static.wikitide.net/battlecatswiki/3/3e/Gatya_bnr1022_en.png",
+"w": 300,
+"h": 84
+},
+"Lords of Destruction DRAGON EMPERORS": {
+"url": "https://static.wikitide.net/battlecatswiki/9/96/Gatya_bnr1060_en.png",
+"w": 300,
+"h": 84
+},
+"Ancient Heroes ULTRA SOULS": {
+"url": "https://static.wikitide.net/battlecatswiki/b/bb/Gatya_bnr946_en.png",
+"w": 300,
+"h": 84
+},
+"Justice Strikes Back! Dark Heroes": {
+"url": "https://static.wikitide.net/battlecatswiki/6/66/Gatya_bnr947_en.png",
+"w": 300,
+"h": 84
+},
+"The Almighties The Majestic Zeus": {
+"url": "https://static.wikitide.net/battlecatswiki/0/06/Gatya_bnr992_en.png",
+"w": 300,
+"h": 84
+},
+"Frontline Assault IRON LEGION": {
+"url": "https://static.wikitide.net/battlecatswiki/1/15/Gatya_bnr980_en.png",
+"w": 300,
+"h": 84
+},
+"Nature's Guardians ELEMENTAL PIXIES": {
+"url": "https://static.wikitide.net/battlecatswiki/d/d9/Gatya_bnr1005_en.png",
+"w": 300,
+"h": 84
+},
+"Girls & Monsters: Angels of Terror": {
+"url": "https://static.wikitide.net/battlecatswiki/2/24/Gatya_bnr1016_en.png",
+"w": 300,
+"h": 84
+},
+"UBERFEST": {
+"url": "https://static.wikitide.net/battlecatswiki/1/19/Gatya_bnr1033_en.png",
+"w": 300,
+"h": 84
+},
+"EPICFEST": {
+"url": "https://static.wikitide.net/battlecatswiki/5/52/Gatya_bnr982_en.png",
+"w": 300,
+"h": 84
+},
+"SUPERFEST": {
+"url": "https://static.wikitide.net/battlecatswiki/9/93/Gatya_bnr1051_en.png",
+"w": 300,
+"h": 84
+},
+"RoyalFest": {
+"url": "https://static.wikitide.net/battlecatswiki/c/cc/Gatya_bnr861_en.png",
+"w": 300,
+"h": 84
+},
+"Dynasty Fest": {
+"url": "https://static.wikitide.net/battlecatswiki/3/30/Gatya_bnr582.png",
+"w": 300,
+"h": 84
+},
+"RED BUSTERS": {
+"url": "https://static.wikitide.net/battlecatswiki/1/14/Gatya_bnr696.png",
+"w": 300,
+"h": 84
+},
+"AIR BUSTERS": {
+"url": "https://static.wikitide.net/battlecatswiki/8/87/Gatya_bnr167.png",
+"w": 300,
+"h": 84
+},
+"METAL BUSTERS": {
+"url": "https://static.wikitide.net/battlecatswiki/f/fa/Gatya_bnr915.png",
+"w": 300,
+"h": 84
+},
+"WAVE BUSTERS": {
+"url": "https://static.wikitide.net/battlecatswiki/c/cd/Gatya_bnr523_en_2.png",
+"w": 300,
+"h": 84
+},
+"Colossus Busters": {
+"url": "https://static.wikitide.net/battlecatswiki/7/7a/Gatya_bnr772.png",
+"w": 300,
+"h": 84
+},
+"BUSTERFEST": {
+"url": "https://static.wikitide.net/battlecatswiki/0/06/Gatya_bnr856_en.png",
+"w": 300,
+"h": 84
+},
+"Halloween Capsules": {
+"url": "https://static.wikitide.net/battlecatswiki/d/d2/Gatya_bnr926_3.png",
+"w": 300,
+"h": 84
+},
+"Xmas Gals": {
+"url": "https://static.wikitide.net/battlecatswiki/b/b7/Gatya_bnr940_en.png",
+"w": 300,
+"h": 84
+},
+"Gals of Summer Blue Ocean": {
+"url": "https://static.wikitide.net/battlecatswiki/7/79/Gatya_bnr1076_en.png",
+"w": 300,
+"h": 84
+},
+"Gals of Summer Sunshine": {
+"url": "https://static.wikitide.net/battlecatswiki/7/7b/Gatya_bnr1075_en.png",
+"w": 300,
+"h": 84
+},
+"Easter Carnival": {
+"url": "https://static.wikitide.net/battlecatswiki/5/5d/Gatya_bnr880_en.png",
+"w": 300,
+"h": 84
+},
+"Valentine Gals": {
+"url": "https://static.wikitide.net/battlecatswiki/5/56/Gatya_bnr795.png",
+"w": 300,
+"h": 84
+},
+"White Day Capsules": {
+"url": "https://static.wikitide.net/battlecatswiki/9/91/Gatya_bnr968_en_1.png",
+"w": 300,
+"h": 84
+},
+"June Bride": {
+"url": "https://static.wikitide.net/battlecatswiki/2/24/Gatya_bnr1065_en.png",
+"w": 300,
+"h": 84
+},
+"Survive! Mola Mola! Collaboration Event": {
+"url": "https://static.wikitide.net/battlecatswiki/b/bf/Clb_l_008_1_en.png",
+"w": 300,
+"h": 150
+},
+"Survive! Mola Mola!": {
+"url": "https://static.wikitide.net/battlecatswiki/2/2e/Gatya_bnr1002_2.png",
+"w": 300,
+"h": 84
+},
+"Best of the Best": {
+"url": "https://static.wikitide.net/battlecatswiki/1/17/Gatya_bnr1052_en.png",
+"w": 300,
+"h": 84
+},
+"NEO Best of the Best": {
+"url": "https://static.wikitide.net/battlecatswiki/0/08/Gatya_bnr1053_en.png",
+"w": 300,
+"h": 84
+},
+"Ultra 4 Selection": {
+"url": "https://static.wikitide.net/battlecatswiki/3/30/Gatya_bnr1028_en.png",
+"w": 300,
+"h": 84
+},
+"Miracle 4 Selection": {
+"url": "https://static.wikitide.net/battlecatswiki/f/fa/Gatya_bnr1054_en.png",
+"w": 300,
+"h": 84
+},
+"Excellent 4 Selection": {
+"url": "https://static.wikitide.net/battlecatswiki/1/11/Gatya_bnr1030_en.png",
+"w": 300,
+"h": 84
+},
+"Platinum Capsules": {
+"url": "https://static.wikitide.net/battlecatswiki/1/1d/Gatya_bnr174.png",
+"w": 300,
+"h": 84
+},
+"Legend Capsules": {
+"url": "https://static.wikitide.net/battlecatswiki/f/f9/Gatya_bnr640.png",
+"w": 300,
+"h": 84
+},
+"Lunar New Year's Capsules": {
+"url": "https://static.wikitide.net/battlecatswiki/3/3c/Gatya_bnr865.png",
+"w": 300,
+"h": 84
+},
+"Lunar New Year Event Capsules": {
+"url": "https://static.wikitide.net/battlecatswiki/4/46/Gatya_e_bnr36_en.png",
+"w": 300,
+"h": 84
+},
+"Heartbeat Catcademy Event Capsules": {
+"url": "https://static.wikitide.net/battlecatswiki/6/63/Gatya_e_bnr47_en.png",
+"w": 300,
+"h": 84
+},
+"June Bride of the Devil Event Capsules": {
+"url": "https://static.wikitide.net/battlecatswiki/a/a7/Gatya_e_bnr50_en.png",
+"w": 300,
+"h": 84
+},
+"Summer Break Cats Event Capsules": {
+"url": "https://static.wikitide.net/battlecatswiki/8/8d/Gatya_e_bnr53_en.png",
+"w": 300,
+"h": 84
+},
+"Summer Break Cats Castaway Event Capsules": {
+"url": "https://static.wikitide.net/battlecatswiki/5/5f/Gatya_e_bnr40_en.png",
+"w": 300,
+"h": 84
+},
+"Summer Break Cats Paradise Event Capsules": {
+"url": "https://static.wikitide.net/battlecatswiki/f/f7/Gatya_e_bnr51_en.png",
+"w": 300,
+"h": 84
+},
+"Halloween Party! Special★Event Capsules": {
+"url": "https://static.wikitide.net/battlecatswiki/d/d0/Gatya_e_bnr54_en.png",
+"w": 300,
+"h": 84
+},
+"Medal King's Palace Event Capsules": {
+"url": "https://static.wikitide.net/battlecatswiki/9/9d/Gatya_e_bnr27_en.png",
+"w": 300,
+"h": 84
+},
+"Monday Stage": {
+"url": "https://static.wikitide.net/battlecatswiki/3/34/Mapname000_s_en.png",
+"w": 192,
+"h": 48
+},
+"Tuesday Stage": {
+"url": "https://static.wikitide.net/battlecatswiki/3/33/Mapname001_s_en.png",
+"w": 192,
+"h": 48
+},
+"Wednesday Stage": {
+"url": "https://static.wikitide.net/battlecatswiki/1/14/Mapname002_s_en.png",
+"w": 192,
+"h": 48
+},
+"Thursday Stage": {
+"url": "https://static.wikitide.net/battlecatswiki/d/d6/Mapname003_s_en.png",
+"w": 192,
+"h": 48
+},
+"Friday Stage": {
+"url": "https://static.wikitide.net/battlecatswiki/a/ad/Mapname004_s_en.png",
+"w": 192,
+"h": 48
+},
+"Weekend Stage": {
+"url": "https://static.wikitide.net/battlecatswiki/a/ae/Mapname005_s_en.png",
+"w": 192,
+"h": 48
+},
+"Monday Blitz Stage": {
+"url": "https://static.wikitide.net/battlecatswiki/2/22/Mapname073_s_en.png",
+"w": 192,
+"h": 48
+},
+"Tuesday Blitz Stage": {
+"url": "https://static.wikitide.net/battlecatswiki/b/b9/Mapname074_s_en.png",
+"w": 192,
+"h": 48
+},
+"Wednesday Blitz Stage": {
+"url": "https://static.wikitide.net/battlecatswiki/2/26/Mapname075_s_en.png",
+"w": 192,
+"h": 48
+},
+"Thursday Blitz Stage": {
+"url": "https://static.wikitide.net/battlecatswiki/f/f3/Mapname076_s_en.png",
+"w": 192,
+"h": 48
+},
+"Friday Blitz Stage": {
+"url": "https://static.wikitide.net/battlecatswiki/e/e2/Mapname077_s_en.png",
+"w": 192,
+"h": 48
+},
+"Growing Green": {
+"url": "https://static.wikitide.net/battlecatswiki/a/a8/Mapname004_b_en.png",
+"w": 192,
+"h": 48
+},
+"Growing Purple": {
+"url": "https://static.wikitide.net/battlecatswiki/6/61/Mapname003_b_en.png",
+"w": 192,
+"h": 48
+},
+"Growing Red": {
+"url": "https://static.wikitide.net/battlecatswiki/1/19/Mapname002_b_en.png",
+"w": 192,
+"h": 48
+},
+"Growing Blue": {
+"url": "https://static.wikitide.net/battlecatswiki/d/d2/Mapname001_b_en.png",
+"w": 192,
+"h": 48
+},
+"Growing Yellow": {
+"url": "https://static.wikitide.net/battlecatswiki/7/77/Mapname000_b_en.png",
+"w": 192,
+"h": 48
+},
+"Growing Epic": {
+"url": "https://static.wikitide.net/battlecatswiki/1/15/Mapname222_s_en.png",
+"w": 192,
+"h": 48
+},
+"Growing Strange": {
+"url": "https://static.wikitide.net/battlecatswiki/a/a1/Mapname162_s_en.png",
+"w": 192,
+"h": 48
+},
+"Growing Evil": {
+"url": "https://static.wikitide.net/battlecatswiki/c/c2/Mapname274_s_en.png",
+"w": 192,
+"h": 48
+},
+"Mining Epic": {
+"url": "https://static.wikitide.net/battlecatswiki/e/e1/Mapname326_s_en.png",
+"w": 192,
+"h": 48
+},
+"XP Stage": {
+"url": "https://static.wikitide.net/battlecatswiki/f/f1/Mapname011_b_en.png",
+"w": 192,
+"h": 48
+},
+"XP Megablitz!": {
+"url": "https://static.wikitide.net/battlecatswiki/4/4f/Mapname010_b_en.png",
+"w": 192,
+"h": 48
+},
+"XP Colosseum": {
+"url": "https://static.wikitide.net/battlecatswiki/e/ec/Mapname009_b_en.png",
+"w": 192,
+"h": 48
+},
+"Merciless XP!": {
+"url": "https://static.wikitide.net/battlecatswiki/1/11/Mapname008_b_en.png",
+"w": 192,
+"h": 48
+},
+"XP Bonanza!": {
+"url": "https://static.wikitide.net/battlecatswiki/9/97/Mapname319_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Proving Grounds": {
+"url": "https://static.wikitide.net/battlecatswiki/6/6b/Mapname250_s_en_2.png",
+"w": 192,
+"h": 48
+},
+"Crimson Catastrophe": {
+"url": "https://static.wikitide.net/battlecatswiki/6/67/Mapname014_s_en.png",
+"w": 192,
+"h": 48
+},
+"Heaven of Darkness": {
+"url": "https://static.wikitide.net/battlecatswiki/8/80/Mapname015_s_en.png",
+"w": 192,
+"h": 48
+},
+"Peerless": {
+"url": "https://static.wikitide.net/battlecatswiki/0/01/Mapname016_s_en.png",
+"w": 192,
+"h": 48
+},
+"Wrath of Heaven": {
+"url": "https://static.wikitide.net/battlecatswiki/0/08/Mapname039_s_en.png",
+"w": 192,
+"h": 48
+},
+"Sweet Irony": {
+"url": "https://static.wikitide.net/battlecatswiki/5/5a/Mapname043_s_en.png",
+"w": 192,
+"h": 48
+},
+"Dimension of Despair": {
+"url": "https://static.wikitide.net/battlecatswiki/5/54/Mapname066_s_en.png",
+"w": 192,
+"h": 48
+},
+"Red Sky at Morning": {
+"url": "https://static.wikitide.net/battlecatswiki/7/7e/Mapname096_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Rolling Dead": {
+"url": "https://static.wikitide.net/battlecatswiki/a/ad/Mapname122_s_en.png",
+"w": 192,
+"h": 48
+},
+"The 2nd Dimension": {
+"url": "https://static.wikitide.net/battlecatswiki/6/6b/Mapname157_s_en.png",
+"w": 192,
+"h": 48
+},
+"Typhoon Nemo": {
+"url": "https://static.wikitide.net/battlecatswiki/1/1d/Mapname189_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Great Diablo": {
+"url": "https://static.wikitide.net/battlecatswiki/2/2c/Mapname259_s_en.png",
+"w": 192,
+"h": 48
+},
+"Crimson Vengeance": {
+"url": "https://static.wikitide.net/battlecatswiki/e/ed/Mapname169_s_en.png",
+"w": 192,
+"h": 48
+},
+"NEO Darkness Heaven": {
+"url": "https://static.wikitide.net/battlecatswiki/d/d0/Mapname172_s_en.png",
+"w": 192,
+"h": 48
+},
+"Peerless Too": {
+"url": "https://static.wikitide.net/battlecatswiki/b/b8/Mapname176_s_en.png",
+"w": 192,
+"h": 48
+},
+"Wrath of the Divine": {
+"url": "https://static.wikitide.net/battlecatswiki/a/aa/Mapname185_s_en.png",
+"w": 192,
+"h": 48
+},
+"Bitter Irony": {
+"url": "https://static.wikitide.net/battlecatswiki/e/ed/Mapname187_s_en.png",
+"w": 192,
+"h": 48
+},
+"Dimension of Delirium": {
+"url": "https://static.wikitide.net/battlecatswiki/b/b7/Mapname193_s_en.png",
+"w": 192,
+"h": 48
+},
+"Red Sky at Night": {
+"url": "https://static.wikitide.net/battlecatswiki/6/61/Mapname195_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Dead Keep Rolling": {
+"url": "https://static.wikitide.net/battlecatswiki/f/ff/Mapname198_s_en.png",
+"w": 192,
+"h": 48
+},
+"The 3rd Dimension": {
+"url": "https://static.wikitide.net/battlecatswiki/4/42/Mapname203_s_en.png",
+"w": 192,
+"h": 48
+},
+"Typhoon Nihil": {
+"url": "https://static.wikitide.net/battlecatswiki/4/44/Mapname247_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Greatest Diablo": {
+"url": "https://static.wikitide.net/battlecatswiki/1/1a/Mapname342_s_en.png",
+"w": 192,
+"h": 48
+},
+"Day of Judgement": {
+"url": "https://static.wikitide.net/battlecatswiki/f/f5/Mapname112_s_en_2.png",
+"w": 192,
+"h": 48
+},
+"Bad to Worse": {
+"url": "https://static.wikitide.net/battlecatswiki/2/21/Mapname111_s_en_2.png",
+"w": 192,
+"h": 48
+},
+"Techneurosis": {
+"url": "https://static.wikitide.net/battlecatswiki/5/55/Mapname114_s_en_2.png",
+"w": 192,
+"h": 48
+},
+"Cavern of Comets": {
+"url": "https://static.wikitide.net/battlecatswiki/d/d8/Mapname150_s_en.png",
+"w": 192,
+"h": 48
+},
+"Island of Ash": {
+"url": "https://static.wikitide.net/battlecatswiki/4/4e/Mapname151_s_en.png",
+"w": 192,
+"h": 48
+},
+"Strait of Wings": {
+"url": "https://static.wikitide.net/battlecatswiki/9/93/Mapname152_s_en.png",
+"w": 192,
+"h": 48
+},
+"Island of Hidden Treasure": {
+"url": "https://static.wikitide.net/battlecatswiki/6/6a/Mapname055_a_en.png",
+"w": 192,
+"h": 48
+},
+"Cat Ticket Chance!": {
+"url": "https://static.wikitide.net/battlecatswiki/e/ef/Mapname007_b_en.png",
+"w": 192,
+"h": 48
+},
+"Siege of Hippoe!": {
+"url": "https://static.wikitide.net/battlecatswiki/8/8d/Mapname007_s_en.png",
+"w": 192,
+"h": 48
+},
+"Facing Danger": {
+"url": "https://static.wikitide.net/battlecatswiki/4/4d/Mapname005_b_en.png",
+"w": 192,
+"h": 48
+},
+"Cybear's Vengeance": {
+"url": "https://static.wikitide.net/battlecatswiki/d/d6/Mapname173_s_en.png",
+"w": 192,
+"h": 48
+},
+"Arcane Confluence": {
+"url": "https://static.wikitide.net/battlecatswiki/7/78/Mapname255_s_en.png",
+"w": 192,
+"h": 48
+},
+"Servant of Darkness": {
+"url": "https://static.wikitide.net/battlecatswiki/7/7d/Mapname256_s_en.png",
+"w": 192,
+"h": 48
+},
+"Demon's Park": {
+"url": "https://static.wikitide.net/battlecatswiki/c/c0/Mapname265_s_en.png",
+"w": 192,
+"h": 48
+},
+"Wicked Cat": {
+"url": "https://static.wikitide.net/battlecatswiki/5/56/Mapname257_s_en.png",
+"w": 192,
+"h": 48
+},
+"Wicked Tank": {
+"url": "https://static.wikitide.net/battlecatswiki/a/a2/Mapname258_s_en.png",
+"w": 192,
+"h": 48
+},
+"Wicked Axe": {
+"url": "https://static.wikitide.net/battlecatswiki/a/a2/Mapname266_s_en.png",
+"w": 192,
+"h": 48
+},
+"Empress' Report 1": {
+"url": "https://static.wikitide.net/battlecatswiki/3/3a/Mapname269_s_en.png",
+"w": 192,
+"h": 48
+},
+"Empress' Report 2": {
+"url": "https://static.wikitide.net/battlecatswiki/d/d5/Mapname270_s_en.png",
+"w": 192,
+"h": 48
+},
+"Empress' Report 3": {
+"url": "https://static.wikitide.net/battlecatswiki/a/ad/Mapname271_s_en.png",
+"w": 192,
+"h": 48
+},
+"Empress' Report 4": {
+"url": "https://static.wikitide.net/battlecatswiki/0/05/Mapname275_s_en.png",
+"w": 192,
+"h": 48
+},
+"Empress' Report 5": {
+"url": "https://static.wikitide.net/battlecatswiki/4/4d/Mapname276_s_en.png",
+"w": 192,
+"h": 48
+},
+"Empress' Excavation 1": {
+"url": "https://static.wikitide.net/battlecatswiki/e/e5/Mapname277_s_en.png",
+"w": 192,
+"h": 48
+},
+"Empress' Excavation 2": {
+"url": "https://static.wikitide.net/battlecatswiki/2/2b/Mapname278_s_en.png",
+"w": 192,
+"h": 48
+},
+"Empress' Excavation 3": {
+"url": "https://static.wikitide.net/battlecatswiki/e/e3/Mapname279_s_en.png",
+"w": 192,
+"h": 48
+},
+"Empress' Excavation 4": {
+"url": "https://static.wikitide.net/battlecatswiki/9/9e/Mapname280_s_en.png",
+"w": 192,
+"h": 48
+},
+"Empress' Excavation 5": {
+"url": "https://static.wikitide.net/battlecatswiki/0/0f/Mapname281_s_en.png",
+"w": 192,
+"h": 48
+},
+"Hidden Forest of Gapra": {
+"url": "https://static.wikitide.net/battlecatswiki/5/5a/Mapname000_q_en.png",
+"w": 192,
+"h": 48
+},
+"Affliction in the Forest": {
+"url": "https://static.wikitide.net/battlecatswiki/1/1a/Mapname312_s_en.png",
+"w": 192,
+"h": 48
+},
+"Affliction in the Forest II": {
+"url": "https://static.wikitide.net/battlecatswiki/2/2e/Mapname333_s_en.png",
+"w": 192,
+"h": 48
+},
+"Affliction in the Forest III": {
+"url": "https://static.wikitide.net/battlecatswiki/2/2f/Mapname345_s_en.png",
+"w": 192,
+"h": 48
+},
+"Ashvini Desert": {
+"url": "https://static.wikitide.net/battlecatswiki/5/57/Mapname001_q_en.png",
+"w": 192,
+"h": 48
+},
+"Oddity in the Desert": {
+"url": "https://static.wikitide.net/battlecatswiki/f/f9/Mapname313_s_en.png",
+"w": 192,
+"h": 48
+},
+"Oddity in the Desert II": {
+"url": "https://static.wikitide.net/battlecatswiki/4/41/Mapname334_s_en.png",
+"w": 192,
+"h": 48
+},
+"Oddity in the Desert III": {
+"url": "https://static.wikitide.net/battlecatswiki/2/2e/Mapname346_s_en.png",
+"w": 192,
+"h": 48
+},
+"Jinfore Volcano": {
+"url": "https://static.wikitide.net/battlecatswiki/c/c9/Mapname002_q_en.png",
+"w": 192,
+"h": 48
+},
+"Peril in the Volcano": {
+"url": "https://static.wikitide.net/battlecatswiki/e/e5/Mapname314_s_en.png",
+"w": 192,
+"h": 48
+},
+"Peril in the Volcano II": {
+"url": "https://static.wikitide.net/battlecatswiki/7/72/Mapname335_s_en.png",
+"w": 192,
+"h": 48
+},
+"Peril in the Volcano III": {
+"url": "https://static.wikitide.net/battlecatswiki/6/6d/Mapname347_s_en.png",
+"w": 192,
+"h": 48
+},
+"Happy New Year?": {
+"url": "https://static.wikitide.net/battlecatswiki/c/c1/Mapname011_s_en.png",
+"w": 192,
+"h": 48
+},
+"Ritual Happiness": {
+"url": "https://static.wikitide.net/battlecatswiki/1/1a/Mapname012_s_en.png",
+"w": 192,
+"h": 48
+},
+"Bears be Bare": {
+"url": "https://static.wikitide.net/battlecatswiki/9/9d/Mapname013_s_en.png",
+"w": 192,
+"h": 48
+},
+"Teacher! It's Spring!": {
+"url": "https://static.wikitide.net/battlecatswiki/c/cc/Mapname026_s_en.png",
+"w": 192,
+"h": 48
+},
+"Love is Sickness": {
+"url": "https://static.wikitide.net/battlecatswiki/b/b1/Mapname029_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Forbidden Bride": {
+"url": "https://static.wikitide.net/battlecatswiki/4/4e/Mapname030_s_en.png",
+"w": 192,
+"h": 48
+},
+"Never Summer!": {
+"url": "https://static.wikitide.net/battlecatswiki/e/e2/Mapname031_s_en.png",
+"w": 192,
+"h": 48
+},
+"Ghostly Houseguests": {
+"url": "https://static.wikitide.net/battlecatswiki/5/56/Mapname032_s_en.png",
+"w": 192,
+"h": 48
+},
+"Old Guys About Town": {
+"url": "https://static.wikitide.net/battlecatswiki/4/4d/Mapname036_s_en.png",
+"w": 192,
+"h": 48
+},
+"Autumn = Sports Day!": {
+"url": "https://static.wikitide.net/battlecatswiki/c/c6/Mapname038_s_en.png",
+"w": 192,
+"h": 48
+},
+"Loving Labour": {
+"url": "https://static.wikitide.net/battlecatswiki/9/9a/Mapname009_s_en.png",
+"w": 192,
+"h": 48
+},
+"Jingle Cat Bell": {
+"url": "https://static.wikitide.net/battlecatswiki/c/c0/Mapname010_s_en.png",
+"w": 192,
+"h": 48
+},
+"Another New Year": {
+"url": "https://static.wikitide.net/battlecatswiki/0/0a/Mapname184_s_en.png",
+"w": 192,
+"h": 48
+},
+"Ritual Confusion": {
+"url": "https://static.wikitide.net/battlecatswiki/5/51/Mapname186_s_en.png",
+"w": 192,
+"h": 48
+},
+"Bears Be Back": {
+"url": "https://static.wikitide.net/battlecatswiki/e/ee/Mapname192_s_en.png",
+"w": 192,
+"h": 48
+},
+"Spring for Sensei": {
+"url": "https://static.wikitide.net/battlecatswiki/f/ff/Mapname194_s_en.png",
+"w": 192,
+"h": 48
+},
+"Lovesick Again": {
+"url": "https://static.wikitide.net/battlecatswiki/3/36/Mapname197_s_en.png",
+"w": 192,
+"h": 48
+},
+"Forbidden Bride Pt II": {
+"url": "https://static.wikitide.net/battlecatswiki/2/2a/Mapname165_s_en.png",
+"w": 192,
+"h": 48
+},
+"Never Not Summer!": {
+"url": "https://static.wikitide.net/battlecatswiki/3/30/Mapname166_s_en.png",
+"w": 192,
+"h": 48
+},
+"Ghostly Strangers": {
+"url": "https://static.wikitide.net/battlecatswiki/8/8e/Mapname167_s_en.png",
+"w": 192,
+"h": 48
+},
+"Old Guys in the City": {
+"url": "https://static.wikitide.net/battlecatswiki/c/c9/Mapname168_s_en.png",
+"w": 192,
+"h": 48
+},
+"Sports Night": {
+"url": "https://static.wikitide.net/battlecatswiki/d/d1/Mapname170_s_en.png",
+"w": 192,
+"h": 48
+},
+"Worker's Revolution": {
+"url": "https://static.wikitide.net/battlecatswiki/9/91/Mapname171_s_en.png",
+"w": 192,
+"h": 48
+},
+"Christmas in Space": {
+"url": "https://static.wikitide.net/battlecatswiki/2/24/Mapname175_s_en.png",
+"w": 192,
+"h": 48
+},
+"War on Valentines": {
+"url": "https://static.wikitide.net/battlecatswiki/0/0c/Eve_l_102_3_en.png",
+"w": 300,
+"h": 150
+},
+"Santa Claws at Work!": {
+"url": "https://static.wikitide.net/battlecatswiki/0/06/Eve_l_130_4_en.png",
+"w": 300,
+"h": 150
+},
+"Heartbeat Catcademy": {
+"url": "https://static.wikitide.net/battlecatswiki/7/70/Eve_l_106_20_en.png",
+"w": 300,
+"h": 150
+},
+"June Bride of the Devil": {
+"url": "https://static.wikitide.net/battlecatswiki/d/d8/Eve_l_124_12_en.png",
+"w": 300,
+"h": 150
+},
+"Summer Break Cats": {
+"url": "https://static.wikitide.net/battlecatswiki/e/ea/Eve_l_078_24_en.png",
+"w": 300,
+"h": 150
+},
+"Summer Break Cats Castaway": {
+"url": "https://static.wikitide.net/battlecatswiki/e/ec/Eve_l_161_5_en.png",
+"w": 300,
+"h": 150
+},
+"Summer Break Cats Paradise": {
+"url": "https://static.wikitide.net/battlecatswiki/6/6d/Eve_l_182_5_en.png",
+"w": 300,
+"h": 150
+},
+"Halloween Party!": {
+"url": "https://static.wikitide.net/battlecatswiki/e/e5/Eve_l_027_12_en.png",
+"w": 300,
+"h": 150
+},
+"A Cultured Festival": {
+"url": "https://static.wikitide.net/battlecatswiki/2/2d/Eve_l_054_1_en.png",
+"w": 300,
+"h": 150
+},
+"Cats in the Snow": {
+"url": "https://static.wikitide.net/battlecatswiki/0/00/Eve_l_045_en.png",
+"w": 300,
+"h": 150
+},
+"Cats Abloom!": {
+"url": "https://static.wikitide.net/battlecatswiki/a/a1/Eve_l_050_5_en.png",
+"w": 300,
+"h": 150
+},
+"GOLD RUSH": {
+"url": "https://static.wikitide.net/battlecatswiki/b/b4/Eve_l_049_en.png",
+"w": 300,
+"h": 150
+},
+"Sliming to Victory": {
+"url": "https://static.wikitide.net/battlecatswiki/4/4c/Eve_l_051_en.png",
+"w": 300,
+"h": 150
+},
+"Machines in Revolt": {
+"url": "https://static.wikitide.net/battlecatswiki/1/1b/Eve_l_154_en.png",
+"w": 300,
+"h": 150
+},
+"Silver Week": {
+"url": "https://static.wikitide.net/battlecatswiki/5/5f/Eve_l_053_1_en.png",
+"w": 300,
+"h": 150
+},
+"FINALS WEEK": {
+"url": "https://static.wikitide.net/battlecatswiki/8/81/Eve_l_047_1_en.png",
+"w": 300,
+"h": 150
+},
+"River City Stages": {
+"url": "https://static.wikitide.net/battlecatswiki/5/5f/Eve_l_084_3_en.png",
+"w": 300,
+"h": 150
+},
+"Clionel Ascendant": {
+"url": "https://static.wikitide.net/battlecatswiki/0/05/Mapname095_s_en.png",
+"w": 192,
+"h": 48
+},
+"River Styx": {
+"url": "https://static.wikitide.net/battlecatswiki/8/84/Mapname117_s_en.png",
+"w": 192,
+"h": 48
+},
+"Queen's Coronation": {
+"url": "https://static.wikitide.net/battlecatswiki/c/c0/Mapname119_s_en.png",
+"w": 192,
+"h": 48
+},
+"Dead on Debut": {
+"url": "https://static.wikitide.net/battlecatswiki/9/98/Mapname128_s_en.png",
+"w": 192,
+"h": 48
+},
+"King Wahwah's Revenge": {
+"url": "https://static.wikitide.net/battlecatswiki/e/eb/Mapname158_s_en.png",
+"w": 192,
+"h": 48
+},
+"Deeply Dreaming": {
+"url": "https://static.wikitide.net/battlecatswiki/7/71/Mapname177_s_en.png",
+"w": 192,
+"h": 48
+},
+"Bottom of the Swamp": {
+"url": "https://static.wikitide.net/battlecatswiki/0/09/Mapname226_s_en.png",
+"w": 192,
+"h": 48
+},
+"Blue Impact": {
+"url": "https://static.wikitide.net/battlecatswiki/f/f7/Mapname215_s_en.png",
+"w": 192,
+"h": 48
+},
+"Courts of Torment": {
+"url": "https://static.wikitide.net/battlecatswiki/8/82/Mapname217_s_en.png",
+"w": 192,
+"h": 48
+},
+"Papuu's Paradise": {
+"url": "https://static.wikitide.net/battlecatswiki/6/60/Mapname219_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Old Queen": {
+"url": "https://static.wikitide.net/battlecatswiki/2/2b/Mapname220_s_en.png",
+"w": 192,
+"h": 48
+},
+"Wanwan's Glory": {
+"url": "https://static.wikitide.net/battlecatswiki/1/19/Mapname229_s_en.png",
+"w": 192,
+"h": 48
+},
+"Z-Onel Rises!": {
+"url": "https://static.wikitide.net/battlecatswiki/5/57/Mapname231_s_en.png",
+"w": 192,
+"h": 48
+},
+"Z-Onel Resurrected!": {
+"url": "https://static.wikitide.net/battlecatswiki/8/8f/Mapname393_s_en.png",
+"w": 192,
+"h": 48
+},
+"First Errand": {
+"url": "https://static.wikitide.net/battlecatswiki/4/44/Mapname232_s_en.png",
+"w": 192,
+"h": 48
+},
+"Prelude to Ruin": {
+"url": "https://static.wikitide.net/battlecatswiki/c/cc/Mapname246_s_en.png",
+"w": 192,
+"h": 48
+},
+"Temptation's Symphony": {
+"url": "https://static.wikitide.net/battlecatswiki/a/a6/Mapname272_s_en.png",
+"w": 192,
+"h": 48
+},
+"Temptation's Rhapsody": {
+"url": "https://static.wikitide.net/battlecatswiki/9/96/Mapname404_s_en.png",
+"w": 192,
+"h": 48
+},
+"Rashomon": {
+"url": "https://static.wikitide.net/battlecatswiki/9/9c/Mapname273_s_en.png",
+"w": 192,
+"h": 48
+},
+"Reign of the Tyrant": {
+"url": "https://static.wikitide.net/battlecatswiki/f/f7/Mapname340_s_en.png",
+"w": 192,
+"h": 48
+},
+"Invasion of the Swamplord": {
+"url": "https://static.wikitide.net/battlecatswiki/b/bd/Mapname348_s_en.png",
+"w": 192,
+"h": 48
+},
+"Hunt for the Xenobeast": {
+"url": "https://static.wikitide.net/battlecatswiki/a/a8/Mapname391_s_en.png",
+"w": 192,
+"h": 48
+},
+"Jumbo Invasion": {
+"url": "https://static.wikitide.net/battlecatswiki/6/66/Mapname406_s_en.png",
+"w": 192,
+"h": 48
+},
+"Invasion of Poultrio": {
+"url": "https://static.wikitide.net/battlecatswiki/7/71/Mapname421_s_en.png",
+"w": 192,
+"h": 48
+},
+"Clionel Dominant": {
+"url": "https://static.wikitide.net/battlecatswiki/2/23/Mapname196_s_en.png",
+"w": 192,
+"h": 48
+},
+"River Acheron": {
+"url": "https://static.wikitide.net/battlecatswiki/5/59/Mapname199_s_en.png",
+"w": 192,
+"h": 48
+},
+"Queen's Condemnation": {
+"url": "https://static.wikitide.net/battlecatswiki/a/a1/Mapname201_s_en.png",
+"w": 192,
+"h": 48
+},
+"Dead by Encore": {
+"url": "https://static.wikitide.net/battlecatswiki/d/d6/Mapname205_s_en.png",
+"w": 192,
+"h": 48
+},
+"King Wahwah's Return": {
+"url": "https://static.wikitide.net/battlecatswiki/d/d6/Mapname207_s_en.png",
+"w": 192,
+"h": 48
+},
+"A Deeper Dream": {
+"url": "https://static.wikitide.net/battlecatswiki/1/16/Mapname214_s_en.png",
+"w": 192,
+"h": 48
+},
+"Top of the Bog": {
+"url": "https://static.wikitide.net/battlecatswiki/c/c7/Mapname243_s_en.png",
+"w": 192,
+"h": 48
+},
+"Courts of Agony": {
+"url": "https://static.wikitide.net/battlecatswiki/1/1e/Mapname296_s_en.png",
+"w": 192,
+"h": 48
+},
+"Papuu's Paradox": {
+"url": "https://static.wikitide.net/battlecatswiki/f/fc/Mapname381_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Eldest Queen": {
+"url": "https://static.wikitide.net/battlecatswiki/b/bc/Mapname383_s_en.png",
+"w": 192,
+"h": 48
+},
+"NEO Wanwan's Glory": {
+"url": "https://static.wikitide.net/battlecatswiki/1/13/Mapname338_s_en.png",
+"w": 192,
+"h": 48
+},
+"NEO First Errand": {
+"url": "https://static.wikitide.net/battlecatswiki/b/b8/Mapname375_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Angel & The Demon": {
+"url": "https://static.wikitide.net/battlecatswiki/b/b7/Mapname251_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Queen & The Dead": {
+"url": "https://static.wikitide.net/battlecatswiki/3/39/Mapname252_s_en.png",
+"w": 192,
+"h": 48
+},
+"The King & The Maiden": {
+"url": "https://static.wikitide.net/battlecatswiki/0/00/Mapname253_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Dead & The Bloated": {
+"url": "https://static.wikitide.net/battlecatswiki/f/f9/Mapname305_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Queen & The Maiden": {
+"url": "https://static.wikitide.net/battlecatswiki/c/cf/Mapname306_s_en.png",
+"w": 192,
+"h": 48
+},
+"The King & The Angel": {
+"url": "https://static.wikitide.net/battlecatswiki/d/de/Mapname307_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Crazed Cat": {
+"url": "https://static.wikitide.net/battlecatswiki/6/61/Mapname017_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Crazed Tank": {
+"url": "https://static.wikitide.net/battlecatswiki/1/14/Mapname018_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Crazed Axe": {
+"url": "https://static.wikitide.net/battlecatswiki/f/f4/Mapname019_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Crazed Gross": {
+"url": "https://static.wikitide.net/battlecatswiki/8/88/Mapname020_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Crazed Cow": {
+"url": "https://static.wikitide.net/battlecatswiki/d/df/Mapname021_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Crazed Bird": {
+"url": "https://static.wikitide.net/battlecatswiki/c/c2/Mapname022_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Crazed Fish": {
+"url": "https://static.wikitide.net/battlecatswiki/2/2c/Mapname023_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Crazed Lizard": {
+"url": "https://static.wikitide.net/battlecatswiki/0/03/Mapname024_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Crazed Titan": {
+"url": "https://static.wikitide.net/battlecatswiki/4/44/Mapname025_s_en.png",
+"w": 192,
+"h": 48
+},
+"Crazed Moneko": {
+"url": "https://static.wikitide.net/battlecatswiki/0/03/Mapname161_s_en.png",
+"w": 192,
+"h": 48
+},
+"Cat Maniac": {
+"url": "https://static.wikitide.net/battlecatswiki/5/5e/Mapname102_s_en.png",
+"w": 192,
+"h": 48
+},
+"Tank Maniac": {
+"url": "https://static.wikitide.net/battlecatswiki/4/43/Mapname103_s_en.png",
+"w": 192,
+"h": 48
+},
+"Axe Maniac": {
+"url": "https://static.wikitide.net/battlecatswiki/b/ba/Mapname104_s_en.png",
+"w": 192,
+"h": 48
+},
+"Gross Maniac": {
+"url": "https://static.wikitide.net/battlecatswiki/8/8e/Mapname105_s_en.png",
+"w": 192,
+"h": 48
+},
+"Cow Maniac": {
+"url": "https://static.wikitide.net/battlecatswiki/0/00/Mapname106_s_en.png",
+"w": 192,
+"h": 48
+},
+"Bird Maniac": {
+"url": "https://static.wikitide.net/battlecatswiki/6/63/Mapname107_s_en.png",
+"w": 192,
+"h": 48
+},
+"Fish Maniac": {
+"url": "https://static.wikitide.net/battlecatswiki/0/0d/Mapname108_s_en.png",
+"w": 192,
+"h": 48
+},
+"Lizard Maniac": {
+"url": "https://static.wikitide.net/battlecatswiki/2/28/Mapname109_s_en.png",
+"w": 192,
+"h": 48
+},
+"Titan Maniac": {
+"url": "https://static.wikitide.net/battlecatswiki/7/7f/Mapname110_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Malevolent Cat": {
+"url": "https://static.wikitide.net/battlecatswiki/e/e9/Mapname350_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Malevolent Tank": {
+"url": "https://static.wikitide.net/battlecatswiki/8/88/Mapname351_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Malevolent Axe": {
+"url": "https://static.wikitide.net/battlecatswiki/2/2f/Mapname352_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Malevolent Gross": {
+"url": "https://static.wikitide.net/battlecatswiki/f/fa/Mapname353_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Malevolent Cow": {
+"url": "https://static.wikitide.net/battlecatswiki/c/c8/Mapname354_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Malevolent Bird": {
+"url": "https://static.wikitide.net/battlecatswiki/0/06/Mapname355_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Malevolent Fish": {
+"url": "https://static.wikitide.net/battlecatswiki/3/31/Mapname356_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Malevolent Lizard": {
+"url": "https://static.wikitide.net/battlecatswiki/e/e5/Mapname357_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Malevolent Titan": {
+"url": "https://static.wikitide.net/battlecatswiki/3/33/Mapname358_s_en.png",
+"w": 192,
+"h": 48
+},
+"Clan of the Maniacs": {
+"url": "https://static.wikitide.net/battlecatswiki/b/bb/Mapname208_s_en_2.png",
+"w": 192,
+"h": 48
+},
+"Super Smash Families": {
+"url": "https://static.wikitide.net/battlecatswiki/7/77/Mapname376_s_en.png",
+"w": 192,
+"h": 48
+},
+"Li'l Cat Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/3/3f/Mapname130_s_en.png",
+"w": 192,
+"h": 48
+},
+"Li'l Tank Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/d/db/Mapname131_s_en.png",
+"w": 192,
+"h": 48
+},
+"Li'l Axe Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/4/49/Mapname132_s_en.png",
+"w": 192,
+"h": 48
+},
+"Li'l Gross Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/6/66/Mapname133_s_en.png",
+"w": 192,
+"h": 48
+},
+"Li'l Cow Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/b/b1/Mapname134_s_en.png",
+"w": 192,
+"h": 48
+},
+"Li'l Bird Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/6/61/Mapname135_s_en.png",
+"w": 192,
+"h": 48
+},
+"Li'l Fish Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/c/c2/Mapname136_s_en.png",
+"w": 192,
+"h": 48
+},
+"Li'l Lizard Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/8/86/Mapname137_s_en.png",
+"w": 192,
+"h": 48
+},
+"Li'l Titan Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/2/21/Mapname138_s_en.png",
+"w": 192,
+"h": 48
+},
+"Li'l Cat's Trial": {
+"url": "https://static.wikitide.net/battlecatswiki/e/e2/Mapname339_s_en.png",
+"w": 192,
+"h": 48
+},
+"Actress Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/e/e9/Mapname045_s_en.png",
+"w": 192,
+"h": 48
+},
+"Kung-Fu Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/d/df/Mapname046_s_en.png",
+"w": 192,
+"h": 48
+},
+"Mr. Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/2/23/Mapname047_s_en.png",
+"w": 192,
+"h": 48
+},
+"Bondage Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/0/01/Mapname048_s_en.png",
+"w": 192,
+"h": 48
+},
+"The Dom Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/b/bf/Mapname049_s_en.png",
+"w": 192,
+"h": 48
+},
+"Box Cats Awaken!": {
+"url": "https://static.wikitide.net/battlecatswiki/1/11/Mapname050_s_en.png",
+"w": 192,
+"h": 48
+},
+"Panties Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/0/0d/Mapname051_s_en.png",
+"w": 192,
+"h": 48
+},
+"Tricycle Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/3/38/Mapname052_s_en.png",
+"w": 192,
+"h": 48
+},
+"Ninja Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/2/2a/Mapname053_s_en.png",
+"w": 192,
+"h": 48
+},
+"Zombie Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/5/50/Mapname054_s_en.png",
+"w": 192,
+"h": 48
+},
+"Samurai Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/0/06/Mapname055_s_en.png",
+"w": 192,
+"h": 48
+},
+"Sumo Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/8/8d/Mapname056_s_en.png",
+"w": 192,
+"h": 48
+},
+"Boogie Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/7/72/Mapname057_s_en.png",
+"w": 192,
+"h": 48
+},
+"Skirt Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/a/a6/Mapname058_s_en.png",
+"w": 192,
+"h": 48
+},
+"Flower Cat Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/2/2c/Mapname148_s_en.png",
+"w": 192,
+"h": 48
+},
+"Cat Kart Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/1/1a/Mapname143_s_en.png",
+"w": 192,
+"h": 48
+},
+"Catburger Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/2/2d/Mapname153_s_en.png",
+"w": 192,
+"h": 48
+},
+"Adult Cat Awakes!": {
+"url": "https://static.wikitide.net/battlecatswiki/1/16/Mapname083_s_en.png",
+"w": 192,
+"h": 48
+},
+"Evil Cat Awakes!": {
+"url": "https://static.wikitide.net/battlecatswiki/e/e0/Mapname084_s_en.png",
+"w": 192,
+"h": 48
+},
+"Doll Cats Awake!": {
+"url": "https://static.wikitide.net/battlecatswiki/0/07/Mapname085_s_en.png",
+"w": 192,
+"h": 48
+},
+"Maiden Awakes!": {
+"url": "https://static.wikitide.net/battlecatswiki/5/55/Mapname086_s_en.png",
+"w": 192,
+"h": 48
+},
+"Koi Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/d/dd/Mapname087_s_en.png",
+"w": 192,
+"h": 48
+},
+"Bride Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/c/c1/Mapname088_s_en.png",
+"w": 192,
+"h": 48
+},
+"Vacation Awakes!": {
+"url": "https://static.wikitide.net/battlecatswiki/d/dc/Mapname089_s_en.png",
+"w": 192,
+"h": 48
+},
+"Vengeance Awakes!": {
+"url": "https://static.wikitide.net/battlecatswiki/3/3d/Mapname090_s_en.png",
+"w": 192,
+"h": 48
+},
+"Kung-Fu X Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/c/cd/Mapname091_s_en.png",
+"w": 192,
+"h": 48
+},
+"Sports Day Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/8/87/Mapname092_s_en.png",
+"w": 192,
+"h": 48
+},
+"Salaryman Awakes!": {
+"url": "https://static.wikitide.net/battlecatswiki/4/44/Mapname093_s_en.png",
+"w": 192,
+"h": 48
+},
+"Reindeer Fish Awakens!": {
+"url": "https://static.wikitide.net/battlecatswiki/e/e0/Mapname094_s_en.png",
+"w": 192,
+"h": 48
+},
+"Deadly Carnival!": {
+"url": "https://static.wikitide.net/battlecatswiki/d/d5/Mapname069_s_en_2.png",
+"w": 192,
+"h": 48
+},
+"Deadly Carnival II": {
+"url": "https://static.wikitide.net/battlecatswiki/d/da/Mapname120_s_en_2.png",
+"w": 192,
+"h": 48
+},
+"Deadly Carnival III": {
+"url": "https://static.wikitide.net/battlecatswiki/a/a2/Mapname190_s_en_2.png",
+"w": 192,
+"h": 48
+},
+"Minced Meet-Up": {
+"url": "https://static.wikitide.net/battlecatswiki/7/78/Mapname071_s_en.png",
+"w": 192,
+"h": 48
+},
+"For the Fans": {
+"url": "https://static.wikitide.net/battlecatswiki/b/b5/Mapname139_s_en.png",
+"w": 192,
+"h": 48
+},
+"Lunar New Year": {
+"url": "https://static.wikitide.net/battlecatswiki/3/38/Eve_l_064_14_en.png",
+"w": 300,
+"h": 150
+},
+"Monthly Event All-Stars Special Celebration!": {
+"url": "https://static.wikitide.net/battlecatswiki/d/da/Mapname033_s_en.png",
+"w": 192,
+"h": 48
+},
+"Monthly Event All-Stars Ultra Celebration!": {
+"url": "https://static.wikitide.net/battlecatswiki/2/24/Mapname034_s_en.png",
+"w": 192,
+"h": 48
+},
+"Monthly Event All-Stars Miracle Celebration!": {
+"url": "https://static.wikitide.net/battlecatswiki/b/bb/Mapname035_s_en.png",
+"w": 192,
+"h": 48
+},
+"Monthly Event All-Stars Wonderful Celebration!": {
+"url": "https://static.wikitide.net/battlecatswiki/0/0e/Mapname070_s_en.png",
+"w": 192,
+"h": 48
+},
+"Event All-Stars Excellent Celebration!": {
+"url": "https://static.wikitide.net/battlecatswiki/2/29/Mapname079_s_en.png",
+"w": 192,
+"h": 48
+},
+"Event All-Stars Grand Jubilee!": {
+"url": "https://static.wikitide.net/battlecatswiki/5/5d/Mapname146_s_en.png",
+"w": 192,
+"h": 48
+},
+"Event All-Stars Super Present DX": {
+"url": "https://static.wikitide.net/battlecatswiki/0/08/Mapname182_s_en.png",
+"w": 192,
+"h": 48
+},
+"January Gauntlet": {
+"url": "https://static.wikitide.net/battlecatswiki/6/66/Mapname032_a_en.png",
+"w": 192,
+"h": 48
+},
+"January Gauntlet II": {
+"url": "https://static.wikitide.net/battlecatswiki/2/2c/Mapname033_a_en.png",
+"w": 192,
+"h": 48
+},
+"February Gauntlet": {
+"url": "https://static.wikitide.net/battlecatswiki/d/da/Mapname039_a_en.png",
+"w": 192,
+"h": 48
+},
+"February Gauntlet II": {
+"url": "https://static.wikitide.net/battlecatswiki/b/b1/Mapname040_a_en.png",
+"w": 192,
+"h": 48
+},
+"March Gauntlet": {
+"url": "https://static.wikitide.net/battlecatswiki/d/d4/Mapname043_a_en.png",
+"w": 192,
+"h": 48
+},
+"March Gauntlet II": {
+"url": "https://static.wikitide.net/battlecatswiki/9/96/Mapname044_a_en.png",
+"w": 192,
+"h": 48
+},
+"April Gauntlet": {
+"url": "https://static.wikitide.net/battlecatswiki/9/90/Mapname046_a_en.png",
+"w": 192,
+"h": 48
+},
+"April Gauntlet II": {
+"url": "https://static.wikitide.net/battlecatswiki/b/b4/Mapname047_a_en.png",
+"w": 192,
+"h": 48
+},
+"May Gauntlet": {
+"url": "https://static.wikitide.net/battlecatswiki/e/e2/Mapname050_a_en.png",
+"w": 192,
+"h": 48
+},
+"May Gauntlet II": {
+"url": "https://static.wikitide.net/battlecatswiki/9/97/Mapname051_a_en.png",
+"w": 192,
+"h": 48
+},
+"June Gauntlet": {
+"url": "https://static.wikitide.net/battlecatswiki/e/e4/Mapname015_a_en.png",
+"w": 192,
+"h": 48
+},
+"June Gauntlet II": {
+"url": "https://static.wikitide.net/battlecatswiki/7/7d/Mapname016_a_en.png",
+"w": 192,
+"h": 48
+},
+"July Gauntlet": {
+"url": "https://static.wikitide.net/battlecatswiki/e/e4/Mapname017_a_en.png",
+"w": 192,
+"h": 48
+},
+"July Gauntlet II": {
+"url": "https://static.wikitide.net/battlecatswiki/c/c9/Mapname018_a_en.png",
+"w": 192,
+"h": 48
+},
+"August Gauntlet": {
+"url": "https://static.wikitide.net/battlecatswiki/7/76/Mapname021_a_en.png",
+"w": 192,
+"h": 48
+},
+"August Gauntlet II": {
+"url": "https://static.wikitide.net/battlecatswiki/4/43/Mapname022_a_en.png",
+"w": 192,
+"h": 48
+},
+"September Gauntlet": {
+"url": "https://static.wikitide.net/battlecatswiki/d/d3/Mapname023_a_en.png",
+"w": 192,
+"h": 48
+},
+"September Gauntlet II": {
+"url": "https://static.wikitide.net/battlecatswiki/d/d2/Mapname024_a_en.png",
+"w": 192,
+"h": 48
+},
+"October Gauntlet": {
+"url": "https://static.wikitide.net/battlecatswiki/a/ab/Mapname025_a_en.png",
+"w": 192,
+"h": 48
+},
+"October Gauntlet II": {
+"url": "https://static.wikitide.net/battlecatswiki/d/d8/Mapname026_a_en.png",
+"w": 192,
+"h": 48
+},
+"November Gauntlet": {
+"url": "https://static.wikitide.net/battlecatswiki/d/d3/Mapname028_a_en.png",
+"w": 192,
+"h": 48
+},
+"November Gauntlet II": {
+"url": "https://static.wikitide.net/battlecatswiki/b/bf/Mapname029_a_en.png",
+"w": 192,
+"h": 48
+},
+"December Gauntlet": {
+"url": "https://static.wikitide.net/battlecatswiki/c/cd/Mapname030_a_en.png",
+"w": 192,
+"h": 48
+},
+"December Gauntlet II": {
+"url": "https://static.wikitide.net/battlecatswiki/a/a7/Mapname031_a_en.png",
+"w": 192,
+"h": 48
+},
+"Baron Seal Strikes": {
+"url": "https://static.wikitide.net/battlecatswiki/3/3f/Baron_seal_strikes_reborn.png",
+"w": 300,
+"h": 150
+},
+"Le'Grim Strikes": {
+"url": "https://static.wikitide.net/battlecatswiki/6/61/Le_grim_strikes_reborn.png",
+"w": 300,
+"h": 150
+},
+"Mega Menace": {
+"url": "https://static.wikitide.net/battlecatswiki/4/49/Mega_menace_reborn.png",
+"w": 300,
+"h": 150
+},
+"Horrorpotamus": {
+"url": "https://static.wikitide.net/battlecatswiki/2/25/Horrorpotamus_reborn.png",
+"w": 300,
+"h": 150
+},
+"Divine Archangel Strikes": {
+"url": "https://static.wikitide.net/battlecatswiki/8/8c/Divine_archangel_splash.png",
+"w": 300,
+"h": 150
+},
+"Big Peng Z Strikes": {
+"url": "https://static.wikitide.net/battlecatswiki/1/13/Big_peng_z_splash.png",
+"w": 300,
+"h": 150
+},
+"Gigahaniwan Strikes!": {
+"url": "https://static.wikitide.net/battlecatswiki/e/e8/Eve_l_156_en.png",
+"w": 300,
+"h": 150
+},
+"Attack of the Omens": {
+"url": "https://static.wikitide.net/battlecatswiki/5/51/Eve_l_136_en.png",
+"w": 300,
+"h": 150
+},
+"Heavenly/Infernal Tower": {
+"url": "https://static.wikitide.net/battlecatswiki/3/34/Eve_l_026_2_en.png",
+"w": 300,
+"h": 150
+},
+"Citadels": {
+"url": "https://static.wikitide.net/battlecatswiki/7/7d/E7L_WjUXEAE2MZF.png",
+"w": 300,
+"h": 150
+},
+"Legend Quest": {
+"url": "https://static.wikitide.net/battlecatswiki/4/49/Legendquest.png",
+"w": 300,
+"h": 150
+},
+"Underground Labyrinth": {
+"url": "https://static.wikitide.net/battlecatswiki/c/ca/Eve_l_132_1_en.png",
+"w": 300,
+"h": 150
+},
+"Arena of Honor": {
+"url": "https://static.wikitide.net/battlecatswiki/2/26/Eve_l_034_en.png",
+"w": 300,
+"h": 150
+},
+"Tales of Honor": {
+"url": "https://static.wikitide.net/battlecatswiki/a/ab/Eve_l_070_en.png",
+"w": 300,
+"h": 150
+},
+"Arena of Power": {
+"url": "https://static.wikitide.net/battlecatswiki/a/ab/Eve_l_159_en.png",
+"w": 300,
+"h": 150
+},
+"Arena of Destiny": {
+"url": "https://static.wikitide.net/battlecatswiki/1/1e/Eve_l_184_en.png",
+"w": 300,
+"h": 150
+},
+"Cover of Darkness": {
+"url": "https://static.wikitide.net/battlecatswiki/a/a4/Dark_Descent.jpg",
+"w": 300,
+"h": 150
+},
+"Resident Undead": {
+"url": "https://static.wikitide.net/battlecatswiki/8/8c/Eve_l_138_en.png",
+"w": 300,
+"h": 150
+},
+"Duel Stages Challenge": {
+"url": "https://static.wikitide.net/battlecatswiki/7/73/Eve_l_039_en.png",
+"w": 300,
+"h": 150
+},
+"Tag Arena Challenge": {
+"url": "https://static.wikitide.net/battlecatswiki/5/5d/TagarenaEN.png",
+"w": 300,
+"h": 150
+},
+"Meow Meow Day": {
+"url": "https://static.wikitide.net/battlecatswiki/e/e1/Mapname209_s_en.png",
+"w": 192,
+"h": 48
+},
+"First Draw Discount": {
+"url": "https://static.wikitide.net/battlecatswiki/7/79/Eve_l_038_en.png",
+"w": 300,
+"h": 150
+},
+"Guaranteed Uber Rare Cat Campaign": {
+"url": "https://static.wikitide.net/battlecatswiki/4/49/Guaranteed_uber.png",
+"w": 300,
+"h": 150
+},
+"Increasing Capsules Campaign": {
+"url": "https://static.wikitide.net/battlecatswiki/c/cc/Step_Up.jpg",
+"w": 300,
+"h": 150
+},
+"Catfruit Buffet": {
+"url": "https://static.wikitide.net/battlecatswiki/4/4f/Eve_l_030_en.png",
+"w": 300,
+"h": 150
+},
+"Catfruit Festival": {
+"url": "https://static.wikitide.net/battlecatswiki/4/48/Eve_l_029_en.png",
+"w": 300,
+"h": 150
+},
+"XP Festival": {
+"url": "https://static.wikitide.net/battlecatswiki/1/1e/Eve_l_118_en.png",
+"w": 300,
+"h": 150
+},
+"Cat Ticket Festival": {
+"url": "https://static.wikitide.net/battlecatswiki/a/a8/Ticket_Fest.jpg",
+"w": 300,
+"h": 150
+},
+"Treasure Festival": {
+"url": "https://static.wikitide.net/battlecatswiki/6/69/Eve_l_031_en.png",
+"w": 300,
+"h": 150
+},
+"Crazed Festival": {
+"url": "https://static.wikitide.net/battlecatswiki/1/11/Eve_l_036_en.png",
+"w": 300,
+"h": 150
+},
+"Cat Scratcher": {
+"url": "https://static.wikitide.net/battlecatswiki/c/ce/Scratch_2026_dl_img01_en.png",
+"w": 320,
+"h": 150
+},
+"Wildcat Slots": {
+"url": "https://static.wikitide.net/battlecatswiki/0/08/Slot_13th_img01_en.png",
+"w": 300,
+"h": 150
+},
+"13th Anniversary": {
+"url": "https://static.wikitide.net/battlecatswiki/d/d9/Eve_l_193_2_en.png",
+"w": 300,
+"h": 150
+},
+"Download Celebration Event!": {
+"url": "https://static.wikitide.net/battlecatswiki/d/d3/Eve_l_196_2_en.png",
+"w": 300,
+"h": 150
+},
+"The Battle Cats Together!": {
+"url": "https://static.wikitide.net/battlecatswiki/8/8d/Eve_l_092_2_en.png",
+"w": 300,
+"h": 150
+},
+"Horde of Cats": {
+"url": "https://static.wikitide.net/battlecatswiki/2/2d/Eve_l_104_4_en.png",
+"w": 300,
+"h": 150
+},
+"Otherworld Colosseum": {
+"url": "https://static.wikitide.net/battlecatswiki/8/87/Eve_l_162_en.png",
+"w": 300,
+"h": 150
+},
+"Year's End Event": {
+"url": "https://static.wikitide.net/battlecatswiki/e/e2/Eve_l_059_4_en.png",
+"w": 300,
+"h": 150
+},
+"New Years Event": {
+"url": "https://static.wikitide.net/battlecatswiki/c/c5/Eve_l_059_5_en.png",
+"w": 300,
+"h": 150
+},
+"Final Boss Strikes?! Collaboration Event": {
+"url": "https://static.wikitide.net/battlecatswiki/2/26/Eve_l_098_en.png",
+"w": 300,
+"h": 150
+},
+"The March of Flames": {
+"url": "https://static.wikitide.net/battlecatswiki/d/dc/Eve_l_148_en.png",
+"w": 300,
+"h": 150
+},
+"Premium Fair Capsules": {
+"url": "https://static.wikitide.net/battlecatswiki/c/c6/Gatya_e_bnr38_en.png",
+"w": 300,
+"h": 84
+},
+"Premium Fair": {
+"url": "https://static.wikitide.net/battlecatswiki/0/01/Eve_l_175_1_en.png",
+"w": 300,
+"h": 150
+},
+"Capsule Clearance": {
+"url": "https://static.wikitide.net/battlecatswiki/4/4c/Gatya_bnr974_en.png",
+"w": 300,
+"h": 84
+},
+"New Update": {
+"url": "https://static.wikitide.net/battlecatswiki/8/85/Other_l_020_en.png",
+"w": 300,
+"h": 150
+},
+"Running Start Campaign": {
+"url": "https://static.wikitide.net/battlecatswiki/d/d7/Eve_l_166_1_en.png",
+"w": 300,
+"h": 150
+},
+"The Battle Cats Training Week": {
+"url": "https://static.wikitide.net/battlecatswiki/d/d1/Eve_l_181_1_en.png",
+"w": 300,
+"h": 150
+},
+"Best of the Best Milestone Edition": {
+"url": "https://static.wikitide.net/battlecatswiki/3/36/Gatya_bnr1077_en.png",
+"w": 300,
+"h": 84
+},
+"Download Celebration!": {
+"url": "https://static.wikitide.net/battlecatswiki/8/85/Gatya_e_bnr55_en.png",
+"w": 300,
+"h": 84
+},
+"Progression Missions": {
+"url": "https://static.wikitide.net/battlecatswiki/8/8d/Eve_l_187_en.png",
+"w": 300,
+"h": 150
+},
+"Nyanko Rangers": {
+"url": "https://static.wikitide.net/battlecatswiki/5/57/Gatya_e_bnr45_en.png",
+"w": 300,
+"h": 84
+},
+"Uber Meownesday": {
+"url": "https://static.wikitide.net/battlecatswiki/1/16/Eve_l_190_3_en.png",
+"w": 300,
+"h": 150
+},
+"Koneko Music Festival": {
+"url": "https://static.wikitide.net/battlecatswiki/7/71/Eve_l_197_en.png",
+"w": 300,
+"h": 150
+},
+"Fate/Stay Night: Heaven's Feel Collaboration Event": {
+"url": "https://static.wikitide.net/battlecatswiki/4/41/Clb_l_012_2_en.png",
+"w": 300,
+"h": 150
+},
+"Fate/Stay Night: Heaven's Feel": {
+"url": "https://static.wikitide.net/battlecatswiki/0/04/Gatya_bnr1081_en.png",
+"w": 300,
+"h": 84
+}
+}
+}

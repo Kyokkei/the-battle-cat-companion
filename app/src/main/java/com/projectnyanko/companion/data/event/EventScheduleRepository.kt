@@ -3,8 +3,6 @@ package com.projectnyanko.companion.data.event
 import android.content.Context
 import com.projectnyanko.companion.domain.event.EventSchedule
 import com.projectnyanko.companion.domain.event.EventScheduleParser
-import com.projectnyanko.companion.domain.event.LiveGacha
-import com.projectnyanko.companion.domain.event.LiveGachaParser
 
 /**
  * The event schedule that ships in the APK.
@@ -19,24 +17,35 @@ class EventScheduleRepository(private val context: Context) {
     private var cached: EventSchedule? = null
 
     @Volatile
-    private var cachedGacha: List<LiveGacha>? = null
+    private var cachedBanners: Map<String, String>? = null
 
     fun load(): EventSchedule? = cached ?: runCatching {
         context.assets.open(ASSET).bufferedReader().use { EventScheduleParser.parse(it.readText()) }
     }.getOrNull()?.also { cached = it }
 
     /**
-     * Gacha banners, from the dated table that ships with the stats data.
+     * Artwork URL for a banner, or null when the bundled map has never heard of it.
      *
-     * This one is computed against today's date, so it is always current without a network call —
-     * the special-event half is the snapshot, this half is not.
+     * The map (379 banners) ships with the schedule; the PNGs themselves are downloaded on demand by
+     * [BannerImageLoader]. The image host answers plain GETs, unlike the wiki it belongs to.
      */
-    fun liveGacha(): List<LiveGacha> = cachedGacha ?: runCatching {
-        context.assets.open(GACHA_ASSET).bufferedReader().use { LiveGachaParser.parse(it.readText()) }
-    }.getOrDefault(emptyList()).also { cachedGacha = it }
+    fun bannerUrl(name: String): String? = bannerMap()[name]
+
+    private fun bannerMap(): Map<String, String> = cachedBanners ?: runCatching {
+        val json = context.assets.open(BANNER_MAP).bufferedReader().use { it.readText() }
+        val root = org.json.JSONObject(json).optJSONObject("banners") ?: return@runCatching emptyMap()
+        buildMap {
+            for (key in root.keys()) {
+                val url = root.optJSONObject(key)?.optString("url").orEmpty()
+                if (url.isNotEmpty()) put(key, url)
+            }
+        }
+    }.onFailure {
+        android.util.Log.w("EventSchedule", "banner map failed: ${it.message}", it)
+    }.getOrDefault(emptyMap()).also { cachedBanners = it }
 
     private companion object {
         const val ASSET = "events/schedule.json"
-        const val GACHA_ASSET = "neko/data/en/gacha_events.json"
+        const val BANNER_MAP = "events/banners.json"
     }
 }
