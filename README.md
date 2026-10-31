@@ -16,7 +16,7 @@ No account. No queue. No "please wait while we look that up for you."
 ![Offline](https://img.shields.io/badge/works-offline-2ea44f)
 ![Telemetry](https://img.shields.io/badge/telemetry-none-2ea44f)
 ![Version](https://img.shields.io/badge/version-0.1.0-blue)
-![License](https://img.shields.io/badge/license-TBD-lightgrey)
+![License](https://img.shields.io/badge/license-GPL--3.0--or--later-blue)
 
 </div>
 
@@ -169,7 +169,7 @@ Full toolchain notes, OCR model setup and the on-device self-test live in [docs/
 | 🚧 In progress | Auto-updater (dialog built, release manifest not hosted yet) |
 | 🧊 Parked | Japanese stage names — the EN OCR charset has no kana, so this needs the JA encoder wired plus a JP name index. It's a project, not a config flip. |
 | 🧊 Parked | Cat browser (stats / talents / true-form costs / compare) — that's a desk feature, not a bubble feature |
-| ❔ Undecided | App license |
+| 📜 Licensed | GPL-3.0-or-later — see [License](#-license) |
 
 ---
 
@@ -181,7 +181,7 @@ This app is glue. The interesting parts were done by other people, and they shou
 
 | Who | What they did |
 |:--|:--|
-| **Phan Chí Vỹ** | Made this app. Wrote the Kotlin, drew the cat, got yelled at by the OCR. <!-- TODO: link your GitHub/portfolio here --> |
+| **Phan Chí Vỹ** aka **Kyokkei** | Made this app. Wrote the Kotlin, drew the cat, got yelled at by the OCR. Also wrote **[Fukidashi](https://github.com/Kyokkei/fukidashi-mcp)**, which is where this app's OCR plumbing came from — so yes, he is crediting himself in this row. <!-- TODO: link your GitHub/portfolio here --> |
 | **[godfat](https://gitlab.com/godfat/battle-cats-rolls)** and the OG dataminers | Reverse-engineered seed tracking and published it as *Battle Cats Rolls*. Without them this app has no seed tracker at all. The mechanics here were researched against their tracker; the Kotlin is an independent implementation, no Ruby was copied. |
 | **@doromond** | The doreo art in the update prompt. <!-- TODO: real link — X? ArtStation? --> |
 
@@ -197,14 +197,39 @@ This app is glue. The interesting parts were done by other people, and they shou
 
 | Project | Used for | License |
 |:--|:--|:--|
-| [Fukidashi](https://github.com/Kyokkei/fukidashi-mcp) (Kyokkei) | PP-OCR CTC decoding + Manga OCR encoder/decoder caching | Apache-2.0 |
+| [Fukidashi](https://github.com/Kyokkei/fukidashi-mcp) | PP-OCR CTC decoding + Manga OCR encoder/decoder caching. **Same author as this app**, kept as a separate Apache-2.0 project. | Apache-2.0 |
 | [ONNX Runtime](https://onnxruntime.ai) | Running the OCR models on-device | MIT |
+
+Because the OCR adapters are the author's own Apache-2.0 code, folding them into a GPL-3.0 app is not a licensing conflict — you can't violate your own license. The **models** they shipped are a different story: PP-OCR and Manga OCR are third-party, Apache-2.0 per their own manifests, and are unaffected by this project's license.
 
 ### The disclaimer
 
-**This is an unofficial fan project.** It is not affiliated with, endorsed by, or supported by **PONOS Corporation**. *The Battle Cats* and all related names, sprites and data belong to PONOS. Enemy sprites are shown locally as in-game reference imagery, not redistributed as assets in their own right.
+**This is an unofficial fan project.** It is not affiliated with, endorsed by, or supported by **PONOS Corporation**.
+
+**Every cat picture and every enemy picture in this app belongs to PONOS.** All of them — the cat portraits in the stat card, the enemy icons in the stage card, the sprites, the unit names, the stats, the stage data. They are shown locally as in-game reference, the way a wiki shows them, and they are **not** covered by this project's license. The GPL applies to the source code. It cannot grant you any rights to the game's artwork, and nothing here is an attempt to claim any.
+
+That means: fork the code freely, but don't treat the bundled sprites as something you were given. If PONOS ever asks, the art comes out and the app still works — it just looks worse.
 
 ⚠️ **On NekoOptimizer:** that repository declares no license, so redistribution rights are unverified. Attribution is included because it was requested, but attribution is not permission. **Don't publish an APK containing those data files until the upstream rights are sorted out.** Full detail in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+---
+
+## 📜 License
+
+**The code is [GPL-3.0-or-later](LICENSE).** Copyright © 2026 Phan Chí Vỹ.
+
+The short version, because licenses are boring: take it, run it, fork it, change it, ship it — but if you ship a modified version, **your source goes public too**, under the same license. That's the deal. It's what stops someone from taking this, closing it up and selling it back to you.
+
+What the license covers, and what it doesn't:
+
+| | |
+|:--|:--|
+| ✅ Covered | Every line of Kotlin in `app/src/main/java`, plus the app's own artwork — the Nyanko icon, the UI |
+| ❌ Not covered | **All Battle Cats art and game data — that's PONOS's.** See the disclaimer above |
+| ❌ Not covered | The doreo art in the update prompt — that's @doromond's |
+| ❌ Not covered | Third-party code and data — each keeps its own license, listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) |
+
+"or later" means you may also use it under any newer GPL the FSF publishes. If you'd rather pin it to v3 exactly, that's a one-word change — say so.
 
 ---
 

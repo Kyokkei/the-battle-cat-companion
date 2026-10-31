@@ -1,5 +1,15 @@
 # Third-party notices
 
+This project's own source code is licensed **GPL-3.0-or-later** (see [LICENSE](LICENSE)). This file lists everything that is *not* ours, along with the terms it arrives under. Where a component's terms are unknown or unverified, that is stated rather than assumed.
+
+## Battle Cats artwork and game data (PONOS Corporation)
+
+**All cat artwork and all enemy artwork in this app belong to PONOS Corporation.** That covers the cat portraits shown in the stat card, the enemy icons shown in the stage card, the unit sprites, the unit and enemy names, the stat tables, and the stage data. *The Battle Cats* is a trademark of PONOS.
+
+These assets are displayed locally as in-game reference, in the same spirit as a community wiki. They are **not** licensed under this project's GPL license, they are not relicensed by inclusion here, and nothing in this repository grants any right to reuse, redistribute, or sell them. The GPL applies to the source code only.
+
+If PONOS asks for the artwork to be removed, removing it does not break the app: every lookup still resolves by ID, and missing sprites already fall back to showing the ID.
+
 ## Battle Cats Rolls
 
 The seed-tracking mechanics were researched against [Battle Cats Rolls](https://gitlab.com/godfat/battle-cats-rolls), an upstream Ruby tracker distributed under the Apache License 2.0 according to its repository README. This project contains an independently written Kotlin implementation of selected documented mechanics and does not bundle upstream Ruby source files. It does bundle NekoOptimizer gacha/event datasets as described below; their redistribution rights remain unverified. The project is not affiliated with PONOS or the Battle Cats Rolls authors.
@@ -14,7 +24,7 @@ Wiki text is attributed under CC BY-SA 4.0; if modified copies of those text rec
 
 ## ONNX Runtime and OCR model assets
 
-The OCR adapters are based on the user's local [Fukidashi MCP Android probes](https://github.com/Kyokkei/fukidashi-mcp/tree/main/android) for PP-OCR CTC decoding and Manga OCR encoder/decoder caching. Fukidashi is Apache-2.0; see [the included license](licenses/Fukidashi-ONNX-OCR-APACHE-2.0.txt). ONNX Runtime Android 1.31.1 is MIT-licensed; see [licenses/ONNX-RUNTIME-MIT.txt](licenses/ONNX-RUNTIME-MIT.txt).
+The OCR adapters are based on the author's own [Fukidashi MCP Android probes](https://github.com/Kyokkei/fukidashi-mcp/tree/main/android) for PP-OCR CTC decoding and Manga OCR encoder/decoder caching. Fukidashi is a separate Apache-2.0 project by the same author (Kyokkei / Phan Chí Vỹ), so reusing it inside a GPL-3.0 application raises no licensing conflict — see [the included license](licenses/Fukidashi-ONNX-OCR-APACHE-2.0.txt). ONNX Runtime Android 1.31.1 is MIT-licensed; see [licenses/ONNX-RUNTIME-MIT.txt](licenses/ONNX-RUNTIME-MIT.txt). The model files themselves are third-party and keep their own Apache-2.0 terms regardless of who copied them into the bundle.
 
 Seven model/vocabulary assets were copied from the user's local `E:/Fukidashi/models/ocr` folder into `app/src/main/assets/ocr/` (PP-OCRv5 mobile text detector shared by both locales, PP-OCRv6 small recognizer for English, and Japanese Manga OCR; 90,812,946 bytes total). Their exact source paths, file sizes, SHA-256 values, and stated Apache-2.0 model licenses are recorded in `app/src/main/assets/ocr/source-manifest.json`. The assets were found locally and were not downloaded for this change.
 
