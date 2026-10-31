@@ -14,6 +14,7 @@
   "note": "Local snapshot was supplied by the user. Runtime parser records SHA-256 hashes for the TSV and schema inputs. Enemy image assets are displayed as user-supplied in-game reference sprites.",
   "corrections": [
     "ex_stage for uh80-uh84 (Growing Catfruit) set to Catfruit Jubilee at 5%: the snapshot's 15% pointed at stages PONOS removed.",
-    "ex_stage for The Proving Grounds rounds rewritten as explicit chains (First Round -> 2nd -> 3rd -> 4th -> Last, Dawn and Dusk at each step, 100%), because the legacy numeric form only stored a group index. The Deadly run's last two rounds are the Merciless ones."
+    "ex_stage for The Proving Grounds rounds rewritten as explicit chains (First Round -> 2nd -> 3rd -> 4th -> Last, Dawn and Dusk at each step, 100%), because the legacy numeric form only stored a group index. The Deadly run's last two rounds are the Merciless ones.",
+    "Enemy icons for ids 702-791 (43 files, including Poultrio 769) fetched from the Battle Cats Wiki's File:Enemy_icon_<id>.png on 2026-11-01; the bundled snapshot had 746 of 792."
   ]
 }
