@@ -1,6 +1,7 @@
 package com.projectnyanko.companion.data.stage
 
 import com.projectnyanko.companion.domain.stage.EnemySpawn
+import com.projectnyanko.companion.domain.stage.ExStageRef
 import com.projectnyanko.companion.domain.stage.StageCatalog
 import com.projectnyanko.companion.domain.stage.StageCatalogMetadata
 import com.projectnyanko.companion.domain.stage.StageCategory
@@ -106,8 +107,30 @@ object StageCatalogParser {
                 length = parseDecimal(value(normalizedRow, index, "len")),
                 difficulty = index["difficulty"]?.let { normalizedRow[it] }.orEmpty(),
                 enemySpawns = parseEnemyLines(value(normalizedRow, index, "enemy_lines"), rowIndex + 2),
+                exStages = parseExStages(value(normalizedRow, index, "ex_stage")),
             )
         }
+    }
+
+    /**
+     * Reads the `ex_stage` column.
+     *
+     * `$2enlk|3` is one EX stage at 3%, `$2ergg,2eqoq|50,50` is two at 50% each. 194 rows still use
+     * the older `100,032,00,01$` form: the odds are the first field, but the rest indexes an EX table
+     * this build does not ship, so those keep the chance and lose the name.
+     */
+    internal fun parseExStages(raw: String): List<ExStageRef> {
+        val text = raw.trim()
+        if (text.isEmpty()) return emptyList()
+        if (!text.startsWith("$")) {
+            val chance = text.substringBefore(',').trim().toIntOrNull()
+            return if (chance != null && chance in 1..100) listOf(ExStageRef(null, chance)) else emptyList()
+        }
+        val body = text.removePrefix("$")
+        val ids = body.substringBefore('|').split(',').map(String::trim).filter(String::isNotEmpty)
+        if (ids.isEmpty()) return emptyList()
+        val chances = body.substringAfter('|', "").split(',').map { it.trim().toIntOrNull() }
+        return ids.mapIndexed { position, id -> ExStageRef(id, chances.getOrNull(position)) }
     }
 
     /**

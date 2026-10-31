@@ -359,6 +359,30 @@ class StageOverlayService : Service() {
             stage.difficulty.takeIf(String::isNotBlank)?.let { "Difficulty $it" },
         ).joinToString(" · ")
         if (stats.isNotBlank()) root.addView(label(stats, 14f, INK_SOFT))
+        // An EX stage is not in any map list: it only appears after its carrier is cleared, which is
+        // the one thing a player standing on it actually needs to know.
+        catalog.carrierOf(stage)?.let { carrier ->
+            root.addView(
+                label(
+                    "EX stage · appears after clearing ${StageCandidateGroups.displayName(carrier, selectedLocale)}",
+                    13f,
+                    ACCENT_DEEP,
+                ),
+            )
+        }
+        // A carrier stage can drop the player into an EX stage on clear, at odds the game never
+        // prints. The stage file knows both the target and the percentage.
+        if (stage.exStages.isNotEmpty()) {
+            val lines = stage.exStages.joinToString("\n") { ref ->
+                val target = ref.sourceId?.let(catalog::findBySourceId)
+                val name = target?.let { StageCandidateGroups.displayName(it, selectedLocale) }
+                    ?: "Hidden EX stage"
+                val chance = ref.chance?.let { " · $it%" }.orEmpty()
+                "$name$chance"
+            }
+            root.addView(label("EX stage on clear", 14f, ACCENT_DEEP, bold = true))
+            root.addView(label(lines, 13f, INK))
+        }
         val enemyIds = stage.enemySpawns.map { it.enemyId }.distinct()
         if (enemyIds.isNotEmpty()) {
             root.addView(label("Enemies", 16f, ACCENT_DEEP, bold = true))

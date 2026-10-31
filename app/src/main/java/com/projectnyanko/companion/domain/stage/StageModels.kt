@@ -17,9 +17,22 @@ data class StageRecord(
     val length: Long?,
     val difficulty: String,
     val enemySpawns: List<EnemySpawn>,
+    /**
+     * Stages this one can spawn on clear — the game's "EX" stages. Clearing the carrier rolls each
+     * of them at its own [ExStageRef.chance]; the game itself never tells the player the odds.
+     */
+    val exStages: List<ExStageRef> = emptyList(),
 ) {
     fun names(locale: StageLocale): List<String> = localizedNames[locale].orEmpty()
 }
+
+/** One entry from the stage file's `ex_stage` column. */
+data class ExStageRef(
+    /** Stage file id of the target, or null when the row only records the odds. */
+    val sourceId: String?,
+    /** Percent, when the file records one. */
+    val chance: Int?,
+)
 
 data class EnemySpawn(
     val enemyId: Int,
@@ -76,7 +89,27 @@ data class StageCatalog(
 ) {
     private val stagesById = stages.associateBy(StageRecord::id)
 
+    private val stagesBySourceId = stages.associateBy(StageRecord::sourceId)
+
+    /** Reverse of [StageRecord.exStages]: which stage you have to clear to see this one. */
+    private val carrierByExId: Map<String, StageRecord> = buildMap {
+        for (stage in stages) {
+            for (ref in stage.exStages) ref.sourceId?.let { putIfAbsent(it, stage) }
+        }
+    }
+
     fun findById(id: Long): StageRecord? = stagesById[id]
+
+    /** Lookup for the `ex_stage` links, which reference the stage file's own string ids. */
+    fun findBySourceId(sourceId: String): StageRecord? = stagesBySourceId[sourceId]
+
+    /**
+     * The stage that can spawn [stage] on clear, when [stage] is itself an EX stage.
+     *
+     * An EX stage is a normal row in the file with no energy of its own, so without this the card
+     * cannot tell the player why they cannot just play it.
+     */
+    fun carrierOf(stage: StageRecord): StageRecord? = carrierByExId[stage.sourceId]
 
     /** Name of the tower or series this stage belongs to, when the local data defines one. */
     fun seriesNameFor(stage: StageRecord): String? =
