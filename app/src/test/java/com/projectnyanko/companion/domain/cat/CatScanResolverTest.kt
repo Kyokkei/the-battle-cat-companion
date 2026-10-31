@@ -389,6 +389,19 @@ class CatScanResolverTest {
     }
 
     @Test
+    fun theCropFindsAPlusAtTheRightEdgeOfTheBlock() {
+        // Verbatim from the Kaoru Hanayama CC crop: `Leaxe 49` at 0.54 and its `+1` at 0.77 (centre
+        // 0.81). A 0.30 column limit rejected the plus and the card showed a bare level 49.
+        val lines = listOf(
+            line("C", 0.50f, 0.05f, 0.10f, 0.26f, 0.28f),
+            line("Leaxe 49", 0.64f, 0.10f, 0.28f, 0.54f, 0.62f),
+            line("+1", 0.90f, 0.32f, 0.40f, 0.77f, 0.85f),
+            line("Q", 0.50f, 0.10f, 0.15f, 0.83f, 0.86f),
+        )
+        assertEquals(49 to 1, CatScanResolver.readLevelBlock(lines))
+    }
+
+    @Test
     fun theCropIgnoresANumberAtTheEdgeWhenTheCardHasItsOwn() {
         // Octopus Cat crop: `Leavei 38` is the card, `84` at the far left is the neighbour's.
         val lines = listOf(

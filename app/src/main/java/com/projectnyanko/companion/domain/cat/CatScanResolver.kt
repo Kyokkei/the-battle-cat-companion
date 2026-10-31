@@ -52,8 +52,14 @@ object CatScanResolver {
     /** How far a number may sit from the `+N` or the `Max Level` word it belongs to. */
     private const val MAX_BLOCK_GAP = 1.8f
 
-    /** How far from the crop's centre column a candidate may sit, in crop widths. */
-    private const val CROP_COLUMN = 0.30f
+    /**
+     * How far from the crop's centre column a candidate may sit, in crop widths.
+     *
+     * Generous on purpose: the block hugs the right edge of a tile, so the plus can land at 0.80 of
+     * the crop (0.31 from centre) while the neighbouring card's block sits at 0.04 (0.46 away).
+     * 0.30 dropped Kaoru Hanayama's `+1` and showed a bare level 49.
+     */
+    private const val CROP_COLUMN = 0.38f
 
     /**
      * No cat tile prints a level below 20: the number under `Max Level` is the *cap*, and caps start
