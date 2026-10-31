@@ -33,8 +33,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -45,6 +47,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.projectnyanko.companion.BattleCatsApplication
+import com.projectnyanko.companion.R
 import com.projectnyanko.companion.data.stage.StageCatalogRepository
 import com.projectnyanko.companion.domain.stage.StageCatalog
 import com.projectnyanko.companion.domain.stage.StageLocale
@@ -202,11 +205,34 @@ fun StageHelperScreen(catalogRepository: StageCatalogRepository) {
             Spacer(Modifier.height(10.dp))
             Text(
                 text = when {
-                    !overlayGranted -> "Allow this app to draw over Battle Cats, then start the helper."
-                    captureActive -> "The paw is on and stays on. Tap it once per stage to read the screen; drag it to the bottom to stop."
-                    else -> "Android asks once to share your screen — choose the entire screen. After that the paw stays on top of the game until you stop it, so this is a one-time approval per session."
+                    !overlayGranted -> "Allow this app to draw over Battle Cats, then come back and start the helper."
+                    captureActive -> "The paw is on. Tap it to read the screen, hold it to switch modes, drag it to the bottom to stop."
+                    else -> "Tap Start helper, then pick Entire screen and press Start now in Android's prompt. That is one approval per session — after it the paw stays on top of the game until you stop it."
                 },
                 style = MaterialTheme.typography.bodyMedium,
+                color = InkSoft,
+            )
+            Spacer(Modifier.height(12.dp))
+            Text(
+                text = "One bubble, two modes",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = Ink,
+            )
+            ModeLegend(
+                iconRes = R.drawable.ic_launcher,
+                title = "Stage mode",
+                body = "Tap on a stage to read its name and list the enemies that will appear.",
+            )
+            ModeLegend(
+                iconRes = R.drawable.bubble_cat_mode,
+                title = "Cat mode",
+                body = "Tap on a cat to read its name and level, then see its stats at that level.",
+            )
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = "Hold the bubble for half a second to switch — the icon and the colour change with it, so you always know which mode is on.",
+                style = MaterialTheme.typography.bodySmall,
                 color = InkSoft,
             )
             Spacer(Modifier.height(14.dp))
@@ -391,6 +417,35 @@ private fun EnemyIcon(enemyId: Int, onClick: () -> Unit) {
                 .size(36.dp)
                 .clickable(onClick = onClick),
         )
+    }
+}
+
+/** One bubble mode: its icon, its name, and what a tap on it gets you. */
+@Composable
+private fun ModeLegend(iconRes: Int, title: String, body: String) {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
+        verticalAlignment = Alignment.Top,
+    ) {
+        Image(
+            painter = painterResource(iconRes),
+            contentDescription = null,
+            modifier = Modifier.size(40.dp).clip(RoundedCornerShape(10.dp)),
+        )
+        Spacer(Modifier.width(10.dp))
+        Column {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = Ink,
+            )
+            Text(
+                text = body,
+                style = MaterialTheme.typography.bodySmall,
+                color = InkSoft,
+            )
+        }
     }
 }
 
