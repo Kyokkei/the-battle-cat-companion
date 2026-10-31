@@ -1,4 +1,7 @@
 package com.projectnyanko.companion
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -58,6 +61,16 @@ class MainActivity : ComponentActivity() {
                 var tab by rememberSaveable { mutableIntStateOf(0) }
                 val context = androidx.compose.ui.platform.LocalContext.current
                 var pendingUpdate by remember { mutableStateOf<com.projectnyanko.companion.data.update.UpdateInfo?>(null) }
+                // Banner data ages fast — a new capsule makes the bundled catalog wrong within days,
+                // and a banner the app has never seen cannot show its guaranteed track. Pull a fresh
+                // copy in the background; it is ~1 MB, twice a day, and silently falls back.
+                LaunchedEffect(Unit) {
+                    val app = context.applicationContext as BattleCatsApplication
+                    val refreshed = withContext(Dispatchers.IO) {
+                        runCatching { app.catalogUpdater.refreshIfStale() }.getOrDefault(false)
+                    }
+                    if (refreshed) app.gachaCatalogRepository.invalidate()
+                }
                 LaunchedEffect(Unit) {
                     // `am start … --ez preview_update true` shows the dialog without a release
                     // manifest, which is how the design gets checked on a device.

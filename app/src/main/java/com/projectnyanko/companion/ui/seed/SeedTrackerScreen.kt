@@ -344,7 +344,7 @@ private fun ReadyTrackerContent(
                 onDismiss = onClearPreview,
             )
         }
-        TableHeader()
+        TableHeader(showGuaranteed = state.guaranteedRolls > 0)
         LazyColumn(modifier = Modifier.weight(1f).fillMaxWidth()) {
             items(state.rows, key = { it.sequence }) { row ->
                 TrackRowView(
@@ -496,22 +496,35 @@ private fun HeaderAction(text: String, enabled: Boolean = true, onClick: () -> U
 }
 
 @Composable
-private fun TableHeader() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 8.dp, end = 8.dp, top = 6.dp, bottom = 2.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            text = "No.",
-            style = MaterialTheme.typography.labelSmall,
-            color = InkSoft,
-            modifier = Modifier.width(34.dp),
-        )
-        ColumnLabel("Track A", Modifier.weight(1f))
-        Spacer(Modifier.width(6.dp))
-        ColumnLabel("Track B", Modifier.weight(1f))
+private fun TableHeader(showGuaranteed: Boolean) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 8.dp, end = 8.dp, top = 6.dp, bottom = 2.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = "No.",
+                style = MaterialTheme.typography.labelSmall,
+                color = InkSoft,
+                modifier = Modifier.width(34.dp),
+            )
+            ColumnLabel("Track A", Modifier.weight(1f))
+            Spacer(Modifier.width(6.dp))
+            ColumnLabel("Track B", Modifier.weight(1f))
+        }
+        if (showGuaranteed) {
+            // The web tracker gives this its own column. On a phone that would squeeze both tracks
+            // into a third of the width each, so it sits inside the cell instead — with a badge,
+            // and this line explaining what the badge means.
+            Text(
+                text = "100% = the cat you are guaranteed to get on an 11-roll, not your next roll",
+                style = MaterialTheme.typography.labelSmall,
+                color = InkSoft,
+                modifier = Modifier.padding(horizontal = 10.dp, vertical = 2.dp),
+            )
+        }
     }
 }
 
@@ -631,7 +644,7 @@ private fun TrackCellView(
         guaranteed?.let {
             JumpLine(
                 cell = it,
-                prefix = "G",
+                prefix = "100%",
                 isNext = nextMarker == it.marker,
                 preview = preview,
                 onAdvance = onAdvance,
@@ -726,11 +739,10 @@ private fun JumpLine(
             Spacer(Modifier.width(3.dp))
         }
         if (prefix.isNotEmpty()) {
-            Text(
+            MicroChip(
                 text = prefix,
-                style = MaterialTheme.typography.labelSmall,
-                fontWeight = FontWeight.Black,
-                color = AccentDeep,
+                background = AccentDeep,
+                foreground = Color.White,
             )
             Spacer(Modifier.width(4.dp))
         }

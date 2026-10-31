@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Gacha banner art (and, later, the data updater). Everything else works offline. -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Only to tell Wi-Fi from mobile data, so a catalog refresh never eats a data plan. -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />

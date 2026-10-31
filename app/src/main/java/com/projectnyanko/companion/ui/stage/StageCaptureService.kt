@@ -318,9 +318,57 @@ class StageCaptureService : Service() {
                 captureRequested = false
                 reader.setOnImageAvailableListener(null, null)
                 runCatching { display.setSurface(null) }
+                // Some devices (One UI especially) never begin mirroring into a surface that was
+                // attached at creation: the virtual display sits idle until the compositor is made
+                // to re-evaluate it. That is exactly why turning the screen off and on "fixes" a
+                // scan — it forces that re-evaluation. Rebuilding the display does the same thing
+                // on purpose, without asking the player to lock their phone.
+                val rebuilt = rebuildCaptureDisplay()
+                Log.i(TAG, "retry $attempt: display rebuilt = $rebuilt")
                 captureHandler?.postDelayed({ attachCaptureSurface() }, CAPTURE_RETRY_DELAY_MS)
             }
         }, CAPTURE_ATTEMPT_TIMEOUT_MS)
+    }
+
+    /**
+     * Tears the mirroring display down and builds a fresh one.
+     *
+     * A `setSurface(null)` / `setSurface(surface)` cycle is not enough on every OEM: the display
+     * keeps the composition it had and simply never produces another frame, so every retry waits
+     * on a display that has nothing to say. Creating a new VirtualDisplay restarts the mirroring
+     * pipeline, which is what the screen-off/on workaround was accidentally doing.
+     *
+     * The MediaProjection itself is reused — it survives, and re-creating it would need the user's
+     * approval again.
+     */
+    private fun rebuildCaptureDisplay(): Boolean {
+        val active = projection ?: return false
+        val reader = imageReader ?: return false
+        val previous = virtualDisplay
+        // Android 14+ allows one virtual display per projection, so the old one has to go first.
+        // It is kept in a local so a failed rebuild can put the session back the way it was instead
+        // of leaving the player with a dead helper.
+        runCatching { previous?.setSurface(null) }
+        runCatching { previous?.release() }
+        val display = runCatching {
+            active.createVirtualDisplay(
+                "Battle Cats stage helper",
+                captureWidth,
+                captureHeight,
+                captureDensity,
+                DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
+                reader.surface,
+                null,
+                captureHandler,
+            )
+        }.getOrNull()
+        if (display == null) {
+            Log.w(TAG, "rebuilding the capture display failed; keeping the released one so the session survives")
+            virtualDisplay = previous
+            return false
+        }
+        virtualDisplay = display
+        return true
     }
 
     /**

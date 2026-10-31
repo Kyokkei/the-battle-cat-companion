@@ -2,6 +2,7 @@ package com.projectnyanko.companion
 
 import android.app.Application
 import androidx.room.Room
+import com.projectnyanko.companion.data.catalog.CatalogUpdater
 import com.projectnyanko.companion.data.catalog.GachaCatalogRepository
 import com.projectnyanko.companion.data.event.EventScheduleRepository
 import com.projectnyanko.companion.data.catalog.CatScanCatalog
@@ -26,6 +27,10 @@ class BattleCatsApplication : Application() {
 
     val gachaCatalogRepository: GachaCatalogRepository by lazy {
         GachaCatalogRepository(this)
+    }
+
+    val catalogUpdater: CatalogUpdater by lazy {
+        CatalogUpdater(this)
     }
 
     val unitStatsRepository: UnitStatsRepository by lazy {
