@@ -12,6 +12,11 @@
     <string name="helper_cat_mode_body">Chạm vào một bé mèo để đọc tên và cấp độ, rồi xem chỉ số ở đúng cấp đó.</string>
     <string name="helper_switch">Giữ bong bóng nửa giây để đổi chế độ — biểu tượng và màu sắc cũng đổi theo, nên bạn luôn biết mình đang ở chế độ nào.</string>
 
+    <string name="helper_start">Bật trợ thủ</string>
+    <string name="helper_allow">Cho phép bong bóng</string>
+    <string name="helper_spawn">Hiện bong bóng</string>
+    <string name="helper_stop">Tắt trợ thủ</string>
+
     <string name="seed_intro">Xin gửi lời cảm ơn lớn đến Godfat và các dataminer kỳ cựu - món ma thuật đen này sẽ không tồn tại nếu không có họ.</string>
     <string name="seed_footer">⚡ Bộ giải này chạy 100% ngoại tuyến ngay trên máy bạn với tốc độ cực nhanh: không hàng chờ, không phải đợi ai phía trước. Dù bạn xem đây là một phép màu tiện lợi hay là gian lận ma thuật đen thuần túy... hãy tự cân nhắc mà dùng!</string>
 

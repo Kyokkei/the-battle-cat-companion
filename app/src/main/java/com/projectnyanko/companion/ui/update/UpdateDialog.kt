@@ -80,20 +80,21 @@ fun UpdateDialog(info: UpdateInfo, onUpdateNow: () -> Unit, onLater: () -> Unit)
                 )
             }
             Spacer(Modifier.height(16.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                NyankoPillButton(
-                    text = stringResource(R.string.update_now),
-                    onClick = onUpdateNow,
-                    modifier = Modifier.weight(1f),
-                )
-                NyankoPillButton(
-                    text = stringResource(R.string.update_later),
-                    onClick = onLater,
-                    filled = false,
-                    icon = null,
-                    modifier = Modifier.weight(1f),
-                )
-            }
+            // Stacked, not side by side: half a dialog is not enough for "I'll update it later" in
+            // any language, and the pill button ellipsises rather than wrapping.
+            NyankoPillButton(
+                text = stringResource(R.string.update_now),
+                onClick = onUpdateNow,
+                modifier = Modifier.fillMaxWidth(),
+            )
+            Spacer(Modifier.height(8.dp))
+            NyankoPillButton(
+                text = stringResource(R.string.update_later),
+                onClick = onLater,
+                filled = false,
+                icon = null,
+                modifier = Modifier.fillMaxWidth(),
+            )
         }
     }
 }

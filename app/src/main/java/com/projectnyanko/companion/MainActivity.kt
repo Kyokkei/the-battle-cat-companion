@@ -33,6 +33,11 @@ import com.projectnyanko.companion.ui.theme.NyankoNavBar
 import com.projectnyanko.companion.ui.theme.Paper
 
 class MainActivity : ComponentActivity() {
+    /** Applied before anything inflates, so the whole activity comes up in the chosen language. */
+    override fun attachBaseContext(newBase: android.content.Context) {
+        super.attachBaseContext(com.projectnyanko.companion.data.locale.AppLocale.wrap(newBase))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val app = application as BattleCatsApplication

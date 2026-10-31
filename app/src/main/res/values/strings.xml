@@ -14,6 +14,12 @@
     <string name="helper_cat_mode_body">Tap on a cat to read its name and level, then see its stats at that level.</string>
     <string name="helper_switch">Hold the bubble for half a second to switch — the icon and the colour change with it, so you always know which mode is on.</string>
 
+    <!-- The paragraph above names this button, so it has to be translated with it. -->
+    <string name="helper_start">Start helper</string>
+    <string name="helper_allow">Allow floating paw</string>
+    <string name="helper_spawn">Spawn bubble</string>
+    <string name="helper_stop">Stop helper</string>
+
     <!-- Seed tracker descriptions -->
     <string name="seed_intro">Huge shoutout to Godfat and the OG dataminers - this piece of dark magic wouldn\'t exist without them.</string>
     <string name="seed_footer">⚡ This solver runs 100% offline on your own device at godspeed: zero queues, zero waiting on anyone ahead of you. Whether you consider this a quality-of-life miracle or pure dark magic cheating... use it at your own discretion!</string>

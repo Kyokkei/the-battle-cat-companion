@@ -48,6 +48,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.projectnyanko.companion.data.locale.AppLocale
 import com.projectnyanko.companion.BattleCatsApplication
 import com.projectnyanko.companion.R
 import com.projectnyanko.companion.data.stage.StageCatalogRepository
@@ -241,11 +242,13 @@ fun StageHelperScreen(catalogRepository: StageCatalogRepository) {
             )
             Spacer(Modifier.height(14.dp))
             NyankoPillButton(
-                text = when {
-                    !overlayGranted -> "Allow floating paw"
-                    captureActive -> "Spawn bubble"
-                    else -> "Start helper"
-                },
+                text = stringResource(
+                    when {
+                        !overlayGranted -> R.string.helper_allow
+                        captureActive -> R.string.helper_spawn
+                        else -> R.string.helper_start
+                    },
+                ),
                 onClick = {
                     if (Settings.canDrawOverlays(context)) {
                         overlayGranted = true
@@ -273,7 +276,7 @@ fun StageHelperScreen(catalogRepository: StageCatalogRepository) {
             if (captureActive || overlayGranted) {
                 Spacer(Modifier.height(8.dp))
                 NyankoPillButton(
-                    text = "Stop helper",
+                    text = stringResource(R.string.helper_stop),
                     onClick = {
                         if (Settings.canDrawOverlays(context)) {
                             StageCaptureService.stop(context)
@@ -302,6 +305,25 @@ fun StageHelperScreen(catalogRepository: StageCatalogRepository) {
             modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
             textAlign = TextAlign.Center,
         )
+        // The app follows the phone's language by default, so the way back out has to live in the
+        // app itself — changing a system language to read one screen is not a reasonable ask.
+        Spacer(Modifier.height(8.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            val chosen = remember { AppLocale.current(context) }
+            val pick: (String) -> Unit = { tag ->
+                AppLocale.set(context, tag)
+                (context as? android.app.Activity)?.recreate()
+            }
+            NyankoToggleChip("Auto", chosen.isBlank()) { pick(AppLocale.SYSTEM) }
+            Spacer(Modifier.width(8.dp))
+            NyankoToggleChip("EN", chosen == "en") { pick("en") }
+            Spacer(Modifier.width(8.dp))
+            NyankoToggleChip("VI", chosen == "vi") { pick("vi") }
+        }
     }
 }
 
