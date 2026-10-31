@@ -176,7 +176,20 @@ data class StageCatalog(
         const val CHAPTER_ID_STRIDE = 1000L
     }
 
-    fun findCandidates(text: String, locale: StageLocale): List<StageRecord> {
+    /**
+     * Stages whose name matches [text].
+     *
+     * [allowPrefix] is for the search box only. Typing "Feathergeddon" should find
+     * "Feathergeddon I (Merciless)", but the length ratio below refuses it — 13 of 29 characters is
+     * 0.45, and that rule exists to stop OCR noise from matching half the game. A human typing a
+     * deliberate prefix is not noise, so the search box turns the ratio off for prefixes while the
+     * OCR path keeps it.
+     */
+    fun findCandidates(
+        text: String,
+        locale: StageLocale,
+        allowPrefix: Boolean = false,
+    ): List<StageRecord> {
         val query = normalizeStageText(text)
         if (query.isEmpty()) return emptyList()
         val matches = stages.filter { stage ->
@@ -185,6 +198,7 @@ data class StageCatalog(
                 val shorterLength = minOf(query.length, normalizedName.length)
                 val longerLength = maxOf(query.length, normalizedName.length)
                 normalizedName == query ||
+                    (allowPrefix && query.length >= 3 && normalizedName.startsWith(query)) ||
                     (shorterLength >= 4 && shorterLength.toFloat() / longerLength >= 0.7f &&
                         (query.contains(normalizedName) || normalizedName.contains(query))) ||
                     isOcrTypoMatch(query, normalizedName)

@@ -24,8 +24,14 @@ class StageCatalogParserTest {
 
         assertEquals(6_328, catalog.metadata.stageCount)
         assertEquals(6_924, catalog.metadata.translationRowCount)
-        assertEquals(746, catalog.metadata.enemySpriteCount)
-        assertEquals(43, catalog.metadata.missingEnemySpriteIds.size)
+        // 789 icons. The three enemies in the stat table with no art ("Enemy 19", "Enemy 20",
+        // "Enemy 747") are unnamed placeholders the wiki has no image for, and no stage spawns them —
+        // so nothing a player can actually meet is missing a picture.
+        assertEquals(789, catalog.metadata.enemySpriteCount)
+        assertTrue(
+            "no stage should reference an enemy without a sprite",
+            catalog.metadata.missingEnemySpriteIds.isEmpty(),
+        )
         assertEquals(catalog.metadata.stageCount, catalog.stages.map { it.id }.toSet().size)
         assertEquals("CC BY-SA 4.0", catalog.metadata.license)
         assertTrue(catalog.stages.any { stage -> stage.enemySpawns.any { it.magnification != null } })
@@ -321,5 +327,30 @@ class StageCatalogParserTest {
         val candidates = listOf(cwd.resolve("app/src/main/assets"), cwd.resolve("../app/src/main/assets").normalize())
         return candidates.firstOrNull { Files.isDirectory(it.resolve("stages")) }
             ?: error("Could not locate app/src/main/assets from $cwd")
+    }
+    @Test
+    fun typingHalfAStageNameInTheSearchBoxFindsIt() {
+        val root = assetsRoot()
+        val spriteIds = Files.list(root.resolve("enemies")).use { paths ->
+            paths.map { it.fileName.toString() }
+                .filter { it.matches(Regex("enemy_\\d+\\.png")) }
+                .map { it.removePrefix("enemy_").removeSuffix(".png").toInt() }
+                .toList()
+                .toSet()
+        }
+        val catalog = parse(root, spriteIds)
+
+        // "Feathergeddon" is 13 characters; "Feathergeddon I (Merciless)" is 29. The OCR ratio wants
+        // 70%, so the screen-reader path rightly refuses this — but a human typed it on purpose.
+        assertTrue(
+            "the OCR path should keep its strict ratio",
+            catalog.findCandidates("Feathergeddon", StageLocale.EN).isEmpty(),
+        )
+
+        val found = catalog.findCandidates("Feathergeddon", StageLocale.EN, allowPrefix = true)
+        assertEquals(
+            listOf("Feathergeddon I (Merciless)", "Feathergeddon II (Merciless)", "Feathergeddon III (Merciless)", "Feathergeddon: Swan Song (Brutal)"),
+            found.map { it.names(StageLocale.EN).first() },
+        )
     }
 }

@@ -124,7 +124,7 @@ fun StageHelperScreen(catalogRepository: StageCatalogRepository) {
         searching = true
         uiScope.launch {
             val found = withContext(Dispatchers.IO) {
-                catalog?.findCandidates(trimmed, region).orEmpty().take(MAX_SEARCH_RESULTS)
+                catalog?.findCandidates(trimmed, region, allowPrefix = true).orEmpty().take(MAX_SEARCH_RESULTS)
             }
             results = found
             selected = null
