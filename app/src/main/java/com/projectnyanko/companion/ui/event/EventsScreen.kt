@@ -1,5 +1,6 @@
 package com.projectnyanko.companion.ui.event
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -78,6 +79,9 @@ fun EventsScreen(repository: EventScheduleRepository) {
 
     val gacha = schedule?.ordered(EventKind.GACHA, today).orEmpty()
     val special = schedule?.ordered(EventKind.SPECIAL, today).orEmpty()
+
+    // System back returns to the bento rather than dropping out of the app.
+    BackHandler(enabled = open != null) { open = null }
 
     when (open) {
         null -> Bento(

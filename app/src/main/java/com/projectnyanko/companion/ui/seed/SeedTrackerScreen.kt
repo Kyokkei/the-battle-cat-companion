@@ -1,6 +1,7 @@
 package com.projectnyanko.companion.ui.seed
 
 import androidx.compose.foundation.Image
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -75,6 +76,23 @@ fun SeedTrackerScreen(viewModel: SeedTrackerViewModel) {
     var showSeek by remember { mutableStateOf(false) }
     var showManual by remember { mutableStateOf(false) }
     var changingBanner by remember { mutableStateOf(false) }
+
+    // System back walks the screen's own stack instead of leaving the app: whatever is on top closes
+    // first, and only the start screen lets back through.
+    BackHandler(
+        enabled = changingBanner || showSeek || showManual || stats != null || tracker is TrackerUiState.Ready,
+    ) {
+        when {
+            changingBanner -> changingBanner = false
+            showSeek -> {
+                viewModel.closeSeek()
+                showSeek = false
+            }
+            showManual -> showManual = false
+            stats != null -> viewModel.hideStats()
+            else -> viewModel.selectProfile(null)
+        }
+    }
 
     Scaffold(
         containerColor = Color.Transparent,
@@ -226,8 +244,8 @@ private fun EmptyTrackerContent(
             Text("Seed tracker", style = MaterialTheme.typography.headlineMedium, color = Ink)
             Spacer(Modifier.height(6.dp))
             NyankoCaption(
-                "Every save has one seed that decides every rare capsule you will ever pull. " +
-                    "Find it once, then read the track below instead of rolling blind.",
+                "Huge shoutout to Godfat and the OG dataminers - this piece of dark magic " +
+                    "wouldn't exist without them.",
             )
             Spacer(Modifier.height(12.dp))
             RegionChips(region, onRegionChange)
@@ -247,7 +265,9 @@ private fun EmptyTrackerContent(
             )
             Spacer(Modifier.height(10.dp))
             NyankoCaption(
-                "The search runs here, on this phone. No queue, no upload, and it keeps working offline.",
+                "⚡ This solver runs 100% offline on your own device at godspeed: zero queues, zero " +
+                    "waiting on anyone ahead of you. Whether you consider this a quality-of-life " +
+                    "miracle or pure dark magic cheating... use it at your own discretion!",
             )
         }
 
