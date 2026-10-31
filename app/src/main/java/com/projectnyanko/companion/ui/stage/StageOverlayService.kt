@@ -370,58 +370,69 @@ class StageOverlayService : Service() {
                 ),
             )
         }
-        // A carrier stage can drop the player into an EX stage on clear, at odds the game never
-        // prints. Tap one to see its own enemy lineup.
-        if (stage.exStages.isNotEmpty()) {
-            val targets = catalog.exStageTargets(stage, selectedLocale)
-            root.addView(label("EX stage on clear", 14f, ACCENT_DEEP, bold = true))
-            if (targets.isEmpty()) {
-                stage.exStages.forEach { ref ->
-                    val chanceText = ref.chance?.let { " · $it%" }.orEmpty()
-                    root.addView(label("Hidden EX stage$chanceText", 13f, INK))
-                }
-            } else {
-                targets.forEach { (target, chance) ->
-                    val chanceText = chance?.let { " · $it%" }.orEmpty()
-                    root.addView(
-                        actionButton(
-                            StageCandidateGroups.displayName(target, selectedLocale) + chanceText,
-                            primary = false,
-                        ) { showStageDetails(target) },
-                    )
-                }
-                val named = targets.map { it.first.sourceId }.toSet()
-                val unnamed = stage.exStages.count { it.sourceId == null || it.sourceId !in named }
-                if (unnamed > 0) {
-                    root.addView(label("Plus $unnamed this file cannot name", 12f, INK_SOFT))
-                }
+        if (stage.enemySpawns.isNotEmpty()) root.addView(label("Enemies", 16f, ACCENT_DEEP, bold = true))
+        addEnemies(root, stage, dp(44), tappable = true)
+
+        // The continuation run, laid out inline. The Proving Grounds goes four rounds deep with a
+        // Dawn and a Dusk branch at every step, so this is a list to read — not a thing to tap.
+        val chain = catalog.exStageChain(stage)
+        if (chain.isNotEmpty()) {
+            root.addView(label("EX stage on clear", 15f, ACCENT_DEEP, bold = true))
+            chain.forEach { step ->
+                val name = StageCandidateGroups.displayName(step.stage, selectedLocale)
+                val chance = step.chance?.let { " · $it%" }.orEmpty()
+                val indent = "   ".repeat(step.depth - 1)
+                val marker = if (step.depth == 1) "" else "↳ "
+                root.addView(
+                    label(
+                        "$indent$marker$name$chance",
+                        if (step.depth == 1) 14f else 12.5f,
+                        if (step.depth == 1) INK else INK_SOFT,
+                    ),
+                )
+                addEnemies(root, step.stage, dp(if (step.depth == 1) 38 else 30), tappable = false)
+            }
+        } else if (stage.exStages.isNotEmpty()) {
+            root.addView(label("EX stage on clear", 15f, ACCENT_DEEP, bold = true))
+            stage.exStages.forEach { ref ->
+                val chance = ref.chance?.let { " · $it%" }.orEmpty()
+                root.addView(label("Continuation stage$chance", 13f, INK))
             }
         }
+        showResultRoot(root)
+    }
+
+    /**
+     * Enemy icon strip for a stage. [tappable] is off for continuation stages: their icons are there
+     * to be read, and a tap would open a card whose back arrow cannot climb back up the chain.
+     */
+    private fun addEnemies(root: android.widget.LinearLayout, stage: StageRecord, size: Int, tappable: Boolean) {
         val enemyIds = stage.enemySpawns.map { it.enemyId }.distinct()
-        if (enemyIds.isNotEmpty()) {
-            root.addView(label("Enemies", 16f, ACCENT_DEEP, bold = true))
-            val strip = IconFlowLayout(this).apply {
-                horizontalGap = dp(6)
-                verticalGap = dp(6)
-                setPadding(0, dp(4), 0, dp(4))
-            }
-            enemyIds.take(MAX_ENEMY_ICONS).forEach { enemyId ->
-                val icon = loadEnemyIcon(enemyId) ?: return@forEach
-                strip.addView(ImageView(this).apply {
-                    setImageBitmap(icon)
-                    scaleType = ImageView.ScaleType.FIT_CENTER
+        if (enemyIds.isEmpty()) return
+        val strip = IconFlowLayout(this).apply {
+            horizontalGap = dp(6)
+            verticalGap = dp(6)
+            setPadding(0, dp(4), 0, dp(4))
+        }
+        enemyIds.take(MAX_ENEMY_ICONS).forEach { enemyId ->
+            val icon = loadEnemyIcon(enemyId) ?: return@forEach
+            strip.addView(ImageView(this).apply {
+                setImageBitmap(icon)
+                scaleType = ImageView.ScaleType.FIT_CENTER
+                if (tappable) {
                     contentDescription = "Enemy $enemyId. Tap for its stats."
                     isClickable = true
                     isFocusable = true
                     setOnClickListener { showEnemyDetails(stage, enemyId) }
-                }, android.view.ViewGroup.LayoutParams(dp(44), dp(44)))
-            }
-            if (strip.isNotEmpty()) {
-                root.addView(strip)
-                root.addView(label("Tap an enemy for its stats", 11f, INK_SOFT))
-            }
+                } else {
+                    contentDescription = "Enemy $enemyId"
+                }
+            }, android.view.ViewGroup.LayoutParams(size, size))
         }
-        showResultRoot(root)
+        if (strip.isNotEmpty()) {
+            root.addView(strip)
+            if (tappable) root.addView(label("Tap an enemy for its stats", 11f, INK_SOFT))
+        }
     }
 
     /**

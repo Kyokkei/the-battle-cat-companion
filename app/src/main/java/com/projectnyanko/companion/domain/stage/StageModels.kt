@@ -26,6 +26,13 @@ data class StageRecord(
     fun names(locale: StageLocale): List<String> = localizedNames[locale].orEmpty()
 }
 
+/** One link in a continuation run: the stage, its odds, and how deep into the chain it sits. */
+data class ExStageStep(
+    val stage: StageRecord,
+    val chance: Int?,
+    val depth: Int,
+)
+
 /** One entry from the stage file's `ex_stage` column. */
 data class ExStageRef(
     /** Stage file id of the target, or null when the row only records the odds. */
@@ -119,11 +126,38 @@ data class StageCatalog(
      * reworked event that PONOS removed from the game, still sitting in the bundled snapshot. Rows
      * the snapshot cannot express are corrected in `stage.tsv` itself instead of being guessed here.
      */
-    fun exStageTargets(stage: StageRecord, locale: StageLocale): List<Pair<StageRecord, Int?>> =
+    fun exStageTargets(stage: StageRecord): List<Pair<StageRecord, Int?>> =
         stage.exStages.mapNotNull { ref ->
             val target = ref.sourceId?.let(::findBySourceId) ?: return@mapNotNull null
             target to ref.chance
         }
+
+    /**
+     * The whole continuation run, breadth first: level 1 is what this stage can roll into, level 2 is
+     * what *those* roll into, and so on.
+     *
+     * The Proving Grounds chains four deep (First Round → 2nd → 3rd → 4th → Last, each with a Dawn
+     * and a Dusk branch), which is why the card has to lay this out as a list rather than a tap.
+     */
+    fun exStageChain(stage: StageRecord, maxDepth: Int = 5): List<ExStageStep> {
+        val out = ArrayList<ExStageStep>()
+        val seen = hashSetOf(stage.id)
+        var frontier = listOf(stage)
+        var depth = 1
+        while (frontier.isNotEmpty() && depth <= maxDepth) {
+            val next = ArrayList<StageRecord>()
+            for (parent in frontier) {
+                for ((target, chance) in exStageTargets(parent)) {
+                    if (!seen.add(target.id)) continue
+                    out += ExStageStep(target, chance, depth)
+                    next += target
+                }
+            }
+            frontier = next
+            depth++
+        }
+        return out
+    }
 
     /** Name of the tower or series this stage belongs to, when the local data defines one. */
     fun seriesNameFor(stage: StageRecord): String? =
