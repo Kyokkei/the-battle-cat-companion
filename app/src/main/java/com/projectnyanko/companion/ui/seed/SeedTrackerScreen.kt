@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +13,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -43,6 +46,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -344,28 +348,193 @@ private fun ReadyTrackerContent(
                 onDismiss = onClearPreview,
             )
         }
-        TableHeader(showGuaranteed = state.guaranteedRolls > 0)
-        LazyColumn(modifier = Modifier.weight(1f).fillMaxWidth()) {
-            items(state.rows, key = { it.sequence }) { row ->
-                TrackRowView(
-                    row = row,
-                    nextMarker = state.nextMarker,
-                    preview = preview,
-                    showGuaranteed = state.guaranteedRolls > 0,
-                    onAdvance = onAdvance,
-                    onPreview = onPreview,
-                    onStats = onStats,
-                )
+        val guaranteed = state.guaranteedRolls > 0
+        val tableScroll = rememberScrollState()
+        // With a guaranteed track the grid is the web tracker's five columns, which does not fit a
+        // phone: it is laid out at a readable width and scrolled sideways instead of squeezing
+        // every cat name to four characters. Without one, the two wide cards stay as they were.
+        val tableWidth = if (guaranteed) TRACK_NUMBER_WIDTH + (GUARANTEED_CELL_WIDTH + CELL_GAP) * 4 else 0.dp
+        Column(modifier = Modifier.weight(1f).fillMaxWidth()) {
+            Column(
+                modifier = if (guaranteed) {
+                    Modifier.horizontalScroll(tableScroll).fillMaxHeight().width(tableWidth)
+                } else {
+                    Modifier.fillMaxWidth()
+                },
+            ) {
+                if (guaranteed) {
+                    GuaranteedHeader()
+                } else {
+                    TableHeader(showGuaranteed = false)
+                }
+                LazyColumn(modifier = Modifier.weight(1f)) {
+                    items(state.rows, key = { it.sequence }) { row ->
+                        if (guaranteed) {
+                            GuaranteedRowView(
+                                row = row,
+                                nextMarker = state.nextMarker,
+                                preview = preview,
+                                onAdvance = onAdvance,
+                                onPreview = onPreview,
+                                onStats = onStats,
+                            )
+                        } else {
+                            TrackRowView(
+                                row = row,
+                                nextMarker = state.nextMarker,
+                                preview = preview,
+                                showGuaranteed = false,
+                                onAdvance = onAdvance,
+                                onPreview = onPreview,
+                                onStats = onStats,
+                            )
+                        }
+                    }
+                    item {
+                        Text(
+                            text = if (guaranteed) {
+                                "Left cell of each pair is the roll, right cell is the cat that 11-roll " +
+                                    "guarantees. Swipe the table sideways for track B. Tap a name to " +
+                                    "record that you rolled it."
+                            } else {
+                                "Tap a cat's name to record that you rolled it — the table then restarts " +
+                                    "from the next roll. Tap anywhere else in a cell to preview the route there."
+                            },
+                            style = MaterialTheme.typography.labelSmall,
+                            color = InkSoft,
+                            modifier = Modifier.padding(16.dp),
+                        )
+                    }
+                }
             }
-            item {
-                Text(
-                    text = "Tap a cat's name to record that you rolled it — the table then restarts " +
-                        "from the next roll. Tap anywhere else in a cell to preview the route there.",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = InkSoft,
-                    modifier = Modifier.padding(16.dp),
-                )
-            }
+        }
+    }
+}
+
+/** Column widths for the five-column layout, in dp. */
+private val TRACK_NUMBER_WIDTH = 30.dp
+private val GUARANTEED_CELL_WIDTH = 126.dp
+private val CELL_GAP = 4.dp
+
+@Composable
+private fun GuaranteedHeader() {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(start = 8.dp, end = 8.dp, top = 6.dp, bottom = 2.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = "No.",
+            style = MaterialTheme.typography.labelSmall,
+            color = InkSoft,
+            modifier = Modifier.width(TRACK_NUMBER_WIDTH),
+        )
+        GuaranteedColumnLabel("A · roll")
+        GuaranteedColumnLabel("A · 100%")
+        GuaranteedColumnLabel("B · roll")
+        GuaranteedColumnLabel("B · 100%")
+    }
+}
+
+@Composable
+private fun GuaranteedColumnLabel(text: String) {
+    Box(
+        modifier = Modifier
+            .width(GUARANTEED_CELL_WIDTH)
+            .clip(RoundedCornerShape(8.dp))
+            .background(Ink.copy(alpha = 0.06f))
+            .padding(horizontal = 6.dp, vertical = 3.dp),
+    ) {
+        Text(text, style = MaterialTheme.typography.labelSmall, color = InkSoft, maxLines = 1)
+    }
+}
+
+/** One row of the five-column layout: roll A, guaranteed A, roll B, guaranteed B. */
+@Composable
+private fun GuaranteedRowView(
+    row: TrackRow,
+    nextMarker: TrackMarker?,
+    preview: PreviewState,
+    onAdvance: (TrackMarker) -> Unit,
+    onPreview: (TrackMarker) -> Unit,
+    onStats: (Int) -> Unit,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 3.dp),
+        verticalAlignment = Alignment.Top,
+    ) {
+        Box(
+            modifier = Modifier.width(TRACK_NUMBER_WIDTH).padding(top = 8.dp),
+            contentAlignment = Alignment.TopCenter,
+        ) {
+            Text(
+                text = row.sequence.toString(),
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = FontWeight.Bold,
+                color = InkSoft,
+            )
+        }
+        SingleCellView(row.trackA, nextMarker, preview, onAdvance, onPreview, onStats)
+        Spacer(Modifier.width(CELL_GAP))
+        SingleCellView(row.guaranteedA, nextMarker, preview, onAdvance, onPreview, onStats)
+        Spacer(Modifier.width(CELL_GAP))
+        SingleCellView(row.trackB, nextMarker, preview, onAdvance, onPreview, onStats)
+        Spacer(Modifier.width(CELL_GAP))
+        SingleCellView(row.guaranteedB, nextMarker, preview, onAdvance, onPreview, onStats)
+    }
+}
+
+/** A single cat in a fixed-width box — one column of the grid. */
+@Composable
+private fun SingleCellView(
+    cell: TrackCell?,
+    nextMarker: TrackMarker?,
+    preview: PreviewState,
+    onAdvance: (TrackMarker) -> Unit,
+    onPreview: (TrackMarker) -> Unit,
+    onStats: (Int) -> Unit,
+) {
+    val isNext = cell != null && nextMarker == cell.marker
+    val shape = RoundedCornerShape(10.dp)
+    Column(
+        modifier = Modifier
+            .width(GUARANTEED_CELL_WIDTH)
+            .heightIn(min = 44.dp)
+            .clip(shape)
+            .background(
+                when {
+                    isNext -> Accent
+                    cell != null -> rarityColor(cell.rarity).copy(alpha = 0.10f)
+                    // A banner can have fewer guaranteed slots than rolls; the gap is drawn as a
+                    // dashed empty box rather than silently shifting the columns.
+                    else -> Ink.copy(alpha = 0.04f)
+                },
+            )
+            .border(
+                width = if (isNext) 2.dp else 1.dp,
+                color = Ink.copy(alpha = if (isNext) 1f else 0.22f),
+                shape = shape,
+            )
+            .padding(horizontal = 4.dp, vertical = 4.dp),
+        verticalArrangement = Arrangement.Center,
+    ) {
+        if (cell != null) {
+            CatLine(
+                cell = cell,
+                muted = false,
+                isNext = isNext,
+                preview = preview,
+                onAdvance = onAdvance,
+                onPreview = onPreview,
+                onStats = onStats,
+            )
+        } else {
+            Text(
+                text = "—",
+                style = MaterialTheme.typography.labelSmall,
+                color = InkSoft.copy(alpha = 0.5f),
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+            )
         }
     }
 }
