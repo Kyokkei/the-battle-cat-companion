@@ -111,6 +111,35 @@ data class StageCatalog(
      */
     fun carrierOf(stage: StageRecord): StageRecord? = carrierByExId[stage.sourceId]
 
+    /**
+     * The EX stages [stage] can spawn on clear, with whatever odds the file records.
+     *
+     * Two ways in. Rows using the `$id|chance` form name their targets outright. The older numeric
+     * form only stores a group index into a table this build does not ship, so for those the EX
+     * stages are found by name instead: the game calls them `<carrier> (Hard)`, `(Expert)`,
+     * `(Insane)` and ships them as ordinary zero-energy stages — "Rays of Gold" has three.
+     */
+    fun exStageTargets(stage: StageRecord, locale: StageLocale): List<Pair<StageRecord, Int?>> {
+        val explicit = stage.exStages.mapNotNull { ref ->
+            val target = ref.sourceId?.let(::findBySourceId) ?: return@mapNotNull null
+            target to ref.chance
+        }
+        if (explicit.isNotEmpty()) return explicit
+
+        val base = StageCandidateGroups.displayName(stage, locale)
+        if (base.isBlank()) return emptyList()
+        val prefix = "$base ("
+        val named = stages.filter { candidate ->
+            candidate.id != stage.id && candidate.energy == 0L &&
+                candidate.names(locale).any { it.startsWith(prefix) }
+        }
+        if (named.isEmpty()) return emptyList()
+        // The carrier's single recorded chance covers the whole set; with several we cannot tell
+        // which belongs to which, so it is left off rather than guessed.
+        val chance = stage.exStages.map { it.chance }.distinct().singleOrNull()
+        return named.sortedBy { it.id }.map { it to chance }
+    }
+
     /** Name of the tower or series this stage belongs to, when the local data defines one. */
     fun seriesNameFor(stage: StageRecord): String? =
         series.firstOrNull { it.contains(stage.id) }?.name

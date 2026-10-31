@@ -371,17 +371,31 @@ class StageOverlayService : Service() {
             )
         }
         // A carrier stage can drop the player into an EX stage on clear, at odds the game never
-        // prints. The stage file knows both the target and the percentage.
+        // prints. Tap one to see its own enemy lineup.
         if (stage.exStages.isNotEmpty()) {
-            val lines = stage.exStages.joinToString("\n") { ref ->
-                val target = ref.sourceId?.let(catalog::findBySourceId)
-                val name = target?.let { StageCandidateGroups.displayName(it, selectedLocale) }
-                    ?: "Hidden EX stage"
-                val chance = ref.chance?.let { " · $it%" }.orEmpty()
-                "$name$chance"
-            }
+            val targets = catalog.exStageTargets(stage, selectedLocale)
             root.addView(label("EX stage on clear", 14f, ACCENT_DEEP, bold = true))
-            root.addView(label(lines, 13f, INK))
+            if (targets.isEmpty()) {
+                stage.exStages.forEach { ref ->
+                    val chanceText = ref.chance?.let { " · $it%" }.orEmpty()
+                    root.addView(label("Hidden EX stage$chanceText", 13f, INK))
+                }
+            } else {
+                targets.forEach { (target, chance) ->
+                    val chanceText = chance?.let { " · $it%" }.orEmpty()
+                    root.addView(
+                        actionButton(
+                            StageCandidateGroups.displayName(target, selectedLocale) + chanceText,
+                            primary = false,
+                        ) { showStageDetails(target) },
+                    )
+                }
+                val named = targets.map { it.first.sourceId }.toSet()
+                val unnamed = stage.exStages.count { it.sourceId == null || it.sourceId !in named }
+                if (unnamed > 0) {
+                    root.addView(label("Plus $unnamed this file cannot name", 12f, INK_SOFT))
+                }
+            }
         }
         val enemyIds = stage.enemySpawns.map { it.enemyId }.distinct()
         if (enemyIds.isNotEmpty()) {
