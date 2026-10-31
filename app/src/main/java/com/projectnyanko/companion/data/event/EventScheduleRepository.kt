@@ -3,6 +3,8 @@ package com.projectnyanko.companion.data.event
 import android.content.Context
 import com.projectnyanko.companion.domain.event.EventSchedule
 import com.projectnyanko.companion.domain.event.EventScheduleParser
+import com.projectnyanko.companion.domain.event.LiveGacha
+import com.projectnyanko.companion.domain.event.LiveGachaParser
 
 /**
  * The event schedule that ships in the APK.
@@ -16,11 +18,25 @@ class EventScheduleRepository(private val context: Context) {
     @Volatile
     private var cached: EventSchedule? = null
 
+    @Volatile
+    private var cachedGacha: List<LiveGacha>? = null
+
     fun load(): EventSchedule? = cached ?: runCatching {
         context.assets.open(ASSET).bufferedReader().use { EventScheduleParser.parse(it.readText()) }
     }.getOrNull()?.also { cached = it }
 
+    /**
+     * Gacha banners, from the dated table that ships with the stats data.
+     *
+     * This one is computed against today's date, so it is always current without a network call —
+     * the special-event half is the snapshot, this half is not.
+     */
+    fun liveGacha(): List<LiveGacha> = cachedGacha ?: runCatching {
+        context.assets.open(GACHA_ASSET).bufferedReader().use { LiveGachaParser.parse(it.readText()) }
+    }.getOrDefault(emptyList()).also { cachedGacha = it }
+
     private companion object {
         const val ASSET = "events/schedule.json"
+        const val GACHA_ASSET = "neko/data/en/gacha_events.json"
     }
 }
