@@ -16,7 +16,7 @@ No account. No queue. No "please wait while we look that up for you."
 ![Offline](https://img.shields.io/badge/works-offline-2ea44f)
 ![Telemetry](https://img.shields.io/badge/telemetry-none-2ea44f)
 ![Version](https://img.shields.io/badge/version-0.1.0-blue)
-![License](https://img.shields.io/badge/license-GPL--3.0--or--later-blue)
+![License](https://img.shields.io/badge/license-CC_BY--NC--SA_4.0-ef9421)
 
 </div>
 
@@ -169,7 +169,7 @@ Full toolchain notes, OCR model setup and the on-device self-test live in [docs/
 | 🚧 In progress | Auto-updater (dialog built, release manifest not hosted yet) |
 | 🧊 Parked | Japanese stage names — the EN OCR charset has no kana, so this needs the JA encoder wired plus a JP name index. It's a project, not a config flip. |
 | 🧊 Parked | Cat browser (stats / talents / true-form costs / compare) — that's a desk feature, not a bubble feature |
-| 📜 Licensed | GPL-3.0-or-later — see [License](#-license) |
+| 📜 Licensed | CC BY-NC-SA 4.0 — free to use, free to fork, **not** free to sell. See [License](#-license) |
 
 ---
 
@@ -181,7 +181,7 @@ This app is glue. The interesting parts were done by other people, and they shou
 
 | Who | What they did |
 |:--|:--|
-| **Phan Chí Vỹ** aka **Kyokkei** | Made this app. Wrote the Kotlin, drew the cat, got yelled at by the OCR. Also wrote **[Fukidashi](https://github.com/Kyokkei/fukidashi-mcp)**, which is where this app's OCR plumbing came from — so yes, he is crediting himself in this row. <!-- TODO: link your GitHub/portfolio here --> |
+| **Phan Chí Vỹ** · [@Kyokkei](https://github.com/Kyokkei) | Made this app. Wrote the Kotlin, drew the cat, got yelled at by the OCR. Also wrote **[Fukidashi](https://github.com/Kyokkei/fukidashi-mcp)**, which is where this app's OCR plumbing came from — so yes, he is crediting himself in this row. |
 | **[godfat](https://gitlab.com/godfat/battle-cats-rolls)** and the OG dataminers | Reverse-engineered seed tracking and published it as *Battle Cats Rolls*. Without them this app has no seed tracker at all. The mechanics here were researched against their tracker; the Kotlin is an independent implementation, no Ruby was copied. |
 | **@doromond** | The doreo art in the update prompt. <!-- TODO: real link — X? ArtStation? --> |
 
@@ -189,9 +189,20 @@ This app is glue. The interesting parts were done by other people, and they shou
 
 | Source | Used for | License |
 |:--|:--|:--|
-| [battlecatsinfo](https://github.com/battlecatsinfo/battlecatsinfo.github.io) | Stage catalog, enemy stats table, trait/ability decoders | MIT |
-| [Battle Cats Wiki (Miraheze)](https://battlecats.miraheze.org) contributors | Stage reference snapshot, event schedule, stage clock table, banner map | CC BY-SA 4.0 |
+| [battlecatsinfo](https://github.com/battlecatsinfo/battlecatsinfo.github.io) | Cat stats, stage catalog, enemy stats table, trait/ability decoders | MIT |
+| [Battle Cats Wiki (Miraheze)](https://battlecats.miraheze.org) contributors | The original wiki: stage reference snapshot, event schedule, stage clock table, banner map | CC BY-SA 4.0 |
 | [NekoOptimizer](https://github.com/IliyanGavrilov/NekoOptimizer) (IliyanGavrilov) | Gacha, unit and evolution catalogs | ⚠️ none declared — see below |
+
+### Checked against (nothing was imported)
+
+Some sites were used to **verify** a number, not to feed the app. They deserve the credit anyway, because without them the app would show a number nobody had ever cross-checked:
+
+| Site | What it settled |
+|:--|:--|
+| [MyGamatoto](https://mygamatoto.com) | Endgame deployment cooldowns. The formula in `InGameCooldown` is pinned by a test literally named `matchesMyGamatotoSpawnValues` — Pizza 19.20s, Saber Alter CC 71.20s, Mega Cat 383.47s, all read off its pages. |
+| BattleCatsStats | The same cooldown values, as a second opinion. |
+
+No data files, sprites or exports were taken from either. If a number here is wrong, it's wrong because it was misread — not because it was copied.
 
 ### The machinery
 
@@ -200,13 +211,13 @@ This app is glue. The interesting parts were done by other people, and they shou
 | [Fukidashi](https://github.com/Kyokkei/fukidashi-mcp) | PP-OCR CTC decoding + Manga OCR encoder/decoder caching. **Same author as this app**, kept as a separate Apache-2.0 project. | Apache-2.0 |
 | [ONNX Runtime](https://onnxruntime.ai) | Running the OCR models on-device | MIT |
 
-Because the OCR adapters are the author's own Apache-2.0 code, folding them into a GPL-3.0 app is not a licensing conflict — you can't violate your own license. The **models** they shipped are a different story: PP-OCR and Manga OCR are third-party, Apache-2.0 per their own manifests, and are unaffected by this project's license.
+Because the OCR adapters are the author's own Apache-2.0 code, reusing them here isn't a licensing conflict — you can't violate your own license, and the copyright holder can relicense his own work. The notice stays because Fukidashi itself is still Apache-2.0. The **models** it shipped are a different story: PP-OCR and Manga OCR are third-party, Apache-2.0 per their own manifests, and are unaffected by this project's license.
 
 ### The disclaimer
 
 **This is an unofficial fan project.** It is not affiliated with, endorsed by, or supported by **PONOS Corporation**.
 
-**Every cat picture and every enemy picture in this app belongs to PONOS.** All of them — the cat portraits in the stat card, the enemy icons in the stage card, the sprites, the unit names, the stats, the stage data. They are shown locally as in-game reference, the way a wiki shows them, and they are **not** covered by this project's license. The GPL applies to the source code. It cannot grant you any rights to the game's artwork, and nothing here is an attempt to claim any.
+**Every cat picture and every enemy picture in this app belongs to PONOS.** All of them — the cat portraits in the stat card, the enemy icons in the stage card, the sprites, the unit names, the stats, the stage data. They are shown locally as in-game reference, the way a wiki shows them, and they are **not** covered by this project's license. Our license applies to the source code. It cannot grant you any rights to the game's artwork, and nothing here is an attempt to claim any.
 
 That means: fork the code freely, but don't treat the bundled sprites as something you were given. If PONOS ever asks, the art comes out and the app still works — it just looks worse.
 
@@ -216,9 +227,17 @@ That means: fork the code freely, but don't treat the bundled sprites as somethi
 
 ## 📜 License
 
-**The code is [GPL-3.0-or-later](LICENSE).** Copyright © 2026 Phan Chí Vỹ.
+**The code is [CC BY-NC-SA 4.0](LICENSE).** Copyright © 2026 Phan Chí Vỹ.
 
-The short version, because licenses are boring: take it, run it, fork it, change it, ship it — but if you ship a modified version, **your source goes public too**, under the same license. That's the deal. It's what stops someone from taking this, closing it up and selling it back to you.
+Three rules, and they're all short:
+
+| | |
+|:--|:--|
+| **BY** | Credit Phan Chí Vỹ and link back to this repo. Don't pretend you wrote it. |
+| **NC** | **No commercial use.** No ads, no paid forks, no bundling it into something you charge for. Not now, not "just a small Patreon", no. |
+| **SA** | If you remix or build on it, your version ships under this same license. You don't get to take it private. |
+
+That's the deal: use it, break it, fork it, learn from it, put it in your own free project. Just don't make money off it.
 
 What the license covers, and what it doesn't:
 
@@ -229,7 +248,10 @@ What the license covers, and what it doesn't:
 | ❌ Not covered | The doreo art in the update prompt — that's @doromond's |
 | ❌ Not covered | Third-party code and data — each keeps its own license, listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) |
 
-"or later" means you may also use it under any newer GPL the FSF publishes. If you'd rather pin it to v3 exactly, that's a one-word change — say so.
+**Two honest footnotes**, because a license you don't understand is worse than none:
+
+1. **This is not "open source" in the strict sense.** The OSI definition forbids restrictions on commercial use, so `NC` disqualifies it — the correct label is *source-available* or *free for non-commercial use*. GitHub will still detect it and show the license, it just won't call it open source.
+2. **The wiki data is CC BY-SA 4.0**, which *does* allow commercial use. We can't bolt our `NC` onto someone else's data — that's not how their license works — so the stage and event tables remain commercially usable on their own. Our code can't be sold. That data was never ours to lock up in the first place.
 
 ---
 
