@@ -403,15 +403,18 @@ class StageOverlayService : Service() {
         // than a campaign. Legends chapters run 3-6 stages, so listing them is a gift; Empire of Cats
         // Ch.1 has 53 and Into the Future 48, where the same list would be a wall of buttons nobody
         // asked for. Small maps only.
-        val siblings = catalog.stagesInSameMap(stage).filter { it.id != stage.id }
-        if (siblings.isNotEmpty() && siblings.size + 1 <= MAX_MAP_LIST) {
-            root.addView(label("Also in this map · ${siblings.size + 1} stages", 15f, ACCENT_DEEP, bold = true))
-            siblings.forEach { sibling ->
-                root.addView(
-                    actionButton(StageCandidateGroups.displayName(sibling, selectedLocale), primary = false) {
-                        showStageDetails(sibling)
-                    },
-                )
+        val chapter = catalog.stagesInSameMap(stage)
+        if (chapter.size in 2..MAX_MAP_LIST) {
+            // The whole chapter, current stage included: seeing where this stage sits in the run is
+            // the point, and a list that quietly omits one of them is not the chapter.
+            root.addView(label("This chapter · ${chapter.size} stages", 15f, ACCENT_DEEP, bold = true))
+            chapter.forEach { sibling ->
+                val name = StageCandidateGroups.displayName(sibling, selectedLocale)
+                if (sibling.id == stage.id) {
+                    root.addView(label("▶ $name", 13f, INK))
+                } else {
+                    root.addView(actionButton(name, primary = false) { showStageDetails(sibling) })
+                }
             }
         }
         showResultRoot(root)

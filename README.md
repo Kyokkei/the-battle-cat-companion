@@ -15,7 +15,7 @@ No account. No queue. No "please wait while we look that up for you."
 
 ![Offline](https://img.shields.io/badge/works-offline-2ea44f)
 ![Telemetry](https://img.shields.io/badge/telemetry-none-2ea44f)
-[![Version](https://img.shields.io/badge/version-0.1.13-blue)](https://github.com/Kyokkei/the-battle-cat-companion/releases)
+[![Version](https://img.shields.io/badge/version-0.1.14-blue)](https://github.com/Kyokkei/the-battle-cat-companion/releases)
 ![License](https://img.shields.io/badge/license-CC_BY--NC--SA_4.0-ef9421)
 
 </div>
