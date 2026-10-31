@@ -204,8 +204,55 @@ data class StageCatalog(
                     isOcrTypoMatch(query, normalizedName)
             }
         }
-        return preferMatchingNumber(query, matches, locale)
+        // Ordinal first: "Feathergeddon II" and "Feathergeddon III" differ by one character, which is
+        // exactly the edit budget the typo rule allows, so without this every numeral matched every
+        // other numeral and the card could resolve to the wrong round.
+        // The raw text, not [query]: normalising strips the spaces, which glues "II (Merciless)"
+        // into one token and makes every numeral invisible.
+        return preferMatchingNumber(query, preferMatchingOrdinal(text, matches, locale), locale)
     }
+
+    /**
+     * Keeps the candidates whose roman numeral matches the one that was read.
+     *
+     * `I`, `II`, `III` and `IV` are one glyph apart, so fuzzy matching treats them as the same stage
+     * and the tracker happily shows round three while the player is standing on round two. The
+     * numeral is the part that actually distinguishes them, so when the read text carries one, the
+     * others are dropped — the same reasoning as [preferMatchingNumber], for the case where the
+     * distinguishing token is a letter rather than a digit.
+     */
+    private fun preferMatchingOrdinal(
+        text: String,
+        matches: List<StageRecord>,
+        locale: StageLocale,
+    ): List<StageRecord> {
+        val ordinal = romanOrdinalOf(text) ?: return matches
+        val sameOrdinal = matches.filter { stage ->
+            stage.names(locale).any { romanOrdinalOf(it) == ordinal }
+        }
+        return sameOrdinal.ifEmpty { matches }
+    }
+
+    /**
+     * The trailing roman numeral in a name, if it has one.
+     *
+     * `l` and `1` are folded to `i` because that is the confusion OCR actually makes: a card reading
+     * `Feathergeddon III` comes back as `Feathergeddon Ill` often enough to matter, and `Ill` is not
+     * a roman numeral to anyone but a font.
+     */
+    private fun romanOrdinalOf(text: String): String? {
+        val tokens = text.lowercase().split(NON_NAME_CHARACTERS).filter(String::isNotEmpty)
+        for (token in tokens.asReversed()) {
+            val folded = token.replace('l', 'i').replace('1', 'i').replace('|', 'i')
+            if (folded.length in 1..4 && folded.all { it in "ivx" } && folded in ROMAN_ORDINALS) {
+                return folded
+            }
+        }
+        return null
+    }
+
+    private val NON_NAME_CHARACTERS = Regex("[^a-z0-9]+")
+    private val ROMAN_ORDINALS = setOf("i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix", "x")
 
     /**
      * Story areas and tower floors are told apart by their number, and the number is the part of a

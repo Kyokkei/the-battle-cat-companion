@@ -221,6 +221,45 @@ class StageCaptureService : Service() {
         StageOverlayService.startBubble(this, locale)
     }
 
+    /**
+     * Writes what the last stage scan actually read.
+     *
+     * The logcat ring buffer on this phone is 256 KiB and mostly system chatter, so a scan's lines
+     * are gone within seconds — which is exactly when someone asks "why did it say round three when
+     * I am on round two". The cat reader already keeps a dump; the stage reader now does too.
+     */
+    private fun dumpStageScan(
+        lines: List<com.projectnyanko.companion.domain.stage.OcrStageLine>,
+        matches: com.projectnyanko.companion.domain.stage.StageMatchResult,
+        frame: Bitmap,
+        locale: StageLocale,
+    ) {
+        runCatching {
+            val dir = java.io.File(cacheDir, "stagescan").apply { mkdirs() }
+            dir.listFiles()?.sortedBy { it.name }?.dropLast(CAT_SCAN_DUMPS)?.forEach { it.delete() }
+            val stamp = "scan-" + System.currentTimeMillis()
+            val body = buildString {
+                appendLine("frame=${frame.width}x${frame.height}")
+                appendLine("likely=" + (matches.likelySelected?.stage?.names(locale)?.firstOrNull() ?: "none"))
+                appendLine(
+                    "candidates=" + matches.candidates.joinToString(" | ") {
+                        "${it.stage.names(locale).firstOrNull()}(%.2f)".format(java.util.Locale.ROOT, it.confidence)
+                    },
+                )
+                appendLine("lines=${lines.size}")
+                lines.forEach { line ->
+                    appendLine(
+                        "  [%.3f-%.3f x %.3f-%.3f] %s (%.2f)".format(
+                            java.util.Locale.ROOT,
+                            line.top, line.bottom, line.left, line.right, line.text, line.confidence,
+                        ),
+                    )
+                }
+            }
+            java.io.File(dir, "$stamp.txt").writeText(body)
+        }
+    }
+
     /** Keeps the last unreadable frame so a failure can be inspected instead of guessed at. */
     private fun dumpFrame(bitmap: Bitmap, index: Int) {
         runCatching {
@@ -497,6 +536,7 @@ class StageCaptureService : Service() {
                     }
                 }
                 val matches = StageMatcher.match(catalog, lines, locale)
+                dumpStageScan(lines, matches, bitmap, locale)
                 val selectedEnergy = energyUnderSelectedCard(lines, matches.likelySelected)
                 Log.i(
                     TAG,

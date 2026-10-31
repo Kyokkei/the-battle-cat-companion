@@ -353,4 +353,47 @@ class StageCatalogParserTest {
             found.map { it.names(StageLocale.EN).first() },
         )
     }
+    @Test
+    fun romanNumeralsStopMatchingEachOther() {
+        val root = assetsRoot()
+        val spriteIds = Files.list(root.resolve("enemies")).use { paths ->
+            paths.map { it.fileName.toString() }
+                .filter { it.matches(Regex("enemy_\\d+\\.png")) }
+                .map { it.removePrefix("enemy_").removeSuffix(".png").toInt() }
+                .toList()
+                .toSet()
+        }
+        val catalog = parse(root, spriteIds)
+
+        // "II" and "III" are one character apart, so the typo rule matched them to each other and the
+        // card could resolve to the wrong round. The numeral has to decide.
+        assertEquals(
+            listOf("Feathergeddon II (Merciless)"),
+            catalog.findCandidates("Feathergeddon II (Merciless)", StageLocale.EN).map { it.names(StageLocale.EN).first() },
+        )
+        assertEquals(
+            listOf("Feathergeddon III (Merciless)"),
+            catalog.findCandidates("Feathergeddon III (Merciless)", StageLocale.EN).map { it.names(StageLocale.EN).first() },
+        )
+    }
+
+    @Test
+    fun anOcrReadOfThreeAsIllStillFindsThree() {
+        val root = assetsRoot()
+        val spriteIds = Files.list(root.resolve("enemies")).use { paths ->
+            paths.map { it.fileName.toString() }
+                .filter { it.matches(Regex("enemy_\\d+\\.png")) }
+                .map { it.removePrefix("enemy_").removeSuffix(".png").toInt() }
+                .toList()
+                .toSet()
+        }
+        val catalog = parse(root, spriteIds)
+
+        // A capital I and a lowercase l are the same two strokes in this font, so `III` arrives as
+        // `Ill` and is not a roman numeral to anyone but the fold below.
+        assertEquals(
+            listOf("Feathergeddon III (Merciless)"),
+            catalog.findCandidates("Feathergeddon Ill (Merciless)", StageLocale.EN).map { it.names(StageLocale.EN).first() },
+        )
+    }
 }
