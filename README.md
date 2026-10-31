@@ -15,10 +15,21 @@ No account. No queue. No "please wait while we look that up for you."
 
 ![Offline](https://img.shields.io/badge/works-offline-2ea44f)
 ![Telemetry](https://img.shields.io/badge/telemetry-none-2ea44f)
-![Version](https://img.shields.io/badge/version-0.1.0-blue)
+[![Version](https://img.shields.io/badge/version-0.1.0-blue)](https://github.com/Kyokkei/ProjectNyanko/releases)
 ![License](https://img.shields.io/badge/license-CC_BY--NC--SA_4.0-ef9421)
 
 </div>
+
+---
+
+## 📦 Download
+
+Grab the latest ready-to-use APK from the **[Releases](https://github.com/Kyokkei/ProjectNyanko/releases)** tab:
+
+- **`Nyanko-arm64-v8a.apk`** — recommended for 99% of modern Android phones. Smaller, faster, and what you almost certainly want.
+- **`Nyanko-universal.apk`** — for PC emulators (LDPlayer, BlueStacks) and older hardware that isn't arm64.
+
+No Play Store, no account, no "install our launcher first". Sideload it and go.
 
 ---
 
@@ -183,7 +194,19 @@ This app is glue. The interesting parts were done by other people, and they shou
 |:--|:--|
 | **Phan Chí Vỹ** · [@Kyokkei](https://github.com/Kyokkei) | Made this app. Wrote the Kotlin, drew the cat, got yelled at by the OCR. Also wrote **[Fukidashi](https://github.com/Kyokkei/fukidashi-mcp)**, which is where this app's OCR plumbing came from — so yes, he is crediting himself in this row. |
 | **[godfat](https://gitlab.com/godfat/battle-cats-rolls)** and the OG dataminers | Reverse-engineered seed tracking and published it as *Battle Cats Rolls*. Without them this app has no seed tracker at all. The mechanics here were researched against their tracker; the Kotlin is an independent implementation, no Ruby was copied. |
-| **@doromond** | The doreo art in the update prompt. <!-- TODO: real link — X? ArtStation? --> |
+| **@Doromond** | The doreo art in the update prompt. Found in the **Dorocord** Discord's `#doro-gallery` — no other public profile, so the server is the credit. |
+
+### The robots
+
+Yes, AI helped write this. It's 2026, pretending otherwise would be weird:
+
+| Model | Job |
+|:--|:--|
+| **Gemini 3.8 Flash** | **Chief recon guy.** Went and read the wiki, the forums and the data files so nobody else had to. |
+| **GPT-6-Luna** | **The guy who built the foundation.** Laid out the architecture before there was an app to put inside it. |
+| **DeepSeek V4.1 Flash** | **The guy who built the house.** Wrote most of the Kotlin, and lost an embarrassing amount of time arguing with OCR about whether a `3` was a `30`. |
+
+None of them are authors. Every decision, every *"no, that's wrong, look at this screenshot"*, and every line that actually shipped was reviewed by a human who was free to say no. The models typed; Phan Chí Vỹ aimed.
 
 ### The data
 
