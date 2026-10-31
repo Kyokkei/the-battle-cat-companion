@@ -75,8 +75,12 @@ object UpdateChecker {
             .filter { it.isNotEmpty() && !it.startsWith("#") && !it.startsWith("---") && !it.startsWith("```") }
             .take(4)
             .joinToString(" ")
+            // Markdown that survives a line filter: emphasis, inline code, links and bullets.
+            .replace(Regex("\\[([^]]+)]\\([^)]*\\)"), "$1")
             .replace("**", "")
+            .replace("`", "")
             .replace("*", "")
+            .removePrefix("- ")
             .trim()
         if (cleaned.isEmpty()) return null
         return if (cleaned.length <= 220) cleaned else cleaned.take(217).trimEnd() + "…"

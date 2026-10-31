@@ -72,6 +72,7 @@ class UpdateCheckerTest {
         assertFalse("headings should be dropped", notes!!.contains("#"))
         assertFalse("rules should be dropped", notes.contains("---"))
         assertTrue(notes.contains("Banner data now refreshes itself."))
+        assertFalse("inline code backticks should be stripped", notes.contains("`"))
     }
 
     @Test
