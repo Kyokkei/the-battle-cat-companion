@@ -222,56 +222,6 @@ class StageCaptureService : Service() {
     }
 
     /**
-     * Re-reads the selected card's name from a magnified crop.
-     *
-     * Only runs when the first pass left the answer ambiguous, which is exactly the case that
-     * matters: `Feathergeddon II` and `III` are one glyph apart, so a dropped stroke picks the wrong
-     * round. Cropping the line and scaling it up gives the recognizer the pixels it was missing.
-     */
-    private suspend fun refineStageName(
-        bitmap: Bitmap,
-        lines: List<com.projectnyanko.companion.domain.stage.OcrStageLine>,
-        matches: com.projectnyanko.companion.domain.stage.StageMatchResult,
-        catalog: com.projectnyanko.companion.domain.stage.StageCatalog,
-        locale: StageLocale,
-    ): com.projectnyanko.companion.domain.stage.StageMatchResult? {
-        if (matches.candidates.size < 2) return null
-        val anchorLine = matches.likelySelected
-            ?.let { candidate -> lines.firstOrNull { it.text == candidate.matchedText } }
-            ?: return null
-        val left = ((anchorLine.left - REFINE_PADDING_X) * bitmap.width).toInt().coerceIn(0, bitmap.width - 1)
-        val right = ((anchorLine.right + REFINE_PADDING_X) * bitmap.width).toInt().coerceIn(left + 1, bitmap.width)
-        val top = ((anchorLine.top - REFINE_PADDING_Y) * bitmap.height).toInt().coerceIn(0, bitmap.height - 1)
-        val bottom = ((anchorLine.bottom + REFINE_PADDING_Y) * bitmap.height).toInt().coerceIn(top + 1, bitmap.height)
-        if (right - left < 24 || bottom - top < 8) return null
-        val crop = runCatching { Bitmap.createBitmap(bitmap, left, top, right - left, bottom - top) }
-            .getOrNull() ?: return null
-        return try {
-            val big = Bitmap.createScaledBitmap(
-                crop,
-                (crop.width * STAGE_REFINE_SCALE).coerceAtMost(MAX_REFINE_WIDTH),
-                (crop.height * STAGE_REFINE_SCALE).coerceAtMost(MAX_REFINE_HEIGHT),
-                true,
-            )
-            try {
-                val engine = ocrEngine ?: return null
-                val refined = synchronized(ocrLock) { engine.recognizeAllLines(big, locale) }
-                val best = refined.maxByOrNull { it.confidence } ?: return null
-                Log.i(TAG, "refined stage name: \"${anchorLine.text}\" -> \"${best.text}\"")
-                val reMatched = StageMatcher.match(catalog, listOf(best), locale)
-                if (reMatched.candidates.isEmpty()) null else reMatched
-            } finally {
-                if (big !== crop) big.recycle()
-            }
-        } catch (error: Exception) {
-            Log.w(TAG, "stage name refine failed: ${error.message}")
-            null
-        } finally {
-            crop.recycle()
-        }
-    }
-
-    /**
      * Writes what the last stage scan actually read.
      *
      * The logcat ring buffer on this phone is 256 KiB and mostly system chatter, so a scan's lines
@@ -311,6 +261,13 @@ class StageCaptureService : Service() {
                 }
             }
             java.io.File(dir, "$stamp.txt").writeText(body)
+            // The frame goes with it. A dump says what OCR produced; only the picture says why —
+            // and "the selected card's label never reads" is a question about pixels, not text.
+            runCatching {
+                java.io.FileOutputStream(java.io.File(dir, "$stamp-frame.png")).use { output ->
+                    frame.compress(Bitmap.CompressFormat.PNG, 90, output)
+                }
+            }
         }
     }
 
@@ -589,12 +546,7 @@ class StageCaptureService : Service() {
                         }
                     }
                 }
-                var matches = StageMatcher.match(catalog, lines, locale)
-                // The card labels are tiny on a windowed frame: a roman numeral is a few pixels tall
-                // and the recognizer drops a stroke, so `Feathergeddon III` arrived as `II` and the
-                // card resolved to the wrong round. Re-reading just that line at 4x is the same trick
-                // that fixed the cat level block, and it costs one small OCR pass.
-                matches = refineStageName(bitmap, lines, matches, catalog, locale) ?: matches
+                val matches = StageMatcher.match(catalog, lines, locale)
                 dumpStageScan(lines, matches, bitmap, locale)
                 val selectedEnergy = energyUnderSelectedCard(lines, matches.likelySelected)
                 Log.i(
@@ -923,6 +875,13 @@ class StageCaptureService : Service() {
                 }
             }
             java.io.File(dir, "$stamp.txt").writeText(body)
+            // The frame goes with it. A dump says what OCR produced; only the picture says why —
+            // and "the selected card's label never reads" is a question about pixels, not text.
+            runCatching {
+                java.io.FileOutputStream(java.io.File(dir, "$stamp-frame.png")).use { output ->
+                    frame.compress(Bitmap.CompressFormat.PNG, 90, output)
+                }
+            }
             runCatching {
                 // JPEG for the frame: it is only ever looked at, and a full-screen PNG costs ~250 ms
                 // of the tap-to-card latency on a 2400x1080 capture.
@@ -1097,13 +1056,6 @@ class StageCaptureService : Service() {
 
     companion object {
         /** A cat screen is a single frame; anything slower than this means the engine is stuck. */
-        /** Padding around the card label before the 4x re-read, in frame fractions. */
-        private const val REFINE_PADDING_X = 0.01f
-        private const val REFINE_PADDING_Y = 0.012f
-        private const val STAGE_REFINE_SCALE = 4
-        private const val MAX_REFINE_WIDTH = 2400
-        private const val MAX_REFINE_HEIGHT = 600
-
         private const val CAT_SCAN_TIMEOUT_MS = 15_000L
 
         /**

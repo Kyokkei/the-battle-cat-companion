@@ -75,9 +75,54 @@ object StageMatcher {
                 }.toList().let { occurrences -> preferExactName(occurrences, locale) }.asSequence()
             }
             .sortedWith(compareByDescending<StageCandidate> { it.confidence }.thenBy { it.top }.thenBy { it.left })
-            .distinctBy { it.stage.id }
             .toList()
-        return StageMatchResult(candidates)
+        // Keep the un-deduplicated list: when the centred card is misread as its neighbour, both
+        // occurrences carry the same stage id, and de-duplication would drop the one whose position
+        // says it is the middle of the carousel.
+        val occurrences = candidates
+        val deduped = occurrences.distinctBy { it.stage.id }
+        // The selected card's label is drawn yellow-on-white with a heavy outline, and the recognizer
+        // reads it as `Feathergeddon II` when it says `III` — one stroke lost. No amount of matching
+        // recovers a wrong read, so the neighbours decide instead: the carousel is an ordered list,
+        // and the card between two known stages is the one that sits between them in the catalog.
+        val inferred = inferFromNeighbours(catalog, occurrences)
+        if (inferred == null) return StageMatchResult(deduped)
+        val anchor = deduped.minByOrNull { kotlin.math.abs(it.centerX - 0.5f) }
+        val withInferred = if (deduped.none { it.stage.id == inferred.id } && anchor != null) {
+            deduped + anchor.copy(stage = inferred)
+        } else {
+            deduped
+        }
+        val likely = withInferred.firstOrNull { it.stage.id == inferred.id }
+            ?: StageMatchResult(withInferred).likelySelected
+        return StageMatchResult(withInferred, likely)
+    }
+
+    /**
+     * The stage that must be the selected card, worked out from its neighbours.
+     *
+     * A stage-select carousel draws a run of consecutive stages. If the card left of centre matches
+     * stage *n* and the card right of centre matches stage *n + 2*, the card between them can only be
+     * *n + 1* — which is how `Feathergeddon III` gets found even when its own label is misread as
+     * `II`, a stage that is already sitting at *n*.
+     *
+     * Deliberately strict: it returns nothing unless both neighbours resolved and the catalog gap is
+     * exactly two. A wrong inference here would be worse than no inference, because the card is
+     * presented as the likely selection.
+     */
+    internal fun inferFromNeighbours(
+        catalog: StageCatalog,
+        candidates: List<StageCandidate>,
+    ): StageRecord? {
+        if (candidates.size < 3) return null
+        val ordered = candidates.sortedBy { it.centerX }
+        val centre = ordered.indices.minByOrNull { kotlin.math.abs(ordered[it].centerX - 0.5f) } ?: return null
+        if (centre == 0 || centre == ordered.lastIndex) return null
+        val stages = catalog.stages
+        val leftIndex = stages.indexOfFirst { it.id == ordered[centre - 1].stage.id }
+        val rightIndex = stages.indexOfFirst { it.id == ordered[centre + 1].stage.id }
+        if (leftIndex < 0 || rightIndex != leftIndex + 2) return null
+        return stages[leftIndex + 1]
     }
 
     /**

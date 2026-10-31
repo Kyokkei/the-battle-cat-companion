@@ -207,4 +207,51 @@ class StageMatcherTest {
         difficulty = "",
         enemySpawns = emptyList(),
     )
+    @Test
+    fun aMisreadCentreCardIsRecoveredFromItsNeighbours() {
+        // Real geometry from a Feathergeddon III screen. The carousel draws I, II, III, Swan Song;
+        // the selected label is yellow-on-white with a heavy outline and the recognizer drops a
+        // stroke, so the centred card arrives as `Feathergeddon II` — which is the card already
+        // sitting to its left. The neighbours make the answer unambiguous.
+        val one = stage(id = 1, names = listOf("Feathergeddon I (Merciless)"))
+        val two = stage(id = 2, names = listOf("Feathergeddon II (Merciless)"))
+        val three = stage(id = 3, names = listOf("Feathergeddon III (Merciless)"))
+        val swan = stage(id = 4, names = listOf("Feathergeddon: Swan Song (Brutal)"))
+        val catalog = catalog(listOf(one, two, three, swan))
+
+        val result = StageMatcher.match(
+            catalog,
+            listOf(
+                OcrStageLine("Feathergeddon I (Merciless]", 0.95f, 0.138f, 0.134f, 0.173f, 0.229f),
+                OcrStageLine("Feathergeddon II [Merciless]", 0.94f, 0.136f, 0.261f, 0.173f, 0.387f),
+                OcrStageLine("Feathergeddon II (Merciless]", 0.95f, 0.146f, 0.422f, 0.191f, 0.578f),
+                OcrStageLine("Feathergeddon: Swan Song [Brutal]", 0.96f, 0.134f, 0.610f, 0.174f, 0.738f),
+            ),
+            StageLocale.EN,
+        )
+
+        assertEquals(3L, result.likelySelected?.stage?.id)
+        assertTrue(result.requiresConfirmation)
+    }
+
+    @Test
+    fun neighboursThatAreNotTwoApartInferNothing() {
+        // Two unrelated stages either side of the centre must not invent a third.
+        val a = stage(id = 1, names = listOf("Alpha"))
+        val b = stage(id = 2, names = listOf("Beta"))
+        val z = stage(id = 9, names = listOf("Zeta"))
+        val catalog = catalog(listOf(a, b, z))
+
+        val result = StageMatcher.match(
+            catalog,
+            listOf(
+                OcrStageLine("Alpha", 0.9f, 0.13f, 0.10f, 0.17f, 0.24f),
+                OcrStageLine("Beta", 0.9f, 0.14f, 0.42f, 0.18f, 0.58f),
+                OcrStageLine("Zeta", 0.9f, 0.13f, 0.70f, 0.17f, 0.80f),
+            ),
+            StageLocale.EN,
+        )
+
+        assertEquals(2L, result.likelySelected?.stage?.id)
+    }
 }
