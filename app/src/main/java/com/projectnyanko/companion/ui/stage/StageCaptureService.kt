@@ -538,8 +538,11 @@ class StageCaptureService : Service() {
                 )
                 CatScanResolver.resolve(all, index)?.let { hit ->
                     val trace = ScanTrace()
-                    val refined = refineLevel(input, hit, trace)
-                    if (!quiet) dumpCatScan(all, refined, trace, input, bitmap, frame !== bitmap)
+                    // Refine reads the uncapped frame: the capped copy is for the cheap full-screen
+                    // pass, but the plus level is the smallest thing on the screen and deserves
+                    // every pixel the device actually captured.
+                    val refined = refineLevel(frame, hit, trace)
+                    if (!quiet) dumpCatScan(all, refined, trace, frame, bitmap, frame !== bitmap)
                     refined
                 }.also { hit ->
                     Log.i(TAG, "cat scan hit: ${hit?.displayName ?: "none"} level=${hit?.level} plus=${hit?.plusLevel}")
@@ -646,7 +649,15 @@ class StageCaptureService : Service() {
             .getOrNull() ?: return hit
         trace.crop = crop
         return try {
-            val big = Bitmap.createScaledBitmap(crop, crop.width * CROP_SCALE, crop.height * CROP_SCALE, true)
+            // Scale by what the crop needs, not a flat 4x: on a 2400 px frame the digits are already
+            // 30 px tall and 4x would mean OCR-ing a 3400 px image for nothing.
+            val scale = (REFINE_TARGET_WIDTH / crop.width).coerceIn(1f, 4f)
+            val big = Bitmap.createScaledBitmap(
+                crop,
+                (crop.width * scale).toInt().coerceAtLeast(1),
+                (crop.height * scale).toInt().coerceAtLeast(1),
+                true,
+            )
             try {
                 val lines = engine.recognizeAllLines(big, locale)
                 trace.refineText = lines.joinToString(" | ") { "${it.text}@${"%.2f".format(it.left)}" }
@@ -948,11 +959,18 @@ class StageCaptureService : Service() {
          * it lands on the block on a 16:9 phone, a 20:9 phone and a tablet alike — and on both the
          * Upgrade card and the Organize Cats panel, where the block sits at a different absolute
          * place but the same distance from the name.
+         *
+         * 3.0, not 2.4: the block hugs the right edge of the tile, and at 2.4 the `+7` on Cyberpunk
+         * Cat ended up touching the crop's border, where the detector drops it — the card read a
+         * level 34 with no plus. The neighbour's block that this now catches is thrown out by the
+         * column check in `readLevelBlock`.
          */
-        private const val CROP_HALF_WIDTH = 2.4f
+        private const val CROP_HALF_WIDTH = 3.0f
         private const val CROP_TOP = 0.3f
         private const val CROP_BOTTOM = 9.0f
-        private const val CROP_SCALE = 4
+
+        /** Refine crops are scaled up to roughly this width before OCR, within [1, 4]x. */
+        private const val REFINE_TARGET_WIDTH = 1400f
 
         /** How many past scans to keep in the cache for diagnosis. */
         private const val CAT_SCAN_DUMPS = 8
