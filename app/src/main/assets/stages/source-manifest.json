@@ -5,6 +5,15 @@
   "license": "CC BY-SA 4.0",
   "snapshotCommit": "not supplied",
   "snapshotDate": "not supplied",
-  "sourceFiles": ["stage.tsv", "tstage.tsv", "stage_scheme.json", "../enemies/enemy_*.png"],
-  "note": "Local snapshot was supplied by the user. Runtime parser records SHA-256 hashes for the TSV and schema inputs. Enemy image assets are displayed as user-supplied in-game reference sprites."
+  "sourceFiles": [
+    "stage.tsv",
+    "tstage.tsv",
+    "stage_scheme.json",
+    "../enemies/enemy_*.png"
+  ],
+  "note": "Local snapshot was supplied by the user. Runtime parser records SHA-256 hashes for the TSV and schema inputs. Enemy image assets are displayed as user-supplied in-game reference sprites.",
+  "corrections": [
+    "ex_stage for uh80-uh84 (Growing Catfruit) set to Catfruit Jubilee at 5%, per the wiki: the snapshot's 15% pointed at stages PONOS removed.",
+    "ex_stage for qsi8/qsi9/qsia (The Proving Grounds, First Round) set to the matching tier's 2nd Round, Dawn or Dusk, at 100%."
+  ]
 }

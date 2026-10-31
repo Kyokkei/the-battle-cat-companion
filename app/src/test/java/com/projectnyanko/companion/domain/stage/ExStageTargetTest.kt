@@ -52,19 +52,14 @@ class ExStageTargetTest {
     }
 
     @Test
-    fun aLegacyRowFindsItsExStagesByName() {
-        // Real shape: `15,004,00,02$` carries no id, and the game ships the three EX stages as
-        // zero-energy stages named after the carrier.
+    fun aLegacyRowWithNoTargetResolvesToNothing() {
+        // `15,004,00,02$` carries no id. Guessing by name produced `Rays of Gold (Hard)`, a stage
+        // PONOS deleted years ago, so a row like this now reports nothing and the link lives in
+        // stage.tsv instead (Rays of Gold → Catfruit Jubilee, 5%).
         val carrier = record(1, "uh84", "Rays of Gold", 200, listOf(ExStageRef(null, 15)))
-        val hard = record(2, "a", "Rays of Gold (Hard)", 0)
-        val expert = record(3, "b", "Rays of Gold (Expert)", 0)
-        val insane = record(4, "c", "Rays of Gold (Insane)", 0)
-        val notEx = record(5, "d", "Rays of Gold 2", 200)
-        val catalog = StageCatalog(listOf(carrier, hard, expert, insane, notEx), emptyList(), metadata)
-
-        val found = catalog.exStageTargets(carrier, StageLocale.EN)
-        assertEquals(listOf(hard, expert, insane), found.map { it.first })
-        assertEquals(listOf(15, 15, 15), found.map { it.second })
+        val removed = record(2, "a", "Rays of Gold (Hard)", 0)
+        val catalog = StageCatalog(listOf(carrier, removed), emptyList(), metadata)
+        assertTrue(catalog.exStageTargets(carrier, StageLocale.EN).isEmpty())
     }
 
     @Test
