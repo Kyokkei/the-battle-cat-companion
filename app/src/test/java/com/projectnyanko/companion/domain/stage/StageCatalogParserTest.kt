@@ -396,4 +396,23 @@ class StageCatalogParserTest {
             catalog.findCandidates("Feathergeddon Ill (Merciless)", StageLocale.EN).map { it.names(StageLocale.EN).first() },
         )
     }
+    @Test
+    fun oneStageNamesItsWholeChapter() {
+        val root = assetsRoot()
+        val spriteIds = Files.list(root.resolve("enemies")).use { paths ->
+            paths.map { it.fileName.toString() }
+                .filter { it.matches(Regex("enemy_\\d+\\.png")) }
+                .map { it.removePrefix("enemy_").removeSuffix(".png").toInt() }
+                .toList()
+                .toSet()
+        }
+        val catalog = parse(root, spriteIds)
+        val hardLuck = catalog.stages.first { it.names(StageLocale.EN).firstOrNull() == "Hard-Luck Homestay" }
+
+        // Scanning one stage of The Ururvu Journals should name the other three, in game order.
+        assertEquals(
+            listOf("Extra Natives", "Hard-Luck Homestay", "AI Fishing", "Sacrifice Apprenticeship"),
+            catalog.stagesInSameMap(hardLuck).map { it.names(StageLocale.EN).first() },
+        )
+    }
 }

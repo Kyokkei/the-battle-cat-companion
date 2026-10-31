@@ -169,6 +169,18 @@ data class StageCatalog(
      * The stage file only stores a map index in the id, so this is what tells eleven identically
      * named `South Africa` records apart. Null for maps the user has not labelled.
      */
+    /**
+     * Every stage that shares a map with [stage], in the order the game lists them.
+     *
+     * A map is the stage id divided by [CHAPTER_ID_STRIDE] — `The Ururvu Journals` is one bucket, so
+     * its four stages come out together. This is what lets one scan name the whole chapter instead
+     * of making the player read four cards.
+     */
+    fun stagesInSameMap(stage: StageRecord): List<StageRecord> {
+        val map = stage.id / CHAPTER_ID_STRIDE
+        return stages.filter { it.id / CHAPTER_ID_STRIDE == map }.sortedBy { it.id }
+    }
+
     fun chapterNameFor(stage: StageRecord): String? =
         stageChapters[stage.id] ?: chapters[(stage.id / CHAPTER_ID_STRIDE).toInt()]
 

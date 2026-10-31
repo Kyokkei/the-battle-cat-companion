@@ -399,6 +399,22 @@ class StageOverlayService : Service() {
                 root.addView(label("Continuation stage$chance", 13f, INK))
             }
         }
+        // One scan names the whole map. Stage ids group by map, so reading "Hard-Luck Homestay"
+        // already tells you it is The Ururvu Journals and what else lives in there — no second scan.
+        val siblings = catalog.stagesInSameMap(stage).filter { it.id != stage.id }
+        if (siblings.isNotEmpty()) {
+            root.addView(label("Also in this map · ${siblings.size + 1} stages", 15f, ACCENT_DEEP, bold = true))
+            siblings.take(MAX_MAP_STAGES).forEach { sibling ->
+                root.addView(
+                    actionButton(StageCandidateGroups.displayName(sibling, selectedLocale), primary = false) {
+                        showStageDetails(sibling)
+                    },
+                )
+            }
+            if (siblings.size > MAX_MAP_STAGES) {
+                root.addView(label("and ${siblings.size - MAX_MAP_STAGES} more", 12f, INK_SOFT))
+            }
+        }
         showResultRoot(root)
     }
 
@@ -1329,6 +1345,9 @@ class StageOverlayService : Service() {
          * the box as wide as the display. A narrower card wraps the sprite strip instead, so a long
          * lineup grows the box downwards rather than sideways.
          */
+        /** Longest chapter list worth drawing; the card scrolls but nobody reads twenty buttons. */
+        private const val MAX_MAP_STAGES = 12
+
         private const val CARD_WIDTH_FRACTION = 0.72f
 
         // Vertical budget the stat rows have to share, in dp. Everything else in the card is fixed:
