@@ -7,8 +7,11 @@ import java.net.URL
 /** A newer build the app knows about. */
 data class UpdateInfo(
     val version: String,
+    /** The release page, used when no APK asset could be resolved. */
     val url: String,
     val notes: String?,
+    /** Direct APK download, chosen for this device's CPU. Null means "send them to the page". */
+    val apkUrl: String? = null,
 )
 
 /**
@@ -43,7 +46,7 @@ object UpdateChecker {
             try {
                 if (connection.responseCode !in 200..299) return@runCatching null
                 val body = connection.inputStream.bufferedReader().use { it.readText() }
-                parseRelease(body, currentVersion)
+                parseRelease(body, currentVersion, android.os.Build.SUPPORTED_ABIS.toList())
             } finally {
                 connection.disconnect()
             }
@@ -55,14 +58,47 @@ object UpdateChecker {
      *
      * Kept separate from the network call so it can be tested against a real payload without one.
      */
-    internal fun parseRelease(json: String, currentVersion: String): UpdateInfo? {
+    internal fun parseRelease(
+        json: String,
+        currentVersion: String,
+        abis: List<String> = emptyList(),
+    ): UpdateInfo? {
         val root = runCatching { JSONObject(json) }.getOrNull() ?: return null
         // GitHub tags are `v0.1.3`; the version comparator only understands numbers.
         val tag = root.optString("tag_name").trim().removePrefix("v").removePrefix("V")
         val url = root.optString("html_url").trim()
         if (tag.isEmpty() || url.isEmpty()) return null
         if (!isNewer(tag, currentVersion)) return null
-        return UpdateInfo(tag, url, summarise(root.optString("body")))
+        val assets = root.optJSONArray("assets")
+        val candidates = ArrayList<Pair<String, String>>()
+        if (assets != null) {
+            for (index in 0 until assets.length()) {
+                val asset = assets.optJSONObject(index) ?: continue
+                val name = asset.optString("name").trim()
+                val download = asset.optString("browser_download_url").trim()
+                if (name.isNotEmpty() && download.isNotEmpty()) candidates += name to download
+            }
+        }
+        return UpdateInfo(tag, url, summarise(root.optString("body")), pickApk(candidates, abis))
+    }
+
+    /**
+     * Picks the APK that matches the device.
+     *
+     * The release ships one build per CPU family plus a universal one. Sending an arm64 phone the
+     * universal APK would double the download for nothing, and sending a 32-bit phone the arm64 APK
+     * would produce an install that fails with a confusing "app not installed".
+     */
+    internal fun pickApk(assets: List<Pair<String, String>>, abis: List<String>): String? {
+        val apks = assets.filter { it.first.endsWith(".apk", ignoreCase = true) }
+        if (apks.isEmpty()) return null
+        fun find(name: String) = apks.firstOrNull { it.first.equals(name, ignoreCase = true) }?.second
+        val primaryAbi = abis.firstOrNull().orEmpty()
+        if (primaryAbi.startsWith("arm64")) {
+            find("Nyanko-arm64-v8a.apk")?.let { return it }
+        }
+        // 32-bit phones, x86 emulators and anything unexpected: the universal build always installs.
+        return find("Nyanko-universal.apk") ?: apks.first().second
     }
 
     /**

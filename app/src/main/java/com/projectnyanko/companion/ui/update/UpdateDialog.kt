@@ -35,11 +35,19 @@ import com.projectnyanko.companion.ui.theme.PaperLight
 /**
  * "A new build is out" — art on top, the artist's credit under it, then the two choices.
  *
- * Nothing is installed from here: [onUpdateNow] opens the download link and Android's own installer
- * takes over, so the app never asks for the install-packages permission.
+ * [onUpdateNow] downloads the APK in the background and hands it to Android's installer, which is
+ * why [progress] exists: a 78 MB download with no feedback reads as a broken button. [message]
+ * carries the two things that can go wrong out loud — the install permission is missing, or the
+ * download failed.
  */
 @Composable
-fun UpdateDialog(info: UpdateInfo, onUpdateNow: () -> Unit, onLater: () -> Unit) {
+fun UpdateDialog(
+    info: UpdateInfo,
+    onUpdateNow: () -> Unit,
+    onLater: () -> Unit,
+    progress: Int? = null,
+    message: String? = null,
+) {
     Dialog(onDismissRequest = onLater, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Column(
             modifier = Modifier
@@ -79,12 +87,29 @@ fun UpdateDialog(info: UpdateInfo, onUpdateNow: () -> Unit, onLater: () -> Unit)
                         .padding(12.dp),
                 )
             }
+            if (message != null) {
+                Spacer(Modifier.height(10.dp))
+                Text(
+                    text = message,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Ink,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(PaperLight)
+                        .padding(10.dp),
+                )
+            }
             Spacer(Modifier.height(16.dp))
             // Stacked, not side by side: half a dialog is not enough for "I'll update it later" in
             // any language, and the pill button ellipsises rather than wrapping.
             NyankoPillButton(
-                text = stringResource(R.string.update_now),
-                onClick = onUpdateNow,
+                text = if (progress != null) {
+                    "Downloading… ${progress.coerceIn(0, 100)}%"
+                } else {
+                    stringResource(R.string.update_now)
+                },
+                onClick = { if (progress == null) onUpdateNow() },
                 modifier = Modifier.fillMaxWidth(),
             )
             Spacer(Modifier.height(8.dp))

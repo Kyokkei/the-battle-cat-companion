@@ -88,4 +88,50 @@ class UpdateCheckerTest {
         assertNull(UpdateChecker.parseRelease(notFound, currentVersion = "0.1.0"))
         assertNull(UpdateChecker.parseRelease("", currentVersion = "0.1.0"))
     }
+    private val assets = listOf(
+        "Nyanko-arm64-v8a.apk" to "https://example.test/arm64.apk",
+        "Nyanko-universal.apk" to "https://example.test/universal.apk",
+        "SHA256SUMS.txt" to "https://example.test/sums.txt",
+    )
+
+    @Test
+    fun anArm64PhoneGetsTheSmallApk() {
+        assertEquals(
+            "https://example.test/arm64.apk",
+            UpdateChecker.pickApk(assets, listOf("arm64-v8a", "armeabi-v7a")),
+        )
+    }
+
+    @Test
+    fun aThirtyTwoBitPhoneGetsTheUniversalOne() {
+        // Sending this device the arm64 build installs nothing and says nothing useful.
+        assertEquals(
+            "https://example.test/universal.apk",
+            UpdateChecker.pickApk(assets, listOf("armeabi-v7a", "armeabi")),
+        )
+    }
+
+    @Test
+    fun anEmulatorGetsTheUniversalOne() {
+        assertEquals(
+            "https://example.test/universal.apk",
+            UpdateChecker.pickApk(assets, listOf("x86_64", "x86")),
+        )
+    }
+
+    @Test
+    fun anArm64PhoneFallsBackWhenTheSmallApkIsMissing() {
+        val universalOnly = assets.filterNot { it.first.contains("arm64") }
+        assertEquals(
+            "https://example.test/universal.apk",
+            UpdateChecker.pickApk(universalOnly, listOf("arm64-v8a")),
+        )
+    }
+
+    @Test
+    fun aReleaseWithNoApksHasNoDownload() {
+        val sumsOnly = assets.filterNot { it.first.endsWith(".apk") }
+        assertNull(UpdateChecker.pickApk(sumsOnly, listOf("arm64-v8a")))
+        assertNull(UpdateChecker.pickApk(emptyList(), listOf("arm64-v8a")))
+    }
 }

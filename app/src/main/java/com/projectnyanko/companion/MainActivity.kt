@@ -1,5 +1,6 @@
 package com.projectnyanko.companion
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
@@ -61,6 +62,9 @@ class MainActivity : ComponentActivity() {
                 var tab by rememberSaveable { mutableIntStateOf(0) }
                 val context = androidx.compose.ui.platform.LocalContext.current
                 var pendingUpdate by remember { mutableStateOf<com.projectnyanko.companion.data.update.UpdateInfo?>(null) }
+                var updateProgress by remember { mutableStateOf<Int?>(null) }
+                var updateMessage by remember { mutableStateOf<String?>(null) }
+                val updateScope = androidx.compose.runtime.rememberCoroutineScope()
                 // Banner data ages fast — a new capsule makes the bundled catalog wrong within days,
                 // and a banner the app has never seen cannot show its guaranteed track. Pull a fresh
                 // copy in the background; it is ~1 MB, twice a day, and silently falls back.
@@ -92,16 +96,50 @@ class MainActivity : ComponentActivity() {
                 pendingUpdate?.let { info ->
                     com.projectnyanko.companion.ui.update.UpdateDialog(
                         info = info,
+                        progress = updateProgress,
+                        message = updateMessage,
                         onUpdateNow = {
-                            runCatching {
-                                context.startActivity(
-                                    android.content.Intent(
-                                        android.content.Intent.ACTION_VIEW,
-                                        android.net.Uri.parse(info.url),
-                                    ),
-                                )
+                            val apk = info.apkUrl
+                            if (apk == null) {
+                                // No APK asset on the release: the page is the only honest option.
+                                runCatching {
+                                    context.startActivity(
+                                        android.content.Intent(
+                                            android.content.Intent.ACTION_VIEW,
+                                            android.net.Uri.parse(info.url),
+                                        ),
+                                    )
+                                }
+                                pendingUpdate = null
+                                return@UpdateDialog
                             }
-                            pendingUpdate = null
+                            if (!com.projectnyanko.companion.data.update.UpdateInstaller.canInstall(context)) {
+                                // One unavoidable extra tap, once per install: Android will not let
+                                // this app launch an installer until the player allows it.
+                                com.projectnyanko.companion.data.update.UpdateInstaller.openPermission(context)
+                                updateMessage = "Allow \"Install unknown apps\" for Nyanko, then tap Update now again."
+                                return@UpdateDialog
+                            }
+                            updateMessage = null
+                            updateProgress = 0
+                            updateScope.launch {
+                                val file = withContext(Dispatchers.IO) {
+                                    com.projectnyanko.companion.data.update.UpdateInstaller.download(
+                                        context,
+                                        apk,
+                                    ) { percent -> updateProgress = percent }
+                                }
+                                updateProgress = null
+                                if (file == null) {
+                                    updateMessage = "The download did not finish. Check your connection and try again."
+                                    return@launch
+                                }
+                                if (com.projectnyanko.companion.data.update.UpdateInstaller.install(context, file)) {
+                                    pendingUpdate = null
+                                } else {
+                                    updateMessage = "Android would not open the installer. Try again, or update from the Releases page."
+                                }
+                            }
                         },
                         onLater = { pendingUpdate = null },
                     )
