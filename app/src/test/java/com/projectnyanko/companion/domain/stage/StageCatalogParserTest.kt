@@ -415,4 +415,24 @@ class StageCatalogParserTest {
             catalog.stagesInSameMap(hardLuck).map { it.names(StageLocale.EN).first() },
         )
     }
+    @Test
+    fun campaignChaptersAreTooBigToList() {
+        val root = assetsRoot()
+        val spriteIds = Files.list(root.resolve("enemies")).use { paths ->
+            paths.map { it.fileName.toString() }
+                .filter { it.matches(Regex("enemy_\\d+\\.png")) }
+                .map { it.removePrefix("enemy_").removeSuffix(".png").toInt() }
+                .toList()
+                .toSet()
+        }
+        val catalog = parse(root, spriteIds)
+
+        // The card only lists a map when it is small. A Legends chapter is 3-6 stages; the campaign
+        // chapters are 48-53, and dumping those as buttons is exactly what the player does not want.
+        val legends = catalog.stages.first { it.names(StageLocale.EN).firstOrNull() == "Hard-Luck Homestay" }
+        val campaign = catalog.stages.first { it.names(StageLocale.EN).firstOrNull() == "Japan" }
+
+        assertTrue("Legends map should be listable", catalog.stagesInSameMap(legends).size <= 12)
+        assertTrue("EoC Ch.1 should be far too big", catalog.stagesInSameMap(campaign).size > 12)
+    }
 }
