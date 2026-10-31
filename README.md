@@ -15,7 +15,7 @@ No account. No queue. No "please wait while we look that up for you."
 
 ![Offline](https://img.shields.io/badge/works-offline-2ea44f)
 ![Telemetry](https://img.shields.io/badge/telemetry-none-2ea44f)
-[![Version](https://img.shields.io/badge/version-0.1.0-blue)](https://github.com/Kyokkei/the-battle-cat-companion/releases)
+[![Version](https://img.shields.io/badge/version-0.1.1-blue)](https://github.com/Kyokkei/the-battle-cat-companion/releases)
 ![License](https://img.shields.io/badge/license-CC_BY--NC--SA_4.0-ef9421)
 
 </div>
@@ -26,8 +26,13 @@ No account. No queue. No "please wait while we look that up for you."
 
 Grab the latest ready-to-use APK from the **[Releases](https://github.com/Kyokkei/the-battle-cat-companion/releases)** tab:
 
-- **`Nyanko-arm64-v8a.apk`** — recommended for 99% of modern Android phones. Smaller, faster, and what you almost certainly want.
-- **`Nyanko-universal.apk`** — for PC emulators (LDPlayer, BlueStacks) and older hardware that isn't arm64.
+| File | Size | Who it's for |
+|:--|:--|:--|
+| **`Nyanko-arm64-v8a.apk`** | ~78 MB | **99% of modern Android phones. Take this one.** |
+| `Nyanko-universal.apk` | ~179 MB | PC emulators (LDPlayer, BlueStacks) and anything that isn't arm64 |
+| `Nyanko-full-universal.apk` | ~240 MB | Everything, including the Japanese OCR models. For poking at the JP path — JP stage names still don't work, so this isn't a "JP build" yet |
+
+Why three: ONNX Runtime ships a separate native library per CPU, and 62 MB of the bundle is Japanese OCR models that an English player never loads. So the default download drops both, and you get 78 MB instead of 240.
 
 No Play Store, no account, no "install our launcher first". Sideload it and go.
 

@@ -53,10 +53,28 @@ android {
         applicationId = "com.projectnyanko.companion"
         minSdk = 24
         targetSdk = 37
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = 2
+        versionName = "0.1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    /**
+     * Two builds, because 62 MB of the APK is the Japanese OCR models and only a JP player needs them.
+     *
+     * - `en`   — the default download. Everything except `assets/ocr/ja`. The JP *data* stays bundled
+     *            (it's 1.9 MB) so the region toggle still works; only the recognizer is absent, which
+     *            is the part that does not work yet anyway.
+     * - `full` — adds the Japanese models back, for testing that path.
+     */
+    flavorDimensions += "region"
+    productFlavors {
+        create("en") {
+            dimension = "region"
+        }
+        create("full") {
+            dimension = "region"
+        }
     }
 
     buildFeatures {
