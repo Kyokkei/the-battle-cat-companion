@@ -1,50 +1,217 @@
-# Battle Cats Companion (working title)
+<div align="center">
 
-An Android companion app for **The Battle Cats (BCEN + BCJP)**. The initial product is centered on three capabilities: a local seed tracker, a user-invoked stage-info overlay, and a reference/events browser. A schedule feature is an optional future module, not part of the initial release commitment.
+# 🐱 Nyanko
 
-> **Project status:** The seed tracker is complete and parity-verified against the live tracker at `bc.godfat.org`: 30 rows for two seeds, duplicate-rare rerolls, reroll route edges, and the guaranteed column for an 11-roll banner all match. Finding a seed runs **on the phone**: the same exhaustive 2^32 sweep as the web tracker, ~3–5 s on an 8-core device, with no queue and no upload. Stage OCR now runs locally through ONNX Runtime CPU: a PP-OCRv5 DB text detector finds the stage cards on the frame, PP-OCRv6 small recognizes English, and Manga OCR handles Japanese; the models were copied from the user's Fukidashi installation and are listed in [third-party notices](THIRD_PARTY_NOTICES.md). Nothing is cropped with fixed screen fractions, so the scan does not depend on the phone's resolution or aspect ratio. The helper asks Android for screen sharing once per active session, then captures one still per paw tap and rejects a replayed older frame; the centered card suggestion still requires confirmation, and a stage name shared by several chapters opens a list of the matching records instead of picking one. Drag the paw to the bottom target to stop the helper and end screen sharing. The stage data parser loads 6,328 records and 746 enemy icons; 5,871 records carry an English name (the remainder are untranslated collaboration/event rows that stay JP-only). Validate capture/OCR on-device before treating it as release-ready. The separate NekoOptimizer gacha catalog provenance remains incomplete.
+**A Battle Cats companion that does all its thinking on your phone.**
 
-## Product goals
+No account. No queue. No "please wait while we look that up for you."
 
-1. **Seed tracking — local-first.** Enter a seed, or find it: type the cats you already rolled and the app searches all 4.29 billion seeds on-device. Then browse the A/B track, tap the cat you actually got to advance, and watch duplicate rerolls and guaranteed ubers resolve. Seeds and positions stay in Room on the device. No game-account credentials, no remote seed storage, no queue.
-2. **Stage info from the game — deliberate capture.** Enable the floating helper once and approve Android's screen-sharing prompt once per session. Tapping the paw captures one still frame for local OCR; it does not OCR continuously or save frames. Choose the matching stage candidate to view its enemy lineup and stage data. The user can dismiss it immediately. Incorrect nearby-stage matches are a release-blocking defect: do not silently present a low-confidence guess as confirmed.
-3. **Reference and event browser.** Browse accurate stage, enemy, banner, and event references for BCEN and BCJP. Display region, source, version/update date, and confidence/freshness where possible. Images must remain clear and legible when the user opens stage info from the bubble; image quality and useful zoom take priority over APK size.
-4. **Optional future schedule module.** If added, show current/upcoming special and recurring events for the selected region. Keep it separate from the stage-reference and seed-tracking milestones.
+<br/>
 
-## UX direction
+![Platform](https://img.shields.io/badge/platform-Android_7.0%2B-3DDC84?logo=android&logoColor=white)
+![Kotlin](https://img.shields.io/badge/Kotlin-2.4.21-7F52FF?logo=kotlin&logoColor=white)
+![Compose](https://img.shields.io/badge/UI-Jetpack_Compose-4285F4?logo=jetpackcompose&logoColor=white)
+![OCR](https://img.shields.io/badge/OCR-on--device_ONNX-005CED?logo=onnx&logoColor=white)
 
-- Visual direction: **glassmorphism**, while preserving contrast and readability over varied game screens.
-- Android-native Kotlin app; Rust or C/C++ is optional only if profiling shows a meaningful benefit. Prefer Kotlin for the first seed-engine implementation to keep debugging and iteration straightforward.
-- The helper uses one Android screen-share approval per active session. Enable the helper before opening Battle Cats; then each paw tap samples one still frame, runs OCR, and presents a likely centered-card suggestion plus alternatives. The paw never triggers a new share prompt per scan. Drag it to the bottom stop target to end the helper/session.
-- Target both **BCEN and BCJP**. Region/language must be explicit throughout data lookup; Japanese stage names and localized aliases must not be conflated with English entries.
+![Offline](https://img.shields.io/badge/works-offline-2ea44f)
+![Telemetry](https://img.shields.io/badge/telemetry-none-2ea44f)
+![Version](https://img.shields.io/badge/version-0.1.0-blue)
+![License](https://img.shields.io/badge/license-TBD-lightgrey)
 
-## Quality bar and engineering constraints
+</div>
 
-- **Zero warnings** is the project goal: compile, lint, tests, and dependency checks should be clean before a release. Track baseline and toolchain versions; do not hide warnings with broad suppressions. A third-party or toolchain warning that cannot be fixed must be documented, scoped, and treated as an exception—not silently called zero-warning.
-- Design for scalability: modular boundaries, stable domain models, versioned data imports, migrations, tests, and clear source attribution. Avoid putting stage data, OCR heuristics, UI, and roll math in one module/class.
-- Use **Room** for app-owned local structured data: seed profiles, roll history, region preferences, cached/reference metadata, and update state. Keep large images/data files in appropriate app-private files rather than bloating relational rows; store a key/path/hash in Room. Define retention and migration rules.
-- Accuracy beats a small APK. Bundle/download high-resolution stage images/data only after licensing, source stability, and update strategy are checked. Preserve original asset resolution; provide fit-to-screen and zoom/pan, and avoid lossy recompression that blurs text or enemy art.
-- Data should be attributable, region-aware, timestamped, and refreshable. Third-party wiki/site content and artwork may have different licenses; review reuse rights before copying assets or scraping.
-- User data remains local unless a later, explicit feature requires otherwise. No account login or telemetry is assumed in this scope.
+---
 
-## Updating the app
+## So what is this thing?
 
-Offer **Check for update** in the app and an optional automatic update-check/download path backed by GitHub Releases. “Silent update” is a desired user experience, but Android generally does not let an ordinary app silently install its own APK. The app can download and validate a release when constraints are satisfied, then invoke Android’s package installer; user confirmation / enabling “Install unknown apps” may be required. A genuinely unattended installation requires privileged/device-owner or managed-device authority and is not assumed.
+Three things, all of which happen **on the device**, none of which need a server:
 
-The desired automatic path is: check on **Wi‑Fi/unmetered network** while the device is **idle/screen-off**, download a compatible signed release APK, verify integrity/signing/version, notify the user, and hand off installation to Android. WorkManager can enforce unmetered network and idle constraints; it does not guarantee “screen is off” as a direct constraint or guarantee an exact run time. The user-triggered path should be available regardless of background constraints. Details and open decisions are in the research note.
+| | Tab | What it does | Why you'd care |
+|:--:|:--|:--|:--|
+| 🐱 | **Stage Info** | Spawn a floating paw. Tap it on the game screen and it reads the stage, lists every enemy that will show up, and chains the hidden EX stages that come after it. | Stop alt-tabbing to a wiki mid-run. |
+| 🎯 | **Trackseeding** | Type the cats you already rolled → it brute-forces all **4,294,967,296** possible seeds on your phone in a few seconds and hands you the A/B track. | Know what you're pulling before you spend catfood. |
+| 📅 | **Event** | Gacha banners (with art), special events, and *what's open right now* — computed from your own clock. | "Is the XP stage up or do I go to bed?" |
 
-## Milestones (proposed)
+The paw also has a second mode: point it at a cat and it reads **that cat's name and level**, then shows health / damage / DPS at that level. Hold the paw to switch modes.
 
-1. **Research/spec:** verify seed behavior and source license; define data sources/rights and stage-match acceptance tests; document Android permissions and updater constraints.
-2. **Seed tracker MVP:** offline seed entry, banner selection, predictions, A/B track and switch handling, roll history, Room persistence, reference fixtures and regression tests against Godfat’s tracker.
-3. **Reference data MVP:** versioned BCEN/BCJP stages/enemies/banners/events datasets, source metadata, image viewing/zoom, import validation, freshness indicators.
-4. **Stage-info overlay MVP:** floating bubble, user-approved capture, OCR, region-aware candidate matching, confidence/review UI, enemy/stage result card, dismiss action. Measure precision/recall on a labeled screenshot set before calling it accurate.
-5. **Updater:** manual check first, then constrained background check/download; integrity checks; installer handoff; rollback/failed-install UX.
-6. **Optional schedule module:** only after schedule source and update ownership are established.
+---
 
-## Documentation
+## 🫧 The bubble (the main character)
 
-- [Research, decisions, and technical notes](docs/RESEARCH_AND_TECHNICAL_NOTES.md)
-- [Product requirements](docs/PRODUCT_REQUIREMENTS.md)
+```mermaid
+flowchart TD
+    A["You open Battle Cats<br/>and have no idea what's coming"] --> B{"Is the paw on screen?"}
+    B -- no --> C["Stage Info → Start helper<br/>Android asks ONCE to share your screen"]
+    C --> B
+    B -- yes --> D{"Which mode is it in?"}
+    D -- "amber · cat with a magnifier" --> E["Tap the paw on a stage"]
+    D -- "mint · cat with a chart" --> F["Tap the paw on a cat"]
+    E --> G["card: enemies + EX chain"]
+    F --> H["card: stats at that level"]
+    G --> I{"wrong stage?"}
+    H --> J{"wrong level?"}
+    I -- yes --> K["pick from the candidates<br/>it never guesses silently"]
+    J -- yes --> L["tap 'not your level?'<br/>and type the damn number"]
+    K --> G
+    L --> H
+```
+
+The rules, in human:
+
+- **One approval per session.** Android's screen-share prompt appears once. The paw never asks again.
+- **One frame per tap.** It is not recording you. It grabs a single still, reads it, throws it away.
+- **Hold to switch modes** (~half a second). The icon *and* the colour change, so you can tell which mode you're in at a glance.
+- **Drag it to the bottom target** to stop the helper and end screen sharing.
+- **It never silently guesses.** If two stages share a name, you get a list. If the level looks wrong, there's a keypad.
+
+---
+
+## 🔍 How a scan actually works (and why your weird phone is fine)
+
+This is the part that took the longest, because "it works on my phone" is not a real answer.
+
+```mermaid
+flowchart LR
+    T["tap"] --> F["one still frame"]
+    F --> X["crop to the game's own pixels<br/>kills letterboxing, split-screen,<br/>floating windows"]
+    X --> O["PP-OCRv5 detector<br/>+ PP-OCRv6 recognizer"]
+    O --> G["geometry measured in<br/>NAME HEIGHTS, not screen %"]
+    G --> R{"confident?"}
+    R -- yes --> CARD["card"]
+    R -- no --> ALT["candidate list"]
+    CARD --> H["still wrong? type it"]
+```
+
+Why that survives every device you throw at it:
+
+| thing that changes per phone | what the code uses instead |
+|:--|:--|
+| Resolution | OCR boxes are normalised `0.0 – 1.0` of the cropped frame |
+| UI scale / game zoom | every distance is measured in **name-box heights** — the one element that scales with the UI |
+| Aspect ratio, notch, split-screen | the frame is cropped to the game's own pixels before anything else runs |
+| Density, system font size | card text is in `dp`, row height is computed from the display |
+| OEM keyboards | the level keypad is drawn buttons — no soft keyboard, no IME roulette |
+
+The scan path was replayed against **8 different screen shapes** (960×540 up to 2400×1080, including a portrait letterbox) on real captured frames. All 8 agree with what the game shows.
+
+---
+
+## 🎯 Seed tracking, in one picture
+
+```mermaid
+flowchart TD
+    S["no idea what your seed is"] --> W["type the cats you already rolled"]
+    W --> B["brute force all 4,294,967,296 seeds<br/>on the phone · a few seconds"]
+    B --> M{"how many match?"}
+    M -- one --> K["locked in 🔒"]
+    M -- several --> P["roll one more cat"]
+    P --> B
+    K --> T["A/B track + duplicate rerolls<br/>+ the guaranteed column"]
+    T --> U["tap the cat you actually got<br/>→ the track advances"]
+```
+
+Same mechanics as the web trackers, ported to Kotlin and verified against them (30 rows, duplicate-rare rerolls, reroll route edges, and the guaranteed column for an 11-roll all match). The difference: **no queue, no upload, works on a plane.**
+
+Huge thanks to [godfat](https://gitlab.com/godfat/battle-cats-rolls) for reverse-engineering this dark magic in the first place — see [Credits](#-credits).
+
+---
+
+## 📅 Events, and the clock thing
+
+Battle Cats has no server-side "now" — stages fire off **your device's clock**. So the Event tab does the same:
+
+- **On now** — with a countdown (`Ends in 42 minutes`, rounded *up*, because "0m" is a lie)
+- **Later today** — `Starts at 20:00`
+- **Rest of the week** — `Wednesday at 11:00`
+
+Three different schedules hide in one data file and they do **not** mean the same thing:
+
+| cadence | format | `3` means |
+|:--|:--|:--|
+| `week` | `D:HH:MM` | Tuesday (1 = Sunday) |
+| `month` | `D:HH:MM` | the 3rd of the month |
+| `year` | `M:D:HH:MM` | the 3rd of that month |
+
+Getting those confused would quietly show you the wrong days forever, so each one has a test.
+
+---
+
+## 🙅 What this app won't do
+
+- **No account.** There's nothing to sign into.
+- **No telemetry.** Nothing phones home about how you play.
+- **No seed upload.** Your seed never leaves the device. That's the whole point.
+- **No background screen reading.** One frame per tap, only when you tap.
+- **No silent stage guess.** A low-confidence match is shown as a list, never as a fact.
+
+The only network call in the entire app is fetching gacha banner art. Everything else works in airplane mode.
+
+---
+
+## 🔨 Build it
+
+```bash
+# JDK 17+, Android SDK with API 37
+./gradlew assembleDebug          # APK → app/build/outputs/apk/debug/
+./gradlew testDebugUnitTest      # the whole unit suite, no device needed
+adb install -r app/build/outputs/apk/debug/app-debug.apk
+```
+
+Full toolchain notes, OCR model setup and the on-device self-test live in [docs/BUILDING.md](docs/BUILDING.md).
+
+---
+
+## 📊 Where it's at
+
+| | |
+|:--|:--|
+| ✅ Done | Seed tracker (parity-verified), stage OCR, cat OCR, EX stage chains, event tab, banner art, EN + VI |
+| 🚧 In progress | Auto-updater (dialog built, release manifest not hosted yet) |
+| 🧊 Parked | Japanese stage names — the EN OCR charset has no kana, so this needs the JA encoder wired plus a JP name index. It's a project, not a config flip. |
+| 🧊 Parked | Cat browser (stats / talents / true-form costs / compare) — that's a desk feature, not a bubble feature |
+| ❔ Undecided | App license |
+
+---
+
+## 💛 Credits
+
+This app is glue. The interesting parts were done by other people, and they should be named.
+
+### The humans
+
+| Who | What they did |
+|:--|:--|
+| **Phan Chí Vỹ** | Made this app. Wrote the Kotlin, drew the cat, got yelled at by the OCR. <!-- TODO: link your GitHub/portfolio here --> |
+| **[godfat](https://gitlab.com/godfat/battle-cats-rolls)** and the OG dataminers | Reverse-engineered seed tracking and published it as *Battle Cats Rolls*. Without them this app has no seed tracker at all. The mechanics here were researched against their tracker; the Kotlin is an independent implementation, no Ruby was copied. |
+| **@doromond** | The doreo art in the update prompt. <!-- TODO: real link — X? ArtStation? --> |
+
+### The data
+
+| Source | Used for | License |
+|:--|:--|:--|
+| [battlecatsinfo](https://github.com/battlecatsinfo/battlecatsinfo.github.io) | Stage catalog, enemy stats table, trait/ability decoders | MIT |
+| [Battle Cats Wiki (Miraheze)](https://battlecats.miraheze.org) contributors | Stage reference snapshot, event schedule, stage clock table, banner map | CC BY-SA 4.0 |
+| [NekoOptimizer](https://github.com/IliyanGavrilov/NekoOptimizer) (IliyanGavrilov) | Gacha, unit and evolution catalogs | ⚠️ none declared — see below |
+
+### The machinery
+
+| Project | Used for | License |
+|:--|:--|:--|
+| [Fukidashi](https://github.com/Kyokkei/fukidashi-mcp) (Kyokkei) | PP-OCR CTC decoding + Manga OCR encoder/decoder caching | Apache-2.0 |
+| [ONNX Runtime](https://onnxruntime.ai) | Running the OCR models on-device | MIT |
+
+### The disclaimer
+
+**This is an unofficial fan project.** It is not affiliated with, endorsed by, or supported by **PONOS Corporation**. *The Battle Cats* and all related names, sprites and data belong to PONOS. Enemy sprites are shown locally as in-game reference imagery, not redistributed as assets in their own right.
+
+⚠️ **On NekoOptimizer:** that repository declares no license, so redistribution rights are unverified. Attribution is included because it was requested, but attribution is not permission. **Don't publish an APK containing those data files until the upstream rights are sorted out.** Full detail in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+---
+
+## 📚 Docs
+
 - [Architecture and data plan](docs/ARCHITECTURE.md)
+- [Product requirements](docs/PRODUCT_REQUIREMENTS.md)
+- [Research and technical notes](docs/RESEARCH_AND_TECHNICAL_NOTES.md) — how the mechanics were verified, what the updater can and can't do
 - [Build and test commands](docs/BUILDING.md)
+- [Third-party notices](THIRD_PARTY_NOTICES.md)
