@@ -58,6 +58,10 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
+/** `1 day` / `4 days` — a countdown that says "1 days" is how you tell an app was never read out loud. */
+private fun daysLabel(days: Long): String = if (days == 1L) "1 day" else "$days days"
+
+
 private enum class Section(val title: String) {
     GACHA("Gacha"),
     SPECIAL("Special Events"),
@@ -129,14 +133,14 @@ private fun Bento(
         BentoTile(
             title = "Gacha",
             big = "$liveGacha live now",
-            caption = soonestGacha?.let { "Next one ends in ${it.daysLeft(today) ?: 0} days" } ?: "Nothing live",
+            caption = soonestGacha?.let { "Next one ends in ${daysLabel(it.daysLeft(today) ?: 0)}" } ?: "Nothing live",
         ) { onOpen(Section.GACHA) }
         Spacer(Modifier.height(12.dp))
         BentoTile(
             title = "Special Events",
             big = "$liveSpecial live now",
             caption = special.firstOrNull { it.status(today) == EventStatus.LIVE }
-                ?.let { "Next one ends in ${it.daysLeft(today) ?: 0} days" } ?: "Nothing live",
+                ?.let { "Next one ends in ${daysLabel(it.daysLeft(today) ?: 0)}" } ?: "Nothing live",
         ) { onOpen(Section.SPECIAL) }
         Spacer(Modifier.height(12.dp))
         BentoTile(
@@ -215,8 +219,8 @@ private fun GachaList(
             EventCard(
                 name = event.name,
                 statusLine = when (event.status(today)) {
-                    EventStatus.LIVE -> "Ends in ${event.daysLeft(today) ?: 0} days"
-                    else -> "Starts in ${event.daysUntilStart(today) ?: 0} days"
+                    EventStatus.LIVE -> "Ends in ${daysLabel(event.daysLeft(today) ?: 0)}"
+                    else -> "Starts in ${daysLabel(event.daysUntilStart(today) ?: 0)}"
                 },
                 live = event.status(today) == EventStatus.LIVE,
                 bannerUrl = repository.bannerUrl(event.name),
@@ -262,10 +266,10 @@ private fun SpecialCard(event: ScheduledEvent, today: String, live: Boolean) {
                 days == null -> if (live) "Live now" else "Coming up"
                 live && days <= 0 -> "Ends today"
                 live && days == 1L -> "Ends tomorrow"
-                live -> "Ends in $days days"
+                live -> "Ends in ${daysLabel(days)}"
                 days <= 0 -> "Starts today"
                 days == 1L -> "Starts tomorrow"
-                else -> "Starts in $days days"
+                else -> "Starts in ${daysLabel(days)}"
             },
             style = MaterialTheme.typography.bodyLarge,
             color = if (live) AccentDeep else InkSoft,
