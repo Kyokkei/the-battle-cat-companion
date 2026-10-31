@@ -112,6 +112,9 @@ class StageCaptureService : Service() {
             when (intent?.action) {
                 ACTION_ENABLE -> enableProjection(intent)
                 ACTION_CAPTURE -> requestCapture()
+                ACTION_SELF_TEST -> serviceScope.launch {
+                    runSelfTest(intent.getStringExtra(EXTRA_TEST_FRAME))
+                }
                 ACTION_STOP -> {
                     isUserStopping = true
                     stopSelf()
@@ -508,13 +511,14 @@ class StageCaptureService : Service() {
      * Returns null when the frame is neither a stage nor a cat screen, so the caller's retry path
      * still handles a replayed composition.
      */
-    private suspend fun resolveCat(bitmap: Bitmap, locale: StageLocale): CatScanHit? =
+    private suspend fun resolveCat(bitmap: Bitmap, locale: StageLocale, quiet: Boolean = false): CatScanHit? =
         withContext(Dispatchers.IO) {
             // The game is not always the whole display: in a floating or split window it is a
             // letterboxed band in the middle, and every box on screen comes out vertically squashed.
             // All the level geometry is relative to the name box, so a squashed frame breaks it —
             // crop to the game's own pixels first.
             val frame = gameFrame(bitmap)
+            val input = ocrInput(frame)
             try {
                 val app = application as BattleCatsApplication
                 // Cat mode returns before the stage path runs, so this is the only place that would
@@ -525,7 +529,7 @@ class StageCaptureService : Service() {
                 val index = app.catScanCatalog.index(region)
                 val startedAt = System.currentTimeMillis()
                 val all = withTimeout(CAT_SCAN_TIMEOUT_MS) {
-                    engine.recognizeAllLines(frame, locale)
+                    engine.recognizeAllLines(input, locale)
                 }
                 Log.i(
                     TAG,
@@ -534,8 +538,8 @@ class StageCaptureService : Service() {
                 )
                 CatScanResolver.resolve(all, index)?.let { hit ->
                     val trace = ScanTrace()
-                    val refined = refineLevel(frame, hit, trace)
-                    dumpCatScan(all, refined, trace, frame, bitmap, frame !== bitmap)
+                    val refined = refineLevel(input, hit, trace)
+                    if (!quiet) dumpCatScan(all, refined, trace, input, bitmap, frame !== bitmap)
                     refined
                 }.also { hit ->
                     Log.i(TAG, "cat scan hit: ${hit?.displayName ?: "none"} level=${hit?.level} plus=${hit?.plusLevel}")
@@ -544,9 +548,31 @@ class StageCaptureService : Service() {
                 Log.w(TAG, "cat scan failed: ${error.message}")
                 null
             } finally {
+                if (input !== frame) input.recycle()
                 if (frame !== bitmap) frame.recycle()
             }
         }
+
+    /**
+     * Caps the frame handed to the recognizer.
+     *
+     * The detector already works at a 1280 long side, but the recognizer runs one crop per text box,
+     * so cost scales with area: a fullscreen 2400x1080 capture took ~6 s per scan while a 1072x480
+     * game window took ~1 s. Nothing readable at 2400 px is lost at 1600.
+     */
+    private fun ocrInput(frame: Bitmap): Bitmap {
+        val longSide = maxOf(frame.width, frame.height)
+        if (longSide <= MAX_OCR_LONG_SIDE) return frame
+        val ratio = MAX_OCR_LONG_SIDE / longSide.toFloat()
+        return runCatching {
+            Bitmap.createScaledBitmap(
+                frame,
+                (frame.width * ratio).toInt().coerceAtLeast(1),
+                (frame.height * ratio).toInt().coerceAtLeast(1),
+                true,
+            )
+        }.getOrDefault(frame)
+    }
 
     /**
      * Crops the capture to the pixels the game actually drew.
@@ -643,6 +669,62 @@ class StageCaptureService : Service() {
     private class ScanTrace {
         var refineText: String? = null
         var crop: Bitmap? = null
+    }
+
+    /**
+     * Runs the real scan pipeline over the last captured frame, rescaled and letterboxed the way
+     * other devices would deliver it.
+     *
+     * "It works on my phone" is not a test. The source frame is the last one the user actually
+     * scanned, so this exercises the same OCR, the same crop and the same geometry on 16:9, 19.5:9,
+     * 20:9, 4:3, tablet and portrait-window shapes. Any variant that disagrees with the native read
+     * is a device the feature would break on, and the answer lands in `cache/selftest.txt`.
+     */
+    private suspend fun runSelfTest(requestedFrame: String? = null) {
+        val dir = java.io.File(cacheDir, "catscan")
+        val source = requestedFrame?.let { java.io.File(dir, it) }?.takeIf { it.isFile }
+            ?: dir.listFiles()?.filter { it.name.endsWith("-frame.jpg") }?.maxByOrNull { it.name }
+        if (source == null) return
+        val base = android.graphics.BitmapFactory.decodeFile(source.absolutePath) ?: return
+        val native = resolveCat(base, locale, quiet = true)
+        val report = StringBuilder()
+        report.appendLine("source=${source.name} ${base.width}x${base.height}")
+        report.appendLine("native=${native?.displayName} level=${native?.level} plus=${native?.plusLevel}")
+
+        for ((label, width, height) in SELF_TEST_SHAPES) {
+            val variant = letterbox(base, width, height)
+            val started = System.currentTimeMillis()
+            val hit = resolveCat(variant, locale, quiet = true)
+            val ms = System.currentTimeMillis() - started
+            val ok = hit?.unitId == native?.unitId && hit?.level == native?.level && hit?.plusLevel == native?.plusLevel
+            report.appendLine(
+                "%-14s %4dx%-4d %s  name=%s level=%s plus=%s  %dms".format(
+                    java.util.Locale.ROOT, label, width, height, if (ok) "OK  " else "FAIL",
+                    hit?.displayName, hit?.level, hit?.plusLevel, ms,
+                ),
+            )
+            if (variant !== base) variant.recycle()
+        }
+        java.io.File(cacheDir, "selftest.txt").writeText(report.toString())
+        Log.i(TAG, "self test done:\n$report")
+        base.recycle()
+    }
+
+    /** Scales to fit, centred on black — how a smaller or differently shaped display sees the game. */
+    private fun letterbox(source: Bitmap, width: Int, height: Int): Bitmap {
+        val canvas = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val ratio = minOf(width.toFloat() / source.width, height.toFloat() / source.height)
+        val scaledW = (source.width * ratio).toInt()
+        val scaledH = (source.height * ratio).toInt()
+        val scaled = Bitmap.createScaledBitmap(source, scaledW, scaledH, true)
+        android.graphics.Canvas(canvas).drawBitmap(
+            scaled,
+            ((width - scaledW) / 2f),
+            ((height - scaledH) / 2f),
+            null,
+        )
+        if (scaled !== source) scaled.recycle()
+        return canvas
     }
 
     /**
@@ -877,6 +959,31 @@ class StageCaptureService : Service() {
 
         /** Sampling stride when hunting for the game's own pixels inside a letterboxed capture. */
         private const val BOUNDS_STEP = 8
+
+        /** Device shapes the self test replays the last real frame through. */
+        private val SELF_TEST_SHAPES = listOf(
+            Triple("16:9 phone", 1920, 1080),
+            Triple("19.5:9", 2340, 1080),
+            Triple("20:9", 2400, 1080),
+            Triple("4:3 tablet", 1024, 768),
+            Triple("16:10 tab", 1280, 800),
+            Triple("portrait", 1080, 2400),
+            Triple("720p", 1280, 720),
+            Triple("small", 960, 540),
+        )
+
+        const val ACTION_SELF_TEST = "com.projectnyanko.companion.stage.SELF_TEST"
+        const val EXTRA_TEST_FRAME = "test_frame"
+
+        /**
+         * Longest side handed to the recognizer.
+         *
+         * The recognizer runs one crop per text box and each crop is upscaled from the input, so
+         * cost tracks the input width: a fullscreen 2400 px capture cost ~6 s per scan, while the
+         * same screen at 1280 costs ~1 s. 1280 is also what the user's own game window reads at
+         * (1072 px), so nothing that reads today stops reading.
+         */
+        private const val MAX_OCR_LONG_SIDE = 1280
         const val ACTION_ENABLE = "com.projectnyanko.companion.stage.ENABLE_CAPTURE"
         const val ACTION_CAPTURE = "com.projectnyanko.companion.stage.CAPTURE_FRAME"
         const val ACTION_STOP = "com.projectnyanko.companion.stage.STOP_CAPTURE"
