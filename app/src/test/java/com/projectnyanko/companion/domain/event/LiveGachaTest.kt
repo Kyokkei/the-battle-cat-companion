@@ -32,10 +32,24 @@ class LiveGachaTest {
     @Test
     fun liveComesFirstThenUpcomingAndEndedIsDropped() {
         val ordered = LiveGachaParser.ordered(all, today).map { it.name }
-        assertEquals(
-            listOf("Squire Luno", "Halloween Units", "Platinum Capsule", "UBERFEST"),
-            ordered,
-        )
+        // The Platinum capsule is live but permanent, so it is not an "event" and is listed apart.
+        assertEquals(listOf("Squire Luno", "Halloween Units", "UBERFEST"), ordered)
+    }
+
+    @Test
+    fun permanentCapsulesArePulledOutAndDeduplicated() {
+        // Real data: 111 rows were live, 107 of them the same two capsules re-listed per re-run,
+        // which made the tile read "115 live" when four banners were actually running.
+        val repeated = all + all.filter { it.name == "Platinum Capsule" } + all.filter { it.name == "Platinum Capsule" }
+        val permanent = LiveGachaParser.alwaysAvailable(repeated, today)
+        assertEquals(listOf("Platinum Capsule"), permanent.map { it.name })
+        assertEquals(3, LiveGachaParser.ordered(repeated, today).size)
+    }
+
+    @Test
+    fun aBannerListedTwiceAppearsOnce() {
+        val duplicated = all + all.filter { it.name == "Squire Luno" }
+        assertEquals(1, LiveGachaParser.ordered(duplicated, today).count { it.name == "Squire Luno" })
     }
 
     @Test

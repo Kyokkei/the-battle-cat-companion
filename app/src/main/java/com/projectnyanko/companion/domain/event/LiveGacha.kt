@@ -42,11 +42,22 @@ object LiveGachaParser {
         return out
     }
 
-    /** Live first (soonest ending first), then what is coming. Ended banners are dropped. */
+    /**
+     * Live banners (soonest ending first), then what is coming.
+     *
+     * The Platinum and Legend capsules sit in the table with an end date of 2030 and repeat once per
+     * historical entry, so counting them as live said "115 live" when four banners were actually
+     * running. They are pulled out into [alwaysAvailable] and the rest is de-duplicated by name,
+     * because the same banner is listed once per re-run.
+     */
     fun ordered(all: List<LiveGacha>, today: String): List<LiveGacha> {
-        val live = all.filter { it.status(today) == EventStatus.LIVE }
-            .sortedWith(compareBy({ it.isAlwaysAvailable }, { it.end }))
+        val live = all.filter { it.status(today) == EventStatus.LIVE && !it.isAlwaysAvailable }
+            .sortedBy { it.end }
         val upcoming = all.filter { it.status(today) == EventStatus.UPCOMING }.sortedBy { it.start }
-        return live + upcoming
+        return (live + upcoming).distinctBy { it.name }
     }
+
+    /** Permanent capsules: live, but not "events". One row per capsule, not one per re-run. */
+    fun alwaysAvailable(all: List<LiveGacha>, today: String): List<LiveGacha> =
+        all.filter { it.status(today) == EventStatus.LIVE && it.isAlwaysAvailable }.distinctBy { it.name }
 }

@@ -65,6 +65,7 @@ fun EventsScreen(repository: EventScheduleRepository) {
     val schedule = remember { repository.load() }
     val today = remember { SimpleDateFormat("yyyy-MM-dd", Locale.ROOT).format(Date()) }
     val gacha = remember { LiveGachaParser.ordered(repository.liveGacha(), today) }
+    val permanent = remember { LiveGachaParser.alwaysAvailable(repository.liveGacha(), today) }
     val special = remember { schedule?.ordered(EventKind.SPECIAL, today).orEmpty() }
     var open by remember { mutableStateOf<Section?>(null) }
 
@@ -77,7 +78,7 @@ fun EventsScreen(repository: EventScheduleRepository) {
             fetched = schedule?.fetched.orEmpty(),
             onOpen = { open = it },
         )
-        Section.GACHA -> GachaList(gacha, today) { open = null }
+        Section.GACHA -> GachaList(gacha, permanent, today) { open = null }
         Section.SPECIAL -> SpecialList(special, today) { open = null }
         Section.RECURRING -> RecurringList(schedule?.recurring.orEmpty()) { open = null }
     }
@@ -185,7 +186,12 @@ private fun ListHeader(title: String, subtitle: String, onBack: () -> Unit) {
 }
 
 @Composable
-private fun GachaList(events: List<LiveGacha>, today: String, onBack: () -> Unit) {
+private fun GachaList(
+    events: List<LiveGacha>,
+    permanent: List<LiveGacha>,
+    today: String,
+    onBack: () -> Unit,
+) {
     LazyColumn(Modifier.fillMaxSize().background(Paper), contentPadding = PaddingValues(16.dp)) {
         item {
             ListHeader("Gacha", "${events.count { it.status(today) == EventStatus.LIVE }} live now", onBack)
@@ -198,12 +204,26 @@ private fun GachaList(events: List<LiveGacha>, today: String, onBack: () -> Unit
                 name = event.name,
                 statusLine = when {
                     status == EventStatus.UPCOMING -> "Starts in ${daysBetween(today, event.start) ?: 0} d"
-                    event.isAlwaysAvailable -> "Always available"
                     else -> "Ends in ${event.daysLeft(today) ?: 0} d"
                 },
                 live = status == EventStatus.LIVE,
                 tag = if (event.guaranteed) "GUARANTEED" else null,
             )
+        }
+        if (permanent.isNotEmpty()) {
+            item {
+                Spacer(Modifier.height(14.dp))
+                Text(
+                    text = "Always available",
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = AccentDeep,
+                )
+                Spacer(Modifier.height(6.dp))
+            }
+            items(permanent) { capsule ->
+                BannerRow(name = capsule.name, statusLine = "Permanent capsule", live = false, tag = null)
+            }
         }
     }
 }
