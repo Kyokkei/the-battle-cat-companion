@@ -10,3 +10,9 @@
 
 # Local agent workspace data (session state, not source)
 .workbuddy-ai/
+
+# Release signing — never commit these
+keystore/
+keystore.properties
+*.jks
+*.keystore

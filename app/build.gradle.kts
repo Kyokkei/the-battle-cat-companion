@@ -1,12 +1,53 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
 }
 
+// Signing credentials live outside the repo — `keystore.properties` and `keystore/*.jks` are both
+// gitignored. Without them the release build still assembles, it just comes out unsigned.
+val keystorePropsFile = rootProject.file("keystore.properties")
+val keystoreProps = Properties().apply {
+    if (keystorePropsFile.exists()) keystorePropsFile.inputStream().use { load(it) }
+}
+
 android {
     namespace = "com.projectnyanko.companion"
     compileSdk = 37
+
+    signingConfigs {
+        create("release") {
+            if (keystorePropsFile.exists()) {
+                storeFile = rootProject.file(keystoreProps.getProperty("storeFile"))
+                storePassword = keystoreProps.getProperty("storePassword")
+                keyAlias = keystoreProps.getProperty("keyAlias")
+                keyPassword = keystoreProps.getProperty("keyPassword")
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            // No minification yet: Compose, Room and ONNX all reach into things by name, and a
+            // "works on debug, crashes on launch" release is not worth the few saved MB.
+            isMinifyEnabled = false
+            isShrinkResources = false
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
+
+    // One APK per ABI. ONNX Runtime ships a .so per architecture, so a single fat APK carried
+    // ~60 MB of native code no single phone can use. `universal` stays for emulators.
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
+            isUniversalApk = true
+        }
+    }
 
     defaultConfig {
         applicationId = "com.projectnyanko.companion"

@@ -15,7 +15,7 @@ No account. No queue. No "please wait while we look that up for you."
 
 ![Offline](https://img.shields.io/badge/works-offline-2ea44f)
 ![Telemetry](https://img.shields.io/badge/telemetry-none-2ea44f)
-[![Version](https://img.shields.io/badge/version-0.1.0-blue)](https://github.com/Kyokkei/ProjectNyanko/releases)
+[![Version](https://img.shields.io/badge/version-0.1.0-blue)](https://github.com/Kyokkei/the-battle-cat-companion/releases)
 ![License](https://img.shields.io/badge/license-CC_BY--NC--SA_4.0-ef9421)
 
 </div>
@@ -24,7 +24,7 @@ No account. No queue. No "please wait while we look that up for you."
 
 ## 📦 Download
 
-Grab the latest ready-to-use APK from the **[Releases](https://github.com/Kyokkei/ProjectNyanko/releases)** tab:
+Grab the latest ready-to-use APK from the **[Releases](https://github.com/Kyokkei/the-battle-cat-companion/releases)** tab:
 
 - **`Nyanko-arm64-v8a.apk`** — recommended for 99% of modern Android phones. Smaller, faster, and what you almost certainly want.
 - **`Nyanko-universal.apk`** — for PC emulators (LDPlayer, BlueStacks) and older hardware that isn't arm64.
