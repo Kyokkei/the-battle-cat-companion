@@ -40,6 +40,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
@@ -243,10 +244,7 @@ private fun EmptyTrackerContent(
         NyankoPanel {
             Text("Seed tracker", style = MaterialTheme.typography.headlineMedium, color = Ink)
             Spacer(Modifier.height(6.dp))
-            NyankoCaption(
-                "Huge shoutout to Godfat and the OG dataminers - this piece of dark magic " +
-                    "wouldn't exist without them.",
-            )
+            NyankoCaption(stringResource(R.string.seed_intro))
             Spacer(Modifier.height(12.dp))
             RegionChips(region, onRegionChange)
             Spacer(Modifier.height(14.dp))
@@ -264,11 +262,7 @@ private fun EmptyTrackerContent(
                 modifier = Modifier.fillMaxWidth(),
             )
             Spacer(Modifier.height(10.dp))
-            NyankoCaption(
-                "⚡ This solver runs 100% offline on your own device at godspeed: zero queues, zero " +
-                    "waiting on anyone ahead of you. Whether you consider this a quality-of-life " +
-                    "miracle or pure dark magic cheating... use it at your own discretion!",
-            )
+            NyankoCaption(stringResource(R.string.seed_footer))
         }
 
         if (profiles.isNotEmpty()) {

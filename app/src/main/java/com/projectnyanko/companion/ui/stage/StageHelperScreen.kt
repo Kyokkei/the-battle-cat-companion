@@ -37,7 +37,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -204,34 +206,36 @@ fun StageHelperScreen(catalogRepository: StageCatalogRepository) {
             SectionHeading(number = "2.", title = "Floating helper")
             Spacer(Modifier.height(10.dp))
             Text(
-                text = when {
-                    !overlayGranted -> "Allow this app to draw over Battle Cats, then come back and start the helper."
-                    captureActive -> "The paw is on. Tap it to read the screen, hold it to switch modes, drag it to the bottom to stop."
-                    else -> "Tap Start helper, then pick Entire screen and press Start now in Android's prompt. That is one approval per session — after it the paw stays on top of the game until you stop it."
-                },
+                text = stringResource(
+                    when {
+                        !overlayGranted -> R.string.helper_need_overlay
+                        captureActive -> R.string.helper_running
+                        else -> R.string.helper_idle
+                    },
+                ),
                 style = MaterialTheme.typography.bodyMedium,
                 color = InkSoft,
             )
             Spacer(Modifier.height(12.dp))
             Text(
-                text = "One bubble, two modes",
+                text = stringResource(R.string.helper_modes_title),
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.SemiBold,
                 color = Ink,
             )
             ModeLegend(
                 iconRes = R.drawable.ic_launcher,
-                title = "Stage mode",
-                body = "Tap on a stage to read its name and list the enemies that will appear.",
+                title = stringResource(R.string.helper_stage_mode),
+                body = stringResource(R.string.helper_stage_mode_body),
             )
             ModeLegend(
                 iconRes = R.drawable.bubble_cat_mode,
-                title = "Cat mode",
-                body = "Tap on a cat to read its name and level, then see its stats at that level.",
+                title = stringResource(R.string.helper_cat_mode),
+                body = stringResource(R.string.helper_cat_mode_body),
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                text = "Hold the bubble for half a second to switch — the icon and the colour change with it, so you always know which mode is on.",
+                text = stringResource(R.string.helper_switch),
                 style = MaterialTheme.typography.bodySmall,
                 color = InkSoft,
             )
@@ -291,6 +295,13 @@ fun StageHelperScreen(catalogRepository: StageCatalogRepository) {
             }
         }
 
+        Text(
+            text = stringResource(R.string.app_credit),
+            style = MaterialTheme.typography.bodySmall,
+            color = InkSoft,
+            modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
+            textAlign = TextAlign.Center,
+        )
     }
 }
 

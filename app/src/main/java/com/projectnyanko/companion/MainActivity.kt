@@ -9,8 +9,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -48,6 +51,43 @@ class MainActivity : ComponentActivity() {
         setContent {
             BattleCatsTheme {
                 var tab by rememberSaveable { mutableIntStateOf(0) }
+                val context = androidx.compose.ui.platform.LocalContext.current
+                var pendingUpdate by remember { mutableStateOf<com.projectnyanko.companion.data.update.UpdateInfo?>(null) }
+                LaunchedEffect(Unit) {
+                    // `am start … --ez preview_update true` shows the dialog without a release
+                    // manifest, which is how the design gets checked on a device.
+                    if (intent?.getBooleanExtra("preview_update", false) == true) {
+                        pendingUpdate = com.projectnyanko.companion.data.update.UpdateInfo(
+                            version = "0.2.0",
+                            url = "https://example.com/battle-cats-companion",
+                            notes = "Preview of the update prompt.",
+                        )
+                    } else if (com.projectnyanko.companion.data.update.UpdateChecker.isConfigured()) {
+                        val current = runCatching {
+                            context.packageManager.getPackageInfo(context.packageName, 0).versionName
+                        }.getOrNull().orEmpty()
+                        pendingUpdate = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                            com.projectnyanko.companion.data.update.UpdateChecker.check(current)
+                        }
+                    }
+                }
+                pendingUpdate?.let { info ->
+                    com.projectnyanko.companion.ui.update.UpdateDialog(
+                        info = info,
+                        onUpdateNow = {
+                            runCatching {
+                                context.startActivity(
+                                    android.content.Intent(
+                                        android.content.Intent.ACTION_VIEW,
+                                        android.net.Uri.parse(info.url),
+                                    ),
+                                )
+                            }
+                            pendingUpdate = null
+                        },
+                        onLater = { pendingUpdate = null },
+                    )
+                }
                 Column(modifier = Modifier.fillMaxSize().background(Paper)) {
                     Box(
                         modifier = Modifier

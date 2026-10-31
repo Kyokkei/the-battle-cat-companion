@@ -1,0 +1,23 @@
+<resources>
+    <!-- Chỉ dịch phần mô tả trong app. Bong bóng nổi và các thuật ngữ trong game
+         (Health, ATK, TBA...) vẫn giữ nguyên ngôn ngữ của game. -->
+
+    <string name="helper_need_overlay">Hãy cho phép ứng dụng này hiển thị trên Battle Cats, rồi quay lại và bật trợ thủ.</string>
+    <string name="helper_running">Bong bóng đang bật. Chạm để đọc màn hình, giữ để đổi chế độ, kéo xuống đáy để tắt.</string>
+    <string name="helper_idle">Nhấn Bật trợ thủ, chọn Toàn bộ màn hình rồi nhấn Bắt đầu ngay trong hộp thoại của Android. Mỗi phiên chỉ cần duyệt một lần — sau đó bong bóng sẽ nằm trên game cho đến khi bạn tắt.</string>
+    <string name="helper_modes_title">Một bong bóng, hai chế độ</string>
+    <string name="helper_stage_mode">Chế độ màn chơi</string>
+    <string name="helper_stage_mode_body">Chạm vào một màn chơi để đọc tên và xem danh sách kẻ địch sẽ xuất hiện.</string>
+    <string name="helper_cat_mode">Chế độ mèo</string>
+    <string name="helper_cat_mode_body">Chạm vào một bé mèo để đọc tên và cấp độ, rồi xem chỉ số ở đúng cấp đó.</string>
+    <string name="helper_switch">Giữ bong bóng nửa giây để đổi chế độ — biểu tượng và màu sắc cũng đổi theo, nên bạn luôn biết mình đang ở chế độ nào.</string>
+
+    <string name="seed_intro">Xin gửi lời cảm ơn lớn đến Godfat và các dataminer kỳ cựu - món ma thuật đen này sẽ không tồn tại nếu không có họ.</string>
+    <string name="seed_footer">⚡ Bộ giải này chạy 100% ngoại tuyến ngay trên máy bạn với tốc độ cực nhanh: không hàng chờ, không phải đợi ai phía trước. Dù bạn xem đây là một phép màu tiện lợi hay là gian lận ma thuật đen thuần túy... hãy tự cân nhắc mà dùng!</string>
+
+    <string name="app_credit">Ứng dụng bởi Phan Chí Vỹ</string>
+
+    <string name="update_art_credit">ảnh: @doromond</string>
+    <string name="update_now">Cập nhật ngay</string>
+    <string name="update_later">Để sau</string>
+</resources>

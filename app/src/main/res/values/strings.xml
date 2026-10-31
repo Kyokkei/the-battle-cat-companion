@@ -1,4 +1,28 @@
 <resources>
     <string name="app_name">Battle Cats Companion</string>
     <string name="stage_stop_drop">× Drop here to stop</string>
+
+    <!-- Floating helper card. Only the descriptive text is translated; the bubble itself and the
+         in-game terms (Health, ATK, TBA) stay in the game's own language. -->
+    <string name="helper_need_overlay">Allow this app to draw over Battle Cats, then come back and start the helper.</string>
+    <string name="helper_running">The paw is on. Tap it to read the screen, hold it to switch modes, drag it to the bottom to stop.</string>
+    <string name="helper_idle">Tap Start helper, then pick Entire screen and press Start now in Android\'s prompt. That is one approval per session — after it the paw stays on top of the game until you stop it.</string>
+    <string name="helper_modes_title">One bubble, two modes</string>
+    <string name="helper_stage_mode">Stage mode</string>
+    <string name="helper_stage_mode_body">Tap on a stage to read its name and list the enemies that will appear.</string>
+    <string name="helper_cat_mode">Cat mode</string>
+    <string name="helper_cat_mode_body">Tap on a cat to read its name and level, then see its stats at that level.</string>
+    <string name="helper_switch">Hold the bubble for half a second to switch — the icon and the colour change with it, so you always know which mode is on.</string>
+
+    <!-- Seed tracker descriptions -->
+    <string name="seed_intro">Huge shoutout to Godfat and the OG dataminers - this piece of dark magic wouldn\'t exist without them.</string>
+    <string name="seed_footer">⚡ This solver runs 100% offline on your own device at godspeed: zero queues, zero waiting on anyone ahead of you. Whether you consider this a quality-of-life miracle or pure dark magic cheating... use it at your own discretion!</string>
+
+    <!-- Footer -->
+    <string name="app_credit">App made by Phan Chí Vỹ</string>
+
+    <!-- Update dialog -->
+    <string name="update_art_credit">pic credit to @doromond</string>
+    <string name="update_now">Update now</string>
+    <string name="update_later">I\'ll update it later</string>
 </resources>
