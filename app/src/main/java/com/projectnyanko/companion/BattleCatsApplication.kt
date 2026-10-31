@@ -3,6 +3,7 @@ package com.projectnyanko.companion
 import android.app.Application
 import androidx.room.Room
 import com.projectnyanko.companion.data.catalog.GachaCatalogRepository
+import com.projectnyanko.companion.data.event.EventScheduleRepository
 import com.projectnyanko.companion.data.catalog.CatScanCatalog
 import com.projectnyanko.companion.data.catalog.UnitStatsRepository
 import com.projectnyanko.companion.data.local.AppDatabase
@@ -37,6 +38,10 @@ class BattleCatsApplication : Application() {
 
     val stageCatalogRepository: StageCatalogRepository by lazy {
         StageCatalogRepository(this)
+    }
+
+    val eventScheduleRepository: EventScheduleRepository by lazy {
+        EventScheduleRepository(this)
     }
 
     val enemyStatsRepository: EnemyStatsRepository by lazy {

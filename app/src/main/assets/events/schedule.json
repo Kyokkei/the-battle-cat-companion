@@ -1,0 +1,1328 @@
+{
+ "source": "Battle Cats Wiki (Miraheze) - Template:CurrentEvents/Schedule.json",
+ "sourceUrl": "https://battlecats.miraheze.org/wiki/Template:CurrentEvents/Schedule.json",
+ "license": "CC BY-SA 4.0",
+ "fetched": "2026-10-31",
+ "gacha": [
+  [
+   "Download Celebration!",
+   "2026-10-05",
+   "2026-10-29"
+  ],
+  [
+   "THE DYNAMITES",
+   "2026-10-16",
+   "2026-10-20"
+  ],
+  [
+   "Cyber Academy Galaxy Gals",
+   "2026-10-18",
+   "2026-10-20"
+  ],
+  [
+   "Sengoku Wargods Vajiras",
+   "2026-10-18",
+   "2026-10-20"
+  ],
+  [
+   "EPICFEST",
+   "2026-10-20",
+   "2026-10-26"
+  ],
+  [
+   "Nature's Guardians ELEMENTAL PIXIES",
+   "2026-10-20",
+   "2026-10-23"
+  ],
+  [
+   "Ancient Heroes ULTRA SOULS",
+   "2026-10-23",
+   "2026-10-26"
+  ],
+  [
+   "Girls & Monsters: Angels of Terror",
+   "2026-10-23",
+   "2026-10-26"
+  ],
+  [
+   "Halloween Party! Special★Event Capsules",
+   "2026-10-26",
+   "2026-11-16"
+  ],
+  [
+   "Halloween Capsules",
+   "2026-10-26",
+   "2026-11-16"
+  ],
+  [
+   "Lords of Destruction DRAGON EMPERORS",
+   "2026-10-26",
+   "2026-10-30"
+  ],
+  [
+   "The Almighties The Majestic Zeus",
+   "2026-10-26",
+   "2026-10-30"
+  ],
+  [
+   "UBERFEST",
+   "2026-10-30",
+   "2026-11-02"
+  ],
+  [
+   "THE DYNAMITES",
+   "2026-10-30",
+   "2026-11-02"
+  ]
+ ],
+ "special": [
+  [
+   "Cat Scratcher",
+   "2026-10-05",
+   "2026-10-29"
+  ],
+  [
+   "Download Celebration Event!",
+   "2026-10-05",
+   "2026-10-29"
+  ],
+  [
+   "Arena of Power",
+   "2026-10-05",
+   "2026-10-29"
+  ],
+  [
+   "Heavenly/Infernal Tower",
+   "2026-10-05",
+   "2026-10-29"
+  ],
+  [
+   "Silver Week",
+   "2026-10-09",
+   "2026-10-29"
+  ],
+  [
+   "Machines in Revolt",
+   "2026-10-09",
+   "2026-10-26"
+  ],
+  [
+   "Koneko Music Festival",
+   "2026-10-12",
+   "2026-10-26"
+  ],
+  [
+   "Arena of Destiny",
+   "2026-10-16",
+   "2026-11-02"
+  ],
+  [
+   "Divine Archangel Strikes",
+   "2026-10-19",
+   "2026-10-26"
+  ],
+  [
+   "Halloween Party!",
+   "2026-10-26",
+   "2026-11-16"
+  ],
+  [
+   "New Update",
+   "2026-10-27",
+   "2026-11-02"
+  ],
+  [
+   "XP Festival",
+   "2026-10-29",
+   "2026-11-16"
+  ],
+  [
+   "Duel Stages Challenge",
+   "2026-10-29",
+   "2026-11-07"
+  ],
+  [
+   "Otherworld Colosseum",
+   "2026-11-01",
+   "2026-11-15"
+  ]
+ ],
+ "recurring": [
+  [
+   "Sweet Irony",
+   "week",
+   "1:00:00",
+   "1:00:00"
+  ],
+  [
+   "Bitter Irony",
+   "week",
+   "1:00:00",
+   "1:00:00"
+  ],
+  [
+   "The 2nd Dimension",
+   "week",
+   "1:00:00",
+   "1:00:00"
+  ],
+  [
+   "The 3rd Dimension",
+   "week",
+   "1:00:00",
+   "1:00:00"
+  ],
+  [
+   "Crimson Catastrophe",
+   "week",
+   "2:00:00",
+   "1:00:00"
+  ],
+  [
+   "Crimson Vengeance",
+   "week",
+   "2:00:00",
+   "1:00:00"
+  ],
+  [
+   "Red Sky at Morning",
+   "week",
+   "3:00:00",
+   "1:00:00"
+  ],
+  [
+   "Red Sky at Night",
+   "week",
+   "3:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Rolling Dead",
+   "week",
+   "3:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Dead Keep Rolling",
+   "week",
+   "3:00:00",
+   "1:00:00"
+  ],
+  [
+   "Heaven of Darkness",
+   "week",
+   "4:00:00",
+   "1:00:00"
+  ],
+  [
+   "NEO Darkness Heaven",
+   "week",
+   "4:00:00",
+   "1:00:00"
+  ],
+  [
+   "Dimension of Despair",
+   "week",
+   "5:00:00",
+   "1:00:00"
+  ],
+  [
+   "Dimension of Delirium",
+   "week",
+   "5:00:00",
+   "1:00:00"
+  ],
+  [
+   "Peerless",
+   "week",
+   "6:00:00",
+   "1:00:00"
+  ],
+  [
+   "Peerless Too",
+   "week",
+   "6:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Great Diablo",
+   "week",
+   "6:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Greatest Diablo",
+   "week",
+   "6:00:00",
+   "1:00:00"
+  ],
+  [
+   "Wrath of Heaven",
+   "week",
+   "7:00:00",
+   "1:00:00"
+  ],
+  [
+   "Wrath of the Divine",
+   "week",
+   "7:00:00",
+   "1:00:00"
+  ],
+  [
+   "Typhoon Nemo",
+   "week",
+   "7:00:00",
+   "1:00:00"
+  ],
+  [
+   "Typhoon Nihil",
+   "week",
+   "7:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Crazed Cat",
+   "month",
+   "3:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Crazed Tank",
+   "month",
+   "6:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Crazed Axe",
+   "month",
+   "9:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Crazed Gross",
+   "month",
+   "12:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Crazed Cow",
+   "month",
+   "15:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Crazed Bird",
+   "month",
+   "18:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Crazed Fish",
+   "month",
+   "21:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Crazed Lizard",
+   "month",
+   "24:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Crazed Titan",
+   "month",
+   "27:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Crazed Cat",
+   "month",
+   "26:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Crazed Gross",
+   "month",
+   "26:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Crazed Fish",
+   "month",
+   "26:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Crazed Tank",
+   "month",
+   "27:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Crazed Cow",
+   "month",
+   "27:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Crazed Lizard",
+   "month",
+   "27:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Crazed Axe",
+   "month",
+   "28:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Crazed Bird",
+   "month",
+   "28:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Crazed Titan",
+   "month",
+   "28:00:00",
+   "1:00:00"
+  ],
+  [
+   "Crazed Moneko",
+   "month",
+   "28:00:00",
+   "1:00:00"
+  ],
+  [
+   "Clan of the Maniacs",
+   "month",
+   "1:00:00",
+   "1:00:00"
+  ],
+  [
+   "Cat Maniac",
+   "month",
+   "3:00:00",
+   "1:00:00"
+  ],
+  [
+   "Tank Maniac",
+   "month",
+   "6:00:00",
+   "1:00:00"
+  ],
+  [
+   "Axe Maniac",
+   "month",
+   "9:00:00",
+   "1:00:00"
+  ],
+  [
+   "Gross Maniac",
+   "month",
+   "12:00:00",
+   "1:00:00"
+  ],
+  [
+   "Cow Maniac",
+   "month",
+   "15:00:00",
+   "1:00:00"
+  ],
+  [
+   "Bird Maniac",
+   "month",
+   "18:00:00",
+   "1:00:00"
+  ],
+  [
+   "Fish Maniac",
+   "month",
+   "21:00:00",
+   "1:00:00"
+  ],
+  [
+   "Lizard Maniac",
+   "month",
+   "24:00:00",
+   "1:00:00"
+  ],
+  [
+   "Titan Maniac",
+   "month",
+   "27:00:00",
+   "1:00:00"
+  ],
+  [
+   "Cat Maniac",
+   "month",
+   "26:00:00",
+   "1:00:00"
+  ],
+  [
+   "Gross Maniac",
+   "month",
+   "26:00:00",
+   "1:00:00"
+  ],
+  [
+   "Fish Maniac",
+   "month",
+   "26:00:00",
+   "1:00:00"
+  ],
+  [
+   "Tank Maniac",
+   "month",
+   "27:00:00",
+   "1:00:00"
+  ],
+  [
+   "Cow Maniac",
+   "month",
+   "27:00:00",
+   "1:00:00"
+  ],
+  [
+   "Lizard Maniac",
+   "month",
+   "27:00:00",
+   "1:00:00"
+  ],
+  [
+   "Axe Maniac",
+   "month",
+   "28:00:00",
+   "1:00:00"
+  ],
+  [
+   "Bird Maniac",
+   "month",
+   "28:00:00",
+   "1:00:00"
+  ],
+  [
+   "Titan Maniac",
+   "month",
+   "28:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Malevolent Cat",
+   "month",
+   "3:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Malevolent Tank",
+   "month",
+   "6:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Malevolent Axe",
+   "month",
+   "9:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Malevolent Gross",
+   "month",
+   "12:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Malevolent Cow",
+   "month",
+   "15:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Malevolent Bird",
+   "month",
+   "18:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Malevolent Fish",
+   "month",
+   "21:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Malevolent Lizard",
+   "month",
+   "24:00:00",
+   "1:00:00"
+  ],
+  [
+   "The Malevolent Titan",
+   "month",
+   "27:00:00",
+   "1:00:00"
+  ],
+  [
+   "Super Smash Families",
+   "month",
+   "16:00:00",
+   "1:00:00"
+  ],
+  [
+   "Li'l Cat Awakens!",
+   "month",
+   "2:00:00",
+   "1:00:00"
+  ],
+  [
+   "Li'l Tank Awakens!",
+   "month",
+   "5:00:00",
+   "1:00:00"
+  ],
+  [
+   "Li'l Axe Awakens!",
+   "month",
+   "8:00:00",
+   "1:00:00"
+  ],
+  [
+   "Li'l Gross Awakens!",
+   "month",
+   "11:00:00",
+   "1:00:00"
+  ],
+  [
+   "Li'l Cow Awakens!",
+   "month",
+   "14:00:00",
+   "1:00:00"
+  ],
+  [
+   "Li'l Bird Awakens!",
+   "month",
+   "17:00:00",
+   "1:00:00"
+  ],
+  [
+   "Li'l Fish Awakens!",
+   "month",
+   "20:00:00",
+   "1:00:00"
+  ],
+  [
+   "Li'l Lizard Awakens!",
+   "month",
+   "23:00:00",
+   "1:00:00"
+  ],
+  [
+   "Li'l Titan Awakens!",
+   "month",
+   "26:00:00",
+   "1:00:00"
+  ],
+  [
+   "Li'l Cat's Trial",
+   "month",
+   "2:00:00",
+   "1:00:00"
+  ],
+  [
+   "Li'l Cat's Trial",
+   "month",
+   "5:00:00",
+   "1:00:00"
+  ],
+  [
+   "Li'l Cat's Trial",
+   "month",
+   "8:00:00",
+   "1:00:00"
+  ],
+  [
+   "Li'l Cat's Trial",
+   "month",
+   "11:00:00",
+   "1:00:00"
+  ],
+  [
+   "Li'l Cat's Trial",
+   "month",
+   "14:00:00",
+   "1:00:00"
+  ],
+  [
+   "Li'l Cat's Trial",
+   "month",
+   "17:00:00",
+   "1:00:00"
+  ],
+  [
+   "Li'l Cat's Trial",
+   "month",
+   "20:00:00",
+   "1:00:00"
+  ],
+  [
+   "Li'l Cat's Trial",
+   "month",
+   "23:00:00",
+   "1:00:00"
+  ],
+  [
+   "Li'l Cat's Trial",
+   "month",
+   "26:00:00",
+   "1:00:00"
+  ],
+  [
+   "Queen's Coronation",
+   "month",
+   "1:00:00",
+   "2:00:00"
+  ],
+  [
+   "Queen's Condemnation",
+   "month",
+   "1:00:00",
+   "2:00:00"
+  ],
+  [
+   "The Old Queen",
+   "month",
+   "1:00:00",
+   "2:00:00"
+  ],
+  [
+   "The Eldest Queen",
+   "month",
+   "1:00:00",
+   "2:00:00"
+  ],
+  [
+   "Invasion of Poultrio",
+   "month",
+   "1:00:00",
+   "2:00:00"
+  ],
+  [
+   "Dead on Debut",
+   "month",
+   "3:00:00",
+   "2:00:00"
+  ],
+  [
+   "Dead by Encore",
+   "month",
+   "3:00:00",
+   "2:00:00"
+  ],
+  [
+   "Papuu's Paradise",
+   "month",
+   "3:00:00",
+   "2:00:00"
+  ],
+  [
+   "Papuu's Paradox",
+   "month",
+   "3:00:00",
+   "2:00:00"
+  ],
+  [
+   "Reign of the Tyrant",
+   "month",
+   "3:00:00",
+   "2:00:00"
+  ],
+  [
+   "King Wahwah's Revenge",
+   "month",
+   "5:00:00",
+   "2:00:00"
+  ],
+  [
+   "King Wahwah's Return",
+   "month",
+   "5:00:00",
+   "2:00:00"
+  ],
+  [
+   "Wanwan's Glory",
+   "month",
+   "5:00:00",
+   "2:00:00"
+  ],
+  [
+   "NEO Wanwan's Glory",
+   "month",
+   "5:00:00",
+   "2:00:00"
+  ],
+  [
+   "Jumbo Invasion",
+   "month",
+   "5:00:00",
+   "2:00:00"
+  ],
+  [
+   "Clionel Ascendant",
+   "month",
+   "7:00:00",
+   "2:00:00"
+  ],
+  [
+   "Clionel Dominant",
+   "month",
+   "7:00:00",
+   "2:00:00"
+  ],
+  [
+   "Z-Onel Rises!",
+   "month",
+   "7:00:00",
+   "2:00:00"
+  ],
+  [
+   "Z-Onel Resurrected!",
+   "month",
+   "7:00:00",
+   "2:00:00"
+  ],
+  [
+   "Hunt for the Xenobeast",
+   "month",
+   "7:00:00",
+   "2:00:00"
+  ],
+  [
+   "Deeply Dreaming",
+   "month",
+   "9:00:00",
+   "2:00:00"
+  ],
+  [
+   "A Deeper Dream",
+   "month",
+   "9:00:00",
+   "2:00:00"
+  ],
+  [
+   "First Errand",
+   "month",
+   "9:00:00",
+   "2:00:00"
+  ],
+  [
+   "NEO First Errand",
+   "month",
+   "9:00:00",
+   "2:00:00"
+  ],
+  [
+   "Temptation's Symphony",
+   "month",
+   "9:00:00",
+   "2:00:00"
+  ],
+  [
+   "Temptation's Rhapsody",
+   "month",
+   "9:00:00",
+   "2:00:00"
+  ],
+  [
+   "River Styx",
+   "month",
+   "11:00:00",
+   "2:00:00"
+  ],
+  [
+   "River Acheron",
+   "month",
+   "11:00:00",
+   "2:00:00"
+  ],
+  [
+   "Rashomon",
+   "month",
+   "11:00:00",
+   "2:00:00"
+  ],
+  [
+   "Courts of Torment",
+   "month",
+   "11:00:00",
+   "2:00:00"
+  ],
+  [
+   "Courts of Agony",
+   "month",
+   "11:00:00",
+   "2:00:00"
+  ],
+  [
+   "Prelude to Ruin",
+   "month",
+   "11:00:00",
+   "2:00:00"
+  ],
+  [
+   "Blue Impact",
+   "month",
+   "13:00:00",
+   "2:00:00"
+  ],
+  [
+   "Bottom of the Swamp",
+   "month",
+   "13:00:00",
+   "2:00:00"
+  ],
+  [
+   "Top of the Bog",
+   "month",
+   "13:00:00",
+   "2:00:00"
+  ],
+  [
+   "Invasion of the Swamplord",
+   "month",
+   "13:00:00",
+   "2:00:00"
+  ],
+  [
+   "Queen's Coronation",
+   "month",
+   "15:00:00",
+   "2:00:00"
+  ],
+  [
+   "Queen's Condemnation",
+   "month",
+   "15:00:00",
+   "2:00:00"
+  ],
+  [
+   "The Old Queen",
+   "month",
+   "15:00:00",
+   "2:00:00"
+  ],
+  [
+   "The Eldest Queen",
+   "month",
+   "15:00:00",
+   "2:00:00"
+  ],
+  [
+   "Invasion of Poultrio",
+   "month",
+   "15:00:00",
+   "2:00:00"
+  ],
+  [
+   "Dead on Debut",
+   "month",
+   "17:00:00",
+   "2:00:00"
+  ],
+  [
+   "Dead by Encore",
+   "month",
+   "17:00:00",
+   "2:00:00"
+  ],
+  [
+   "Papuu's Paradise",
+   "month",
+   "17:00:00",
+   "2:00:00"
+  ],
+  [
+   "Papuu's Paradox",
+   "month",
+   "17:00:00",
+   "2:00:00"
+  ],
+  [
+   "Reign of the Tyrant",
+   "month",
+   "17:00:00",
+   "2:00:00"
+  ],
+  [
+   "King Wahwah's Revenge",
+   "month",
+   "19:00:00",
+   "2:00:00"
+  ],
+  [
+   "King Wahwah's Return",
+   "month",
+   "19:00:00",
+   "2:00:00"
+  ],
+  [
+   "Wanwan's Glory",
+   "month",
+   "19:00:00",
+   "2:00:00"
+  ],
+  [
+   "NEO Wanwan's Glory",
+   "month",
+   "19:00:00",
+   "2:00:00"
+  ],
+  [
+   "Clionel Ascendant",
+   "month",
+   "21:00:00",
+   "2:00:00"
+  ],
+  [
+   "Clionel Dominant",
+   "month",
+   "21:00:00",
+   "2:00:00"
+  ],
+  [
+   "Z-Onel Rises!",
+   "month",
+   "21:00:00",
+   "2:00:00"
+  ],
+  [
+   "Z-Onel Resurrected!",
+   "month",
+   "21:00:00",
+   "2:00:00"
+  ],
+  [
+   "Hunt for the Xenobeast",
+   "month",
+   "21:00:00",
+   "2:00:00"
+  ],
+  [
+   "Deeply Dreaming",
+   "month",
+   "23:00:00",
+   "2:00:00"
+  ],
+  [
+   "A Deeper Dream",
+   "month",
+   "23:00:00",
+   "2:00:00"
+  ],
+  [
+   "First Errand",
+   "month",
+   "23:00:00",
+   "2:00:00"
+  ],
+  [
+   "NEO First Errand",
+   "month",
+   "23:00:00",
+   "2:00:00"
+  ],
+  [
+   "Temptation's Symphony",
+   "month",
+   "23:00:00",
+   "2:00:00"
+  ],
+  [
+   "Temptation's Rhapsody",
+   "month",
+   "23:00:00",
+   "2:00:00"
+  ],
+  [
+   "River Styx",
+   "month",
+   "25:00:00",
+   "2:00:00"
+  ],
+  [
+   "River Acheron",
+   "month",
+   "25:00:00",
+   "2:00:00"
+  ],
+  [
+   "Rashomon",
+   "month",
+   "25:00:00",
+   "2:00:00"
+  ],
+  [
+   "Courts of Torment",
+   "month",
+   "25:00:00",
+   "2:00:00"
+  ],
+  [
+   "Courts of Agony",
+   "month",
+   "25:00:00",
+   "2:00:00"
+  ],
+  [
+   "Prelude to Ruin",
+   "month",
+   "25:00:00",
+   "2:00:00"
+  ],
+  [
+   "Blue Impact",
+   "month",
+   "27:00:00",
+   "2:00:00"
+  ],
+  [
+   "Bottom of the Swamp",
+   "month",
+   "27:00:00",
+   "2:00:00"
+  ],
+  [
+   "Top of the Bog",
+   "month",
+   "27:00:00",
+   "2:00:00"
+  ],
+  [
+   "Invasion of the Swamplord",
+   "month",
+   "27:00:00",
+   "2:00:00"
+  ],
+  [
+   "The Dom Awakens!",
+   "month",
+   "1:07:00",
+   "0:07:00"
+  ],
+  [
+   "The Dom Awakens!",
+   "month",
+   "2:17:00",
+   "0:07:00"
+  ],
+  [
+   "Panties Awakens!",
+   "month",
+   "1:07:00",
+   "0:07:00"
+  ],
+  [
+   "Panties Awakens!",
+   "month",
+   "4:17:00",
+   "0:07:00"
+  ],
+  [
+   "Kung-Fu Awakens!",
+   "month",
+   "5:07:00",
+   "0:07:00"
+  ],
+  [
+   "Kung-Fu Awakens!",
+   "month",
+   "6:17:00",
+   "0:07:00"
+  ],
+  [
+   "Bondage Awakens!",
+   "month",
+   "7:07:00",
+   "0:07:00"
+  ],
+  [
+   "Bondage Awakens!",
+   "month",
+   "8:17:00",
+   "0:07:00"
+  ],
+  [
+   "Zombie Awakens!",
+   "month",
+   "9:07:00",
+   "0:07:00"
+  ],
+  [
+   "Zombie Awakens!",
+   "month",
+   "10:17:00",
+   "0:07:00"
+  ],
+  [
+   "Boogie Awakens!",
+   "month",
+   "11:07:00",
+   "0:07:00"
+  ],
+  [
+   "Boogie Awakens!",
+   "month",
+   "12:17:00",
+   "0:07:00"
+  ],
+  [
+   "Samurai Awakens!",
+   "month",
+   "13:07:00",
+   "0:07:00"
+  ],
+  [
+   "Samurai Awakens!",
+   "month",
+   "14:17:00",
+   "0:07:00"
+  ],
+  [
+   "Box Cats Awaken!",
+   "month",
+   "15:07:00",
+   "0:07:00"
+  ],
+  [
+   "Box Cats Awaken!",
+   "month",
+   "16:17:00",
+   "0:07:00"
+  ],
+  [
+   "Ninja Awakens!",
+   "month",
+   "17:07:00",
+   "0:07:00"
+  ],
+  [
+   "Ninja Awakens!",
+   "month",
+   "18:17:00",
+   "0:07:00"
+  ],
+  [
+   "Mr. Awakens!",
+   "month",
+   "19:07:00",
+   "0:07:00"
+  ],
+  [
+   "Mr. Awakens!",
+   "month",
+   "20:17:00",
+   "0:07:00"
+  ],
+  [
+   "Tricycle Awakens!",
+   "month",
+   "21:07:00",
+   "0:07:00"
+  ],
+  [
+   "Tricycle Awakens!",
+   "month",
+   "22:17:00",
+   "0:07:00"
+  ],
+  [
+   "Skirt Awakens!",
+   "month",
+   "23:07:00",
+   "0:07:00"
+  ],
+  [
+   "Skirt Awakens!",
+   "month",
+   "24:17:00",
+   "0:07:00"
+  ],
+  [
+   "Sumo Awakens!",
+   "month",
+   "25:07:00",
+   "0:07:00"
+  ],
+  [
+   "Sumo Awakens!",
+   "month",
+   "26:17:00",
+   "0:07:00"
+  ],
+  [
+   "Actress Awakens!",
+   "month",
+   "27:07:00",
+   "0:07:00"
+  ],
+  [
+   "Actress Awakens!",
+   "month",
+   "28:17:00",
+   "0:07:00"
+  ],
+  [
+   "Day of Judgement",
+   "month",
+   "6:00:00",
+   "2:00:00"
+  ],
+  [
+   "Day of Judgement",
+   "month",
+   "20:00:00",
+   "2:00:00"
+  ],
+  [
+   "Bad to Worse",
+   "month",
+   "9:00:00",
+   "2:00:00"
+  ],
+  [
+   "Bad to Worse",
+   "month",
+   "23:00:00",
+   "2:00:00"
+  ],
+  [
+   "Techneurosis",
+   "month",
+   "13:00:00",
+   "2:00:00"
+  ],
+  [
+   "Techneurosis",
+   "month",
+   "27:00:00",
+   "2:00:00"
+  ],
+  [
+   "Meow Meow Day",
+   "month",
+   "22:00:00",
+   "1:00:00"
+  ],
+  [
+   "Flower Cat Awakens!",
+   "month",
+   "2:14:22",
+   "0:00:02"
+  ],
+  [
+   "Flower Cat Awakens!",
+   "month",
+   "22:14:22",
+   "0:00:02"
+  ]
+ ]
+}

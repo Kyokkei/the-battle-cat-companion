@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.projectnyanko.companion.domain.stage.StageLocale
+import com.projectnyanko.companion.ui.event.EventsScreen
 import com.projectnyanko.companion.ui.seed.SeedTrackerScreen
 import com.projectnyanko.companion.ui.seed.SeedTrackerViewModel
 import com.projectnyanko.companion.ui.stage.StageCaptureService
@@ -55,7 +56,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         when (tab) {
                             0 -> StageHelperScreen(app.stageCatalogRepository)
-                            else -> {
+                            1 -> {
                                 val viewModel: SeedTrackerViewModel = viewModel(
                                     factory = SeedTrackerViewModel.factory(
                                         app.seedTrackerRepository,
@@ -65,6 +66,7 @@ class MainActivity : ComponentActivity() {
                                 )
                                 SeedTrackerScreen(viewModel)
                             }
+                            else -> EventsScreen(app.eventScheduleRepository)
                         }
                     }
                     NyankoNavBar(
@@ -98,13 +100,11 @@ class MainActivity : ComponentActivity() {
     )
 
     private companion object {
-        /**
-         * The template also has an `Event` tab, but no event data is imported yet, so it is left out
-         * rather than shipped as a dead button.
-         */
+        /** The Event tab reads the schedule bundled from the wiki; see EventScheduleRepository. */
         val TABS = listOf(
             Tab("Stage Info", R.drawable.nav_cat),
             Tab("Trackseeding", R.drawable.nav_search),
+            Tab("Event", R.drawable.ic_event),
         )
     }
 }
