@@ -22,3 +22,5 @@ setup_build.sh
 *.zip
 scratch/
 tools/
+.ai/
+.AI/
