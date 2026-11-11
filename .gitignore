@@ -16,3 +16,9 @@ keystore/
 keystore.properties
 *.jks
 *.keystore
+keystore_b64.txt
+setup_build.sh
+*.apk
+*.zip
+scratch/
+tools/

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
@@ -40,19 +41,36 @@ import java.util.Locale
 @Composable
 fun CatStatsDialog(
     state: StatsUiState,
+    spirits: List<UnitStats> = emptyList(),
+    targetFormIndex: Int? = null,
     onDismiss: () -> Unit,
 ) {
     NyankoDialogFrame(onDismiss = onDismiss) {
         val stats = state.stats
-        DialogHeader(
-            title = stats?.forms?.firstOrNull()?.name ?: "Cat stats",
-            subtitle = stats?.let { unit ->
+        val headerTitle = if (targetFormIndex != null && stats != null && targetFormIndex in stats.forms.indices) {
+            stats.forms[targetFormIndex].name
+        } else {
+            stats?.forms?.firstOrNull()?.name ?: "Cat stats"
+        }
+        val headerSubtitle = stats?.let { unit ->
+            if (targetFormIndex != null && targetFormIndex in unit.forms.indices) {
+                buildString {
+                    unit.rarity?.let { append(it.displayName).append("  ·  ") }
+                    append("Lv ${unit.level}")
+                    append("  ·  ").append(formLabel(targetFormIndex))
+                }
+            } else {
                 buildString {
                     unit.rarity?.let { append(it.displayName).append("  ·  ") }
                     append("Lv ${unit.level}")
                     append("  ·  ${unit.forms.size} form").append(if (unit.forms.size == 1) "" else "s")
                 }
-            } ?: "Reading the bundled stat table…",
+            }
+        } ?: "Reading the bundled stat table…"
+
+        DialogHeader(
+            title = headerTitle,
+            subtitle = headerSubtitle,
         )
         Spacer(Modifier.height(12.dp))
         when {
@@ -78,8 +96,55 @@ fun CatStatsDialog(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                itemsIndexed(stats.forms, key = { _, form -> form.name }) { index, form ->
+                val formsToRender = if (targetFormIndex != null && targetFormIndex in stats.forms.indices) {
+                    listOf(targetFormIndex to stats.forms[targetFormIndex])
+                } else {
+                    stats.forms.mapIndexed { idx, form -> idx to form }
+                }
+
+                items(formsToRender, key = { (idx, form) -> "${form.name}_$idx" }) { (index, form) ->
                     FormCard(unitId = stats.id, formIndex = index, form = form)
+                }
+                if (spirits.isNotEmpty()) {
+                    item(key = "spirits_divider") {
+                        Spacer(Modifier.height(4.dp))
+                        Row(
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(2.dp)
+                                    .background(Ink.copy(alpha = 0.25f))
+                            )
+                            Text(
+                                text = "✨ CONJURED SPIRIT",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = FontWeight.Black,
+                                color = AccentDeep,
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(2.dp)
+                                    .background(Ink.copy(alpha = 0.25f))
+                            )
+                        }
+                    }
+                    items(spirits, key = { "spirit_${it.id}" }) { spiritUnit ->
+                        spiritUnit.forms.forEachIndexed { fIdx, sForm ->
+                            val summonerName = stats.forms.firstOrNull()?.name ?: "Cat"
+                            val displaySpiritName = if (sForm.name.matches(Regex(".*\\d+[-_]\\d+.*"))) "Spirit of $summonerName" else sForm.name
+                            FormCard(
+                                unitId = spiritUnit.id,
+                                formIndex = fIdx,
+                                form = sForm.copy(name = displaySpiritName),
+                                customLabel = "Conjured by $summonerName",
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -95,7 +160,7 @@ fun CatStatsDialog(
 }
 
 @Composable
-private fun FormCard(unitId: Int, formIndex: Int, form: UnitFormStats) {
+private fun FormCard(unitId: Int, formIndex: Int, form: UnitFormStats, customLabel: String? = null) {
     val shape = RoundedCornerShape(16.dp)
     Column(
         modifier = Modifier
@@ -117,9 +182,10 @@ private fun FormCard(unitId: Int, formIndex: Int, form: UnitFormStats) {
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
-                    text = formLabel(formIndex),
+                    text = customLabel ?: formLabel(formIndex),
                     style = MaterialTheme.typography.labelSmall,
-                    color = InkSoft,
+                    color = if (customLabel != null) AccentDeep else InkSoft,
+                    fontWeight = if (customLabel != null) FontWeight.Bold else FontWeight.Normal,
                 )
             }
         }
@@ -151,7 +217,7 @@ private fun FormCard(unitId: Int, formIndex: Int, form: UnitFormStats) {
 }
 
 @Composable
-private fun StatPair(labelLeft: String, valueLeft: String, labelRight: String, valueRight: String) {
+internal fun StatPair(labelLeft: String, valueLeft: String, labelRight: String, valueRight: String) {
     Row(modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp)) {
         StatCell(labelLeft, valueLeft, Modifier.weight(1f))
         Spacer(Modifier.width(8.dp))
@@ -160,7 +226,7 @@ private fun StatPair(labelLeft: String, valueLeft: String, labelRight: String, v
 }
 
 @Composable
-private fun StatCell(label: String, value: String, modifier: Modifier = Modifier) {
+internal fun StatCell(label: String, value: String, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
@@ -184,7 +250,7 @@ private fun StatCell(label: String, value: String, modifier: Modifier = Modifier
 }
 
 @Composable
-private fun TraitRow(label: String, values: List<String>) {
+internal fun TraitRow(label: String, values: List<String>) {
     Row(
         modifier = Modifier.fillMaxWidth().padding(top = 3.dp),
         verticalAlignment = Alignment.Top,

@@ -53,8 +53,8 @@ android {
         applicationId = "com.projectnyanko.companion"
         minSdk = 24
         targetSdk = 37
-        versionCode = 15
-        versionName = "0.1.14"
+        versionCode = 16
+        versionName = "0.1.15"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

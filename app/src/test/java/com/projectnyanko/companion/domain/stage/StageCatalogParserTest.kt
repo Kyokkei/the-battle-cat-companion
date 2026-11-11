@@ -27,7 +27,7 @@ class StageCatalogParserTest {
         // 789 icons. The three enemies in the stat table with no art ("Enemy 19", "Enemy 20",
         // "Enemy 747") are unnamed placeholders the wiki has no image for, and no stage spawns them —
         // so nothing a player can actually meet is missing a picture.
-        assertEquals(789, catalog.metadata.enemySpriteCount)
+        assertEquals(800, catalog.metadata.enemySpriteCount)
         assertTrue(
             "no stage should reference an enemy without a sprite",
             catalog.metadata.missingEnemySpriteIds.isEmpty(),

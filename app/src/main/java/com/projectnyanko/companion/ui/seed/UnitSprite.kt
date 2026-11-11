@@ -46,24 +46,21 @@ fun UnitSprite(unitId: Int, formIndex: Int, size: Dp, modifier: Modifier = Modif
 
 private fun loadUnitSprite(context: Context, unitId: Int, formIndex: Int): ImageBitmap? {
     if (unitId < 0) return null
-    val suffix = when (formIndex) {
+    val primarySuffix = when (formIndex) {
         0 -> "f"
         1 -> "c"
         2 -> "s"
         else -> "u"
     }
-    val paths = buildList {
-        add(spritePath(unitId, suffix))
-        if (suffix != "f") add(spritePath(unitId, "f"))
-    }
-    for (path in paths) {
+    val fallbackOrder = listOf(primarySuffix, "s", "c", "f", "u").distinct()
+    for (suffix in fallbackOrder) {
         try {
-            context.assets.open(path).use { stream ->
+            context.assets.open(spritePath(unitId, suffix)).use { stream ->
                 val bitmap = BitmapFactory.decodeStream(stream)
                 if (bitmap != null) return bitmap.asImageBitmap()
             }
         } catch (_: IOException) {
-            // No artwork for this form; the loop falls back to the base form.
+            // Try next fallback
         }
     }
     return null

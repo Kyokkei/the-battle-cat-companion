@@ -14,7 +14,7 @@ class SeedTrackerScreenTest {
 
     @Test
     fun seedTrackerLandingScreenRenders() {
-        composeRule.onNodeWithText("Trackseeding").performClick()
+        composeRule.onNodeWithText("Trackseed").performClick()
         composeRule.onNodeWithText("Seed tracker").assertIsDisplayed()
         composeRule.onNodeWithText("Find my seed").assertIsDisplayed()
         composeRule.onNodeWithText("I already know my seed").assertIsDisplayed()

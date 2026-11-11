@@ -162,6 +162,10 @@ class MainActivity : ComponentActivity() {
                                 )
                                 SeedTrackerScreen(viewModel)
                             }
+                            2 -> com.projectnyanko.companion.ui.directory.UnitInfoScreen(
+                                unitStatsRepository = app.unitStatsRepository,
+                                enemyStatsRepository = app.enemyStatsRepository,
+                            )
                             else -> EventsScreen(app.eventScheduleRepository)
                         }
                     }
@@ -199,7 +203,8 @@ class MainActivity : ComponentActivity() {
         /** The Event tab reads the schedule bundled from the wiki; see EventScheduleRepository. */
         val TABS = listOf(
             Tab("Stage Info", R.drawable.nav_cat),
-            Tab("Trackseeding", R.drawable.nav_search),
+            Tab("Trackseed", R.drawable.nav_search),
+            Tab("Unit Info", R.drawable.ic_nav_unit_book),
             Tab("Event", R.drawable.ic_event),
         )
     }

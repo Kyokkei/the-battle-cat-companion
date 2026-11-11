@@ -851,7 +851,18 @@ private fun CatLine(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         RarityDot(cell.rarity)
-        Spacer(Modifier.width(5.dp))
+        Spacer(Modifier.width(4.dp))
+        if (cell.unitId >= 0) {
+            UnitSprite(
+                unitId = cell.unitId,
+                formIndex = 0,
+                size = 28.dp,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(4.dp))
+                    .clickable { onStats(cell.unitId) },
+            )
+            Spacer(Modifier.width(4.dp))
+        }
         Text(
             text = cell.name,
             style = MaterialTheme.typography.bodySmall,
@@ -912,6 +923,17 @@ private fun JumpLine(
                 text = prefix,
                 background = AccentDeep,
                 foreground = Color.White,
+            )
+            Spacer(Modifier.width(4.dp))
+        }
+        if (cell.unitId >= 0) {
+            UnitSprite(
+                unitId = cell.unitId,
+                formIndex = 0,
+                size = 22.dp,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(4.dp))
+                    .clickable { onStats(cell.unitId) },
             )
             Spacer(Modifier.width(4.dp))
         }
